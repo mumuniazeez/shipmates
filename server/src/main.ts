@@ -9,12 +9,12 @@ declare const module: any;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
-  app.enableVersioning({ type: VersioningType.URI });
+  app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('IdeaOut API documentation')
-    .setDescription('The IdeaOut API documentation')
+    .setTitle('Shipmates API documentation')
+    .setDescription('The Shipmates API documentation')
     .setContact(
       'AzCodes',
       'https://azcodes.ideaout.app',

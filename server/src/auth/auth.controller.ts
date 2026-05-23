@@ -1,6 +1,7 @@
-import { Controller, Post, Query, Redirect } from '@nestjs/common';
+import { Controller, Get, Query, Redirect } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { AuthResponseDto } from 'src/global/dto';
 
 @Controller('auth')
 export class AuthController {
@@ -15,7 +16,7 @@ https://yourapp.com/callback?code=abc123def456`,
     description: 'The URI to redirect to after signing in',
     required: true,
   })
-  @Post('hackclubauth')
+  @Get('hackclubauth')
   @Redirect()
   hackClubAuth(@Query('redirect_uri') redirect_uri: string) {
     return this.authService.hackClubAuth(redirect_uri);
@@ -25,6 +26,7 @@ https://yourapp.com/callback?code=abc123def456`,
     summary: 'Exchange the code for an access token',
     description: `Exchange the code for an access token`,
   })
+  @ApiResponse({ type: AuthResponseDto, status: 200 })
   @ApiQuery({
     name: 'code',
     description:
@@ -36,8 +38,7 @@ https://yourapp.com/callback?code=abc123def456`,
     description: 'The URI to redirect to after signing in',
     required: true,
   })
-  @Post('hackclubauth/callback')
-  @Redirect()
+  @Get('hackclubauth/callback')
   hackClubAuthCallback(
     @Query('code') code: string,
     @Query('redirect_uri') redirect_uri: string,
