@@ -1,9 +1,20 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './prisma/prisma.module';
 import { MailerModule } from './mailer/mailer.module';
-import { HealthCheckModule } from './health-check/health-check.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
-  imports: [PrismaModule, MailerModule, HealthCheckModule],
+  imports: [
+    // Nestjs modules
+    ConfigModule.forRoot({ isGlobal: true }),
+
+    // Custom service module
+    PrismaModule,
+    MailerModule,
+
+    // Routes Module
+    HealthModule,
+  ],
 })
 export class AppModule {}

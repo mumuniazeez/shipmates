@@ -9,16 +9,17 @@ import Handlebars from 'handlebars';
 export class MailerService extends Resend {
   constructor(private config: ConfigService) {
     super(config.get('RESEND_API_KEY'));
+    Handlebars.registerHelper('eq', (a, b) => a === b);
   }
 
-  async sendEmail(to: string, subject: string, html: string) {
+  async sendEmail(subject: string, to: string, html: string) {
     let attempts = 0;
     const maxAttempts = 3;
 
     while (attempts < maxAttempts) {
       try {
         const { error } = await this.emails.send({
-          from: `"IdeaOut" <${this.config.get('SMTP_USER')}>`,
+          from: `"Shipmates" <${this.config.get('EMAIL_USER')}>`,
           to,
           subject,
           html,
