@@ -1,17 +1,13 @@
 {
   "name": "shipmates",
   "version": "1.0.0",
-  "main": "index.js",
+  "private": "true",
   "scripts": {
-    "dev": "concurrently \"npm run dev -w client\" \"npm run start:dev -w server\"",
-    "client": "npm run dev -w client",
-    "server": "npm run start:dev -w server",
-    "build": "npm run build -w client && npm run build -w server"
+    "dev": "concurrently \"pnpm --filter client dev\" \"pnpm --filter server start:dev\"",
+    "client": "pnpm --filter client dev",
+    "server": "pnpm --filter server start:dev",
+    "build": "pnpm --filter client build && pnpm --filter server build"
   },
-  "workspaces": [
-    "client",
-    "server"
-  ],
   "license": "MIT",
   "dependencies": {
     "concurrently": "^9.2.1"
