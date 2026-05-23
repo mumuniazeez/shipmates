@@ -6,19 +6,19 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  findAll() {
-    return `This action returns all user`;
+  findOne(id: string) {
+    return this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
+  update(id: string, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} user`;
   }
 }
