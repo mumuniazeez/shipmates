@@ -24,14 +24,14 @@ export class ErrorMessageDto {
     examples: [200, 201, 400, 401, 403, 404, 422, 500],
   })
   @ApiResponseProperty({ type: 'number' })
-  statusCode: number;
+  statusCode!: number;
 
   @ApiProperty({
     description: 'Human readable error message',
     examples: ['User not found', 'Invalid Credential'],
     oneOf: [{ type: 'string' }, { type: 'array', items: { type: 'string' } }],
   })
-  message: string | string[];
+  message!: string | string[];
   @ApiProperty({
     required: false,
     description: 'Machine readable error message',

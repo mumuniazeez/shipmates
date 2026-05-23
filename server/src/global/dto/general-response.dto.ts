@@ -6,5 +6,5 @@ export class GeneralOkResponseDto {
     description: 'Human readable message',
     examples: ['Item deleted successfully', 'Item created successfully'],
   })
-  message: string;
+  message!: string;
 }
