@@ -1,0 +1,19 @@
+{
+  "name": "shipmates",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w client\" \"npm run start:dev -w server\"",
+    "client": "npm run dev -w client",
+    "server": "npm run start:dev -w server",
+    "build": "npm run build -w client && npm run build -w server"
+  },
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
