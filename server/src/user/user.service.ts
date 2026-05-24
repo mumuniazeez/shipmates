@@ -20,7 +20,10 @@ export class UserService {
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+    return this.prisma.user.update({
+      data: { ...updateUserDto },
+      where: { id },
+    });
   }
 
   remove(id: string) {

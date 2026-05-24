@@ -49,8 +49,17 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
+  @ApiOperation({
+    summary: 'Update the current user profile',
+    description:
+      'Update the current user profile based on the JWT token provided in the request. This endpoint returns the new user information associated with the token.',
+  })
+  @ApiResponse({
+    status: 200,
+    type: UserResponseDto,
+  })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  update(@GetUser('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(id, updateUserDto);
   }
 
