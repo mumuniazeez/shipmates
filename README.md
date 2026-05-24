@@ -82,6 +82,7 @@ The server folder contain the backend code for the application and is build with
 - Nestjs
 - Prisma
 - PostgreSQL
+- Hack Club Auth
 
 To run the backend code from use the following command:
 
