@@ -6,7 +6,10 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { User } from 'generated/prisma';
-import { AuthResponseDto } from 'src/global/dto';
+import {
+  AuthCallbackResponseDto,
+  GetNewAccessTokenResponseDto,
+} from 'src/global/dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 
@@ -26,10 +29,11 @@ export class AuthService {
       url: `https://auth.hackclub.com/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&response_type=code&scope=email+profile+slack_id+verification_status`,
     };
   }
+
   async hackClubAuthCallback(
     redirect_uri: string,
     code: string,
-  ): Promise<AuthResponseDto> {
+  ): Promise<AuthCallbackResponseDto> {
     const client_id = this.config.get<string>('HACKCLUB_AUTH_CLIENT_ID');
     const client_secret = this.config.get<string>(
       'HACKCLUB_AUTH_CLIENT_SECRET',
@@ -44,7 +48,7 @@ export class AuthService {
     };
 
     const oauthRes = await this.httpService.axiosRef.post<
-      AuthResponseDto & { id_token: string }
+      AuthCallbackResponseDto & { id_token: string }
     >('https://auth.hackclub.com/oauth/token', reqBody, {
       headers: {
         'Content-Type': 'application/json',
@@ -114,11 +118,44 @@ export class AuthService {
       secret: this.config.get('ACCESS_JWT_TOKEN_SECRET'),
       expiresIn: '30mins',
     });
+    // TODO: Make refresh token can only be used once
     const refresh_token = this.jwtService.sign(payload, {
       secret: this.config.get('REFRESH_JWT_TOKEN_SECRET'),
-      expiresIn: '30mins',
+      expiresIn: '60days',
     });
 
     return { access_token, refresh_token };
+  }
+
+  async getNewAccessToken(
+    refresh_token: string,
+  ): Promise<GetNewAccessTokenResponseDto> {
+    // TODO: Make refresh token can only be used once
+    const payload = this.jwtService.verify<{
+      id: string;
+      email: string;
+    }>(refresh_token, {
+      secret: this.config.get('REFRESH_JWT_TOKEN_SECRET'),
+    });
+
+    const user = await this.prisma.user.findUnique({
+      where: { id: payload.id },
+    });
+
+    if (!user) throw new UnauthorizedException('User not found');
+
+    // generate a new access token
+    const new_access_token = this.jwtService.sign(
+      {
+        id: user.id,
+        email: user.email,
+      },
+      {
+        secret: this.config.get('ACCESS_JWT_TOKEN_SECRET'),
+        expiresIn: '30mins',
+      },
+    );
+
+    return { access_token: new_access_token };
   }
 }

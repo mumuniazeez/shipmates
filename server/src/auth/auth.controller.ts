@@ -1,7 +1,12 @@
-import { Controller, Get, Query, Redirect } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Redirect } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
-import { AuthResponseDto } from 'src/global/dto';
+import {
+  AuthCallbackResponseDto,
+  GetNewAccessTokenResponseDto,
+} from 'src/global/dto';
+import { GetNewAccessTokenDto } from './dto/auth.dto';
+import { Throttle } from '@nestjs/throttler';
 
 @Controller('auth')
 export class AuthController {
@@ -26,7 +31,7 @@ https://yourapp.com/callback?code=abc123def456`,
     summary: 'Exchange the code for an access token',
     description: `Exchange the code for an access token`,
   })
-  @ApiResponse({ type: AuthResponseDto, status: 200 })
+  @ApiResponse({ type: AuthCallbackResponseDto, status: 200 })
   @ApiQuery({
     name: 'code',
     description:
@@ -44,5 +49,18 @@ https://yourapp.com/callback?code=abc123def456`,
     @Query('redirect_uri') redirect_uri: string,
   ) {
     return this.authService.hackClubAuthCallback(redirect_uri, code);
+  }
+
+  @ApiOperation({
+    summary: 'Get a new access token with a refresh token',
+    description: `Get a new access token with a refresh token, 4 request per hour for each user, if the limit is exceeded, the user will be blocked for 2 hours to prevent abuse`,
+  })
+  @ApiResponse({ type: GetNewAccessTokenResponseDto, status: 200 })
+  @Throttle({ default: { limit: 4, ttl: 3600000, blockDuration: 7200000 } })
+  @Post('token/refresh')
+  getNewAccessToken(@Body() getNewAccessTokenDto: GetNewAccessTokenDto) {
+    return this.authService.getNewAccessToken(
+      getNewAccessTokenDto.refresh_token,
+    );
   }
 }
