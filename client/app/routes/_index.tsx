@@ -1,4 +1,4 @@
-import type { Route } from "./+types/_landing._index";
+import type { Route } from "./+types/_index";
 import { Kbd, KbdGroup } from "~/components/ui/kbd";
 import { Button } from "~/components/ui/button";
 import HackClubIcon from "@hackclub/icons";
@@ -33,7 +33,7 @@ export default function Home() {
             <span>+</span>
             <Kbd className="text-4xl w-fit h-fit">Meet</Kbd>
           </KbdGroup>
-          <h1 className="text-8xl font-bold">Shipmates </h1>
+          <h1 className="text-8xl font-bold">Shipmates</h1>
           <p className="text-3xl font-medium">Where Hackers Meet</p>
           <p className="max-w-2xl text-center text-muted-foreground">
             Shipmate is an Hack Club match maker for hackers. Where you get to

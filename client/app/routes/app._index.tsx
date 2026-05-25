@@ -1,5 +1,6 @@
-import { getCurrentUser } from "~/lib/user.server";
+// import { getCurrentUser } from "~/lib/user.server";
 import type { Route } from "./+types/app._index";
+import { redirect } from "react-router";
 
 export function meta({}: Route.MetaArgs): Route.MetaDescriptors {
   return [
@@ -11,15 +12,19 @@ export function meta({}: Route.MetaArgs): Route.MetaDescriptors {
   ];
 }
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const userRes = await getCurrentUser(request);
-  return {user: userRes.data};
-}
+// export async function loader({ request }: Route.LoaderArgs) {
+//   const userRes = await getCurrentUser(request);
+//   if (userRes.error) {
+//     console.log(userRes.error);
+//     throw redirect("/");
+//   }
+//   return { user: userRes.data };
+// }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
   return (
-    <h1 className="text-4xl">
-      {!loaderData.user ? "Error occurred" : loaderData.user.firstName}
-    </h1>
+    <div>
+      <h1>Here is the dashboard.....</h1>
+    </div>
   );
 }

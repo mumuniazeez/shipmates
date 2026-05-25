@@ -35,6 +35,12 @@ export class UserResponseDto {
   })
   lastName!: string | null;
   @ApiProperty({
+    type: 'string',
+    description: 'The profile image of the user',
+    nullable: true,
+  })
+  profileImg!: string | null;
+  @ApiProperty({
     type: 'boolean',
     description: 'Whether the user is eligible for the YSWS program',
   })

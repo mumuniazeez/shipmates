@@ -12,6 +12,7 @@ model User {
   hcId         String   @unique
   email        String   @unique
   slackId      String?  @unique
+  profileImg   String?
   firstName    String?
   lastName     String?
   bio          String?

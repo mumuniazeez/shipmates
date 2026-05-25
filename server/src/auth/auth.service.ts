@@ -61,12 +61,10 @@ export class AuthService {
       );
 
     // get user data from hack club auth
-    const userData = await this.httpService.axiosRef.get<{
+    const userDataFromHackClubAuth = await this.httpService.axiosRef.get<{
       identity: {
         ysws_eligible: boolean;
         primary_email: string;
-        first_name: string;
-        last_name: string;
         id: string;
         slack_id: string | null;
       };
@@ -76,21 +74,33 @@ export class AuthService {
       },
     });
 
-    if (userData.status !== 200)
+    if (userDataFromHackClubAuth.status !== 200)
       throw new InternalServerErrorException(
-        `Failed to retrieve user data from hack club auth: ${userData.status} ${userData.statusText}`,
+        `Failed to retrieve user data from hack club auth: ${userDataFromHackClubAuth.status} ${userDataFromHackClubAuth.statusText}`,
       );
 
     // check if user is eligible to signup
-    if (!userData.data.identity.ysws_eligible)
+    if (!userDataFromHackClubAuth.data.identity.ysws_eligible)
       throw new UnauthorizedException(
         'You are not eligible to use this platform',
+      );
+    // get user data from public slack api using Cachet
+    const userDataFromSlack = await this.httpService.axiosRef.get<{
+      displayName: string;
+      imageUrl: string;
+    }>(
+      `https://cachet.dunkirk.sh/users/${userDataFromHackClubAuth.data.identity.slack_id}`,
+    );
+
+    if (userDataFromSlack.status !== 200)
+      throw new InternalServerErrorException(
+        `Failed to retrieve user data from hack club auth: ${userDataFromHackClubAuth.status} ${userDataFromHackClubAuth.statusText}`,
       );
 
     let user: User;
     // check if user exist
     const userExist = await this.prisma.user.findUnique({
-      where: { email: userData.data.identity.primary_email },
+      where: { email: userDataFromHackClubAuth.data.identity.primary_email },
     });
 
     // create user if not exist
@@ -98,12 +108,13 @@ export class AuthService {
     if (!userExist)
       user = await this.prisma.user.create({
         data: {
-          email: userData.data.identity.primary_email,
-          firstName: userData.data.identity.first_name || null,
-          lastName: userData.data.identity.last_name || null,
-          hcId: userData.data.identity.id,
-          slackId: userData.data.identity.slack_id,
-          yswsEligible: userData.data.identity.ysws_eligible,
+          email: userDataFromHackClubAuth.data.identity.primary_email,
+          firstName: userDataFromSlack.data.displayName.split(' ')[0] || null,
+          lastName: userDataFromSlack.data.displayName.split(' ')[1] || null,
+          hcId: userDataFromHackClubAuth.data.identity.id,
+          slackId: userDataFromHackClubAuth.data.identity.slack_id,
+          yswsEligible: userDataFromHackClubAuth.data.identity.ysws_eligible,
+          profileImg: userDataFromSlack.data.imageUrl,
         },
       });
     else user = userExist;
