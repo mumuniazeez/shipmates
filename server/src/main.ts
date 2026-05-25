@@ -13,7 +13,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('Shipmates API documentation')
+    .setTitle('Shipmates API Documentation')
     .setDescription('The Shipmates API documentation')
     .setContact(
       'AzCodes',

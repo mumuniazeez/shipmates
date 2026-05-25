@@ -1,9 +1,10 @@
+import "dotenv/config";
 import { createClient } from "./api/client";
 import { createConfig } from "./api/client";
 import type { CreateClientConfig } from "./api/client.gen";
 import type { ClientOptions } from "./api/types.gen";
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = process.env.VITE_API_URL;
 
 /**
  * Default client config used by the auto-generated client.
