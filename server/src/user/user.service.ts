@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserResponseDto } from 'src/global/dto';
 
@@ -17,16 +16,5 @@ export class UserService {
     if (!user) throw new NotFoundException('User not found');
 
     return user;
-  }
-
-  update(id: string, updateUserDto: UpdateUserDto): Promise<UserResponseDto> {
-    return this.prisma.user.update({
-      data: { ...updateUserDto },
-      where: { id },
-    });
-  }
-
-  remove(id: string) {
-    return `This action removes a #${id} user`;
   }
 }

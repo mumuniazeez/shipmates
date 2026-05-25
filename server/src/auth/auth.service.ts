@@ -117,7 +117,16 @@ export class AuthService {
           profileImg: userDataFromSlack.data.imageUrl,
         },
       });
-    else user = userExist;
+    else
+      user = await this.prisma.user.update({
+        where: { email: userDataFromHackClubAuth.data.identity.primary_email },
+        data: {
+          firstName: userDataFromSlack.data.displayName.split(' ')[0] || null,
+          lastName: userDataFromSlack.data.displayName.split(' ')[1] || null,
+          yswsEligible: userDataFromHackClubAuth.data.identity.ysws_eligible,
+          profileImg: userDataFromSlack.data.imageUrl,
+        },
+      });
 
     // generate a jwt token containing the user id and return it to the client
     const payload = {

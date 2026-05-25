@@ -2,8 +2,8 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import { userControllerFindMeV1ResponseTransformer, userControllerFindOneV1ResponseTransformer, userControllerUpdateV1ResponseTransformer } from './transformers.gen';
-import type { AuthControllerGetNewAccessTokenV1Data, AuthControllerGetNewAccessTokenV1Errors, AuthControllerGetNewAccessTokenV1Responses, AuthControllerHackClubAuthCallbackV1Data, AuthControllerHackClubAuthCallbackV1Errors, AuthControllerHackClubAuthCallbackV1Responses, AuthControllerHackClubAuthV1Data, AuthControllerHackClubAuthV1Errors, AuthControllerHackClubAuthV1Responses, HealthCheckData, HealthCheckErrors, HealthCheckResponses, UserControllerFindMeV1Data, UserControllerFindMeV1Errors, UserControllerFindMeV1Responses, UserControllerFindOneV1Data, UserControllerFindOneV1Errors, UserControllerFindOneV1Responses, UserControllerRemoveV1Data, UserControllerRemoveV1Errors, UserControllerRemoveV1Responses, UserControllerUpdateV1Data, UserControllerUpdateV1Errors, UserControllerUpdateV1Responses } from './types.gen';
+import { userControllerFindMeV1ResponseTransformer, userControllerFindOneV1ResponseTransformer } from './transformers.gen';
+import type { AuthControllerGetNewAccessTokenV1Data, AuthControllerGetNewAccessTokenV1Errors, AuthControllerGetNewAccessTokenV1Responses, AuthControllerHackClubAuthCallbackV1Data, AuthControllerHackClubAuthCallbackV1Errors, AuthControllerHackClubAuthCallbackV1Responses, AuthControllerHackClubAuthV1Data, AuthControllerHackClubAuthV1Errors, AuthControllerHackClubAuthV1Responses, HealthCheckData, HealthCheckErrors, HealthCheckResponses, UserControllerFindMeV1Data, UserControllerFindMeV1Errors, UserControllerFindMeV1Responses, UserControllerFindOneV1Data, UserControllerFindOneV1Errors, UserControllerFindOneV1Responses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -82,14 +82,6 @@ export class user {
         });
     }
     
-    public static userControllerRemoveV1<ThrowOnError extends boolean = false>(options: Options<UserControllerRemoveV1Data, ThrowOnError>) {
-        return (options.client ?? client).delete<UserControllerRemoveV1Responses, UserControllerRemoveV1Errors, ThrowOnError>({
-            security: [{ scheme: 'bearer', type: 'http' }],
-            url: '/api/v1/user/{id}',
-            ...options
-        });
-    }
-    
     /**
      * Get a user by ID
      *
@@ -101,24 +93,6 @@ export class user {
             security: [{ scheme: 'bearer', type: 'http' }],
             url: '/api/v1/user/{id}',
             ...options
-        });
-    }
-    
-    /**
-     * Update the current user profile
-     *
-     * Update the current user profile based on the JWT token provided in the request. This endpoint returns the new user information associated with the token.
-     */
-    public static userControllerUpdateV1<ThrowOnError extends boolean = false>(options: Options<UserControllerUpdateV1Data, ThrowOnError>) {
-        return (options.client ?? client).patch<UserControllerUpdateV1Responses, UserControllerUpdateV1Errors, ThrowOnError>({
-            responseTransformer: userControllerUpdateV1ResponseTransformer,
-            security: [{ scheme: 'bearer', type: 'http' }],
-            url: '/api/v1/user/{id}',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options.headers
-            }
         });
     }
 }

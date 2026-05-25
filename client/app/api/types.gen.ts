@@ -88,6 +88,10 @@ export type UserResponseDto = {
      */
     lastName: string | null;
     /**
+     * The profile image of the user
+     */
+    profileImg: string | null;
+    /**
      * Whether the user is eligible for the YSWS program
      */
     yswsEligible: boolean;
@@ -99,17 +103,6 @@ export type UserResponseDto = {
      * When last the user account was updated
      */
     updatedAt: Date;
-};
-
-export type UpdateUserDto = {
-    /**
-     * The first name of the user
-     */
-    firstName?: string | null;
-    /**
-     * The last name of the user
-     */
-    lastName?: string | null;
 };
 
 export type ErrorMessageDtoWritable = {
@@ -308,32 +301,6 @@ export type UserControllerFindMeV1Responses = {
 
 export type UserControllerFindMeV1Response = UserControllerFindMeV1Responses[keyof UserControllerFindMeV1Responses];
 
-export type UserControllerRemoveV1Data = {
-    body?: never;
-    path: {
-        id: string;
-    };
-    query?: never;
-    url: '/api/v1/user/{id}';
-};
-
-export type UserControllerRemoveV1Errors = {
-    /**
-     * Client side error
-     */
-    '4XX': ErrorMessageDto;
-    /**
-     * Server side error
-     */
-    '5XX': ErrorMessageDto;
-};
-
-export type UserControllerRemoveV1Error = UserControllerRemoveV1Errors[keyof UserControllerRemoveV1Errors];
-
-export type UserControllerRemoveV1Responses = {
-    200: unknown;
-};
-
 export type UserControllerFindOneV1Data = {
     body?: never;
     path: {
@@ -361,29 +328,3 @@ export type UserControllerFindOneV1Responses = {
 };
 
 export type UserControllerFindOneV1Response = UserControllerFindOneV1Responses[keyof UserControllerFindOneV1Responses];
-
-export type UserControllerUpdateV1Data = {
-    body: UpdateUserDto;
-    path?: never;
-    query?: never;
-    url: '/api/v1/user/{id}';
-};
-
-export type UserControllerUpdateV1Errors = {
-    /**
-     * Client side error
-     */
-    '4XX': ErrorMessageDto;
-    /**
-     * Server side error
-     */
-    '5XX': ErrorMessageDto;
-};
-
-export type UserControllerUpdateV1Error = UserControllerUpdateV1Errors[keyof UserControllerUpdateV1Errors];
-
-export type UserControllerUpdateV1Responses = {
-    200: UserResponseDto;
-};
-
-export type UserControllerUpdateV1Response = UserControllerUpdateV1Responses[keyof UserControllerUpdateV1Responses];
