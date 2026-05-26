@@ -1,7 +1,8 @@
 // import { getCurrentUser } from "~/lib/user.server";
 import Sidebar from "~/components/Sidebar";
 import type { Route } from "./+types/app._index";
-import { redirect } from "react-router";
+import { redirect, useOutletContext } from "react-router";
+import type { OutletContext } from "./app";
 
 export function meta({}: Route.MetaArgs): Route.MetaDescriptors {
   return [
@@ -23,10 +24,16 @@ export function meta({}: Route.MetaArgs): Route.MetaDescriptors {
 // }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
+  const { user } = useOutletContext<OutletContext>();
   return (
     <main>
-      <div className="flex items-center">
-        <Sidebar />
+      <div>
+        <div>
+          <div>
+            <h1>Explore Live Pitches</h1>
+            <p>Pitch your skills or double tap to ship with active author</p>
+          </div>
+        </div>
       </div>
     </main>
   );

@@ -9,10 +9,11 @@ import {
   Users,
   SignOut,
 } from "@hugeicons/core-free-icons";
+import type { UserResponseDto } from "~/api";
 
-export default function Sidebar() {
+export default function Sidebar({ user }: { user: UserResponseDto }) {
   return (
-    <div className="w-[25%] h-screen p-5 bg-accent flex flex-col justify-between">
+    <div className="w-[25%] h-screen p-5 bg-accent flex flex-col justify-between border-r">
       <div className="space-y-5">
         <header className="flex items-center gap-x-2">
           <img src="/Shipmates-Logo.png" width={50} />
@@ -48,13 +49,15 @@ export default function Sidebar() {
         <div className="bg-background flex items-center justify-between p-3 rounded-4xl">
           <div className="flex items-center gap-x-2">
             <img
-              src="/Shipmates-Logo.png"
+              src={user.profileImg || "/Shipmates-Logo.png"}
               width={50}
               className="rounded-full border border-primary p-0.5"
             />
             <div>
-              <h4 className="text-xl font-medium">Abdulazeez Adewale</h4>
-              <p>mumuniazeez99@gmail.com</p>
+              <h4 className="text-xl font-medium">
+                {user.firstName} {user.lastName}
+              </h4>
+              <p className="text-sm text-muted-foreground">{user.email}</p>
             </div>
           </div>
           <Button variant={"destructive"} title="Sign out">
