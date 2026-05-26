@@ -33,7 +33,7 @@ export function meta({}: Route.MetaArgs): Route.MetaDescriptors {
 //   return { user: userRes.data };
 // }
 
-export default function Home({ loaderData }: Route.ComponentProps) {
+export default function DashboardMyDeck({ loaderData }: Route.ComponentProps) {
   const { user } = useOutletContext<OutletContext>();
   return (
     <div className="md:w-[75%] w-full overflow-auto">

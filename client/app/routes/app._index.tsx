@@ -20,6 +20,7 @@ import {
   EmptyDescription,
   EmptyContent,
 } from "~/components/ui/empty";
+import { useState } from "react";
 
 export function meta({}: Route.MetaArgs): Route.MetaDescriptors {
   return [
@@ -40,7 +41,7 @@ export function meta({}: Route.MetaArgs): Route.MetaDescriptors {
 //   return { user: userRes.data };
 // }
 
-export default function Home({ loaderData }: Route.ComponentProps) {
+export default function DashboardExplore({ loaderData }: Route.ComponentProps) {
   const { user } = useOutletContext<OutletContext>();
   return (
     <div className="md:w-[75%] w-full overflow-auto">

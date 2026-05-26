@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -30,6 +30,13 @@ export default function CreateProjectPitchDialog({
 }: {
   children: React.ReactNode;
 }) {
+  // const [s, sS] = useState("1");
+  // const [formData, setFormData] = useState<{
+  //   projectTitle: string;
+  //   pitchDescription: string;
+  //   skills: string[];
+  // }>({ pitchDescription: "", projectTitle: "", skills: [] });
+
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -49,7 +56,7 @@ export default function CreateProjectPitchDialog({
               >
                 <span> Project Title</span>
                 <span className="text-muted-foreground!">
-                  Max 50 characters
+                  {/* ${formData.projectTitle.length}/50 chars */}
                 </span>
               </FieldLabel>
               <Input
@@ -69,7 +76,7 @@ export default function CreateProjectPitchDialog({
               >
                 <span> Pitch Description & Needed Skills</span>
                 <span className="text-muted-foreground!">
-                  Max 200 characters
+                  {/* ${formData.pitchDescription.length}/100 chars */}
                 </span>
               </FieldLabel>
               <Textarea
@@ -229,7 +236,10 @@ export default function CreateProjectPitchDialog({
                   required
                 /> */}
                 <Combobox items={["Hey", "There", "Search"]}>
-                  <ComboboxInput placeholder="E.g., 'React Native, Firebase, and OpenAI API'" />
+                  <ComboboxInput
+                    placeholder="E.g., 'React Native, Firebase, and OpenAI API'"
+                    className={"w-full"}
+                  />
                   <ComboboxContent>
                     <ComboboxEmpty className={"items-center gap-x-2"}>
                       <p className="text-base">Not found</p>
@@ -253,11 +263,11 @@ export default function CreateProjectPitchDialog({
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline" type="button">
-                No, keep me logged in
+                Cancel
               </Button>
             </DialogClose>
             <Button variant="default" type="submit">
-              Yes, log me out
+              Create Pitch
             </Button>
           </DialogFooter>
         </form>
