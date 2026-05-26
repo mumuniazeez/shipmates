@@ -14,6 +14,7 @@ import LogoutDialog from "./dialogs/LogoutDialog";
 import { Link, useLocation } from "react-router";
 import { Separator } from "./ui/separator";
 import { useNavigate } from "react-router";
+import CreateProjectPitchDialog from "./dialogs/CreateProjectPitchDialog";
 
 export default function Sidebar({ user }: { user: UserResponseDto }) {
   const { pathname } = useLocation();
@@ -29,9 +30,11 @@ export default function Sidebar({ user }: { user: UserResponseDto }) {
             <p className="font-light">Hack Club Matchmaker</p>
           </div>
         </header>
-        <Button className="w-full">
-          <HugeiconsIcon icon={Plus} /> Pitch Project
-        </Button>
+        <CreateProjectPitchDialog>
+          <Button className="w-full">
+            <HugeiconsIcon icon={Plus} /> Pitch Project
+          </Button>
+        </CreateProjectPitchDialog>
         <Separator />
         <Button
           className="w-full justify-between"
