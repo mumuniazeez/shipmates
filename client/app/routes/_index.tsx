@@ -1,7 +1,6 @@
 import type { Route } from "./+types/_index";
 import { Kbd, KbdGroup } from "~/components/ui/kbd";
 import { Button } from "~/components/ui/button";
-import HackClubIcon from "@hackclub/icons";
 import {
   Card,
   CardDescription,
@@ -25,20 +24,20 @@ export default function Home() {
   return (
     <div>
       <main>
-        <section className="pt-40 pb-10 flex flex-col items-center gap-y-5 md:px-30 px-20">
-          <KbdGroup className="text-4xl">
-            <Kbd className="text-4xl w-fit h-fit">Ctrl</Kbd>
+        <section className="pt-40 pb-10 flex flex-col items-center gap-y-5 md:px-30 px-10">
+          <KbdGroup className="text-3xl md:text-4xl">
+            <Kbd className="text-3xl md:text-4xl w-fit h-fit">Ctrl</Kbd>
             <span>+</span>
-            <Kbd className="text-4xl w-fit h-fit">Alt</Kbd>
+            <Kbd className="text-3xl md:text-4xl w-fit h-fit">Alt</Kbd>
             <span>+</span>
-            <Kbd className="text-4xl w-fit h-fit">Meet</Kbd>
+            <Kbd className="text-3xl md:text-4xl w-fit h-fit">Meet</Kbd>
           </KbdGroup>
           <div className="flex items-center justify-center gap-x-5">
             <img
               src="/Shipmates-Logo.png"
-              className="-rotate-12 hover:rotate-0 duration-200"
+              className="md:-rotate-12 md:hover:rotate-0 duration-200 w-20"
             />
-            <h1 className="text-8xl font-bold">Shipmates</h1>
+            <h1 className="md:text-8xl text-6xl font-bold">Shipmates</h1>
           </div>
           <p className="text-3xl font-medium">
             Where{" "}
@@ -52,14 +51,14 @@ export default function Home() {
             meet people to collaborate on project's with you.
           </p>
 
-          <Link to={"/auth"}>
+          <Link to={"/auth/login"}>
             <Button>Sign in with Hack Club</Button>
           </Link>
           <p className="text-sm text-muted-foreground">
             DM @azcodes on Slack for support.
           </p>
         </section>
-        <section className="py-10 md:px-30 px-20 space-y-5">
+        <section className="py-10 md:px-30 px-10 space-y-5">
           <h3 className="text-4xl font-bold text-center">How it works</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:gris-cols-3 gap-10">
             <Card className="hover:shadow-md hover:shadow-primary/50 transition-all duration-200 hover:-translate-y-2">
@@ -119,7 +118,7 @@ export default function Home() {
           </div>
         </section>
       </main>
-      <footer className="md:px-30 px-20 py-10 border-t flex justify-between md:items-center  flex-col md:flex-row gap-y-5">
+      <footer className="md:px-30 px-10 py-10 border-t flex justify-between md:items-center  flex-col md:flex-row gap-y-5">
         <div className="flex flex-col gap-y-2">
           <h3 className="text-2xl font-bold">
             Shipmates{" "}

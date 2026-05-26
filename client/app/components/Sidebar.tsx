@@ -10,10 +10,17 @@ import {
   SignOut,
 } from "@hugeicons/core-free-icons";
 import type { UserResponseDto } from "~/api";
+import LogoutDialog from "./dialogs/LogoutDialog";
+import { Link, useLocation } from "react-router";
+import { Separator } from "./ui/separator";
+import { useNavigate } from "react-router";
 
 export default function Sidebar({ user }: { user: UserResponseDto }) {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+
   return (
-    <div className="w-[25%] h-screen p-5 bg-accent flex flex-col justify-between border-r">
+    <div className="w-[25%] hidden h-screen p-5 bg-accent md:flex flex-col justify-between border-r">
       <div className="space-y-5">
         <header className="flex items-center gap-x-2">
           <img src="/Shipmates-Logo.png" width={50} />
@@ -25,20 +32,32 @@ export default function Sidebar({ user }: { user: UserResponseDto }) {
         <Button className="w-full">
           <HugeiconsIcon icon={Plus} /> Pitch Project
         </Button>
-        <hr />
-        <Button className="w-full justify-between" variant={"outline"}>
+        <Separator />
+        <Button
+          className="w-full justify-between"
+          variant={pathname === "/app" ? "default" : "outline"}
+          onClick={() => navigate("/app")}
+        >
           <span className="flex items-center gap-x-2">
             <HugeiconsIcon icon={Navigation} /> Explore
           </span>
           <Kbd>3</Kbd>
         </Button>
-        <Button className="w-full justify-between" variant={"outline"}>
+        <Button
+          className="w-full justify-between"
+          variant={pathname === "/app/my-deck" ? "default" : "outline"}
+          onClick={() => navigate("/app/my-deck")}
+        >
           <span className="flex items-center gap-x-2">
-            <HugeiconsIcon icon={Layer} /> My Desk (Pitches)
+            <HugeiconsIcon icon={Layer} /> My Deck (Pitches)
           </span>
           <Kbd>5</Kbd>
         </Button>
-        <Button className="w-full justify-between" variant={"outline"}>
+        <Button
+          className="w-full justify-between"
+          variant={pathname === "/app/my-matches" ? "default" : "outline"}
+          onClick={() => navigate("/app/my-matches")}
+        >
           <span className="flex items-center gap-x-2">
             <HugeiconsIcon icon={Users} /> Crew Matches
           </span>
@@ -60,9 +79,11 @@ export default function Sidebar({ user }: { user: UserResponseDto }) {
               <p className="text-sm text-muted-foreground">{user.email}</p>
             </div>
           </div>
-          <Button variant={"destructive"} title="Sign out">
-            <HugeiconsIcon icon={SignOut} />
-          </Button>
+          <LogoutDialog>
+            <Button variant={"destructive"} title="Sign out">
+              <HugeiconsIcon icon={SignOut} />
+            </Button>
+          </LogoutDialog>
         </div>
       </div>
     </div>

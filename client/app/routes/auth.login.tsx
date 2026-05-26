@@ -1,4 +1,4 @@
-import type { Route } from "./+types/auth";
+import type { Route } from "./+types/auth.login";
 import { redirect } from "react-router";
 import * as api from "~/api";
 import { createAuthCookie, getAuthToken } from "~/lib/auth.server";
@@ -21,7 +21,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
 
   const code = url.searchParams.get("code");
-  const redirectUri = `${url.origin}/auth`;
+  const redirectUri = `${url.origin}/auth/login`;
   if (!code)
     throw redirect(
       `${process.env.VITE_API_URL}/api/v1/auth/hackclubauth?redirect_uri=${redirectUri}`,
