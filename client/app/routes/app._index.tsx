@@ -1,4 +1,5 @@
 // import { getCurrentUser } from "~/lib/user.server";
+import Sidebar from "~/components/Sidebar";
 import type { Route } from "./+types/app._index";
 import { redirect } from "react-router";
 
@@ -23,8 +24,10 @@ export function meta({}: Route.MetaArgs): Route.MetaDescriptors {
 
 export default function Home({ loaderData }: Route.ComponentProps) {
   return (
-    <div>
-      <h1>Here is the dashboard.....</h1>
-    </div>
+    <main>
+      <div className="flex items-center">
+        <Sidebar />
+      </div>
+    </main>
   );
 }

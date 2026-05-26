@@ -13,7 +13,7 @@ import { Link } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Shipmates | Where hackers meet" },
+    { title: "Shipmates | Where Hackers Meet" },
     {
       name: "description",
       content: "Ctrl+Atl+Meet your next collaborator to work on your project",
@@ -33,8 +33,20 @@ export default function Home() {
             <span>+</span>
             <Kbd className="text-4xl w-fit h-fit">Meet</Kbd>
           </KbdGroup>
-          <h1 className="text-8xl font-bold">Shipmates</h1>
-          <p className="text-3xl font-medium">Where Hackers Meet</p>
+          <div className="flex items-center justify-center gap-x-5">
+            <img
+              src="/Shipmates-Logo.png"
+              className="-rotate-12 hover:rotate-0 duration-200"
+            />
+            <h1 className="text-8xl font-bold">Shipmates</h1>
+          </div>
+          <p className="text-3xl font-medium">
+            Where{" "}
+            <span className="text-primary underline decoration-wavy">
+              Hackers
+            </span>{" "}
+            Meet
+          </p>
           <p className="max-w-2xl text-center text-muted-foreground">
             Shipmate is an Hack Club match maker for hackers. Where you get to
             meet people to collaborate on project's with you.
