@@ -1,10 +1,19 @@
-import { Body, Controller, Get, Post, Query, Redirect } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Query,
+  Redirect,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import {
   AuthCallbackResponseDto,
   GetNewAccessTokenResponseDto,
-} from 'src/global/dto';
+} from './dto/auth-response.dto';
 import { GetNewAccessTokenDto } from './dto/auth.dto';
 import { Throttle } from '@nestjs/throttler';
 
@@ -57,6 +66,7 @@ https://yourapp.com/callback?code=abc123def456`,
   })
   @ApiResponse({ type: GetNewAccessTokenResponseDto, status: 200 })
   @Throttle({ default: { limit: 4, ttl: 3600000, blockDuration: 7200000 } })
+  @HttpCode(HttpStatus.OK)
   @Post('token/refresh')
   getNewAccessToken(@Body() getNewAccessTokenDto: GetNewAccessTokenDto) {
     return this.authService.getNewAccessToken(

@@ -9,7 +9,7 @@ import { User } from 'generated/prisma';
 import {
   AuthCallbackResponseDto,
   GetNewAccessTokenResponseDto,
-} from 'src/global/dto';
+} from './dto/auth-response.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 

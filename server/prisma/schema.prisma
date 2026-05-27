@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(cuid())
+  id           String   @id @default(uuid())
   hcId         String   @unique
   email        String   @unique
   slackId      String?  @unique
@@ -21,14 +21,14 @@ model User {
   updatedAt    DateTime @updatedAt
 
   projectPitches        ProjectPitch[]
-  matchesAsOwner        Match[]      @relation("matchProjectOwner")
-  matchesAsCollaborator Match[]      @relation("matchMatchingUser")
+  matchesAsOwner        Match[]        @relation("matchProjectOwner")
+  matchesAsCollaborator Match[]        @relation("matchMatchingUser")
 
   @@map("users")
 }
 
 model ProjectPitch {
-  id           String   @id @default(cuid())
+  id           String   @id @default(uuid())
   title        String
   description  String
   createdAt    DateTime @default(now())
@@ -41,7 +41,7 @@ model ProjectPitch {
 }
 
 model Skill {
-  id             String         @id @default(cuid())
+  id             String         @id @default(uuid())
   name           String         @unique
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
@@ -51,11 +51,11 @@ model Skill {
 }
 
 model Match {
-  id                  String @id @default(cuid())
+  id                  String @id @default(uuid())
   projectOwner        User   @relation("matchProjectOwner", fields: [projectOwnerId], references: [id])
   projectOwnerId      String
   collaboratingUser   User   @relation("matchMatchingUser", fields: [collaboratingUserId], references: [id])
   collaboratingUserId String @map("matchingUserId")
-  
-	@@map("matches")
+
+  @@map("matches")
 }

@@ -4,7 +4,7 @@ import { JwtGuard } from 'src/auth/guard';
 import { GetUser } from 'src/auth/decorator';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import type { User } from 'generated/prisma';
-import { UserResponseDto } from 'src/global/dto';
+import { UserResponseDto } from './dto/user-response.dto';
 
 @UseGuards(JwtGuard)
 @ApiBearerAuth()
