@@ -9,6 +9,8 @@ import { MailerModule } from './mailer/mailer.module';
 import { HealthModule } from './health/health.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { ProjectPitchModule } from './project-pitch/project-pitch.module';
+import { SkillModule } from './skill/skill.module';
 
 @Module({
   imports: [
@@ -28,6 +30,8 @@ import { UserModule } from './user/user.module';
     HealthModule,
     AuthModule,
     UserModule,
+    ProjectPitchModule,
+    SkillModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })

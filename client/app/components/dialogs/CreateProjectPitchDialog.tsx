@@ -31,11 +31,11 @@ export default function CreateProjectPitchDialog({
   children: React.ReactNode;
 }) {
   // const [s, sS] = useState("1");
-  // const [formData, setFormData] = useState<{
-  //   projectTitle: string;
-  //   pitchDescription: string;
-  //   skills: string[];
-  // }>({ pitchDescription: "", projectTitle: "", skills: [] });
+  const [formData, setFormData] = useState<{
+    projectTitle: string;
+    pitchDescription: string;
+    skills: string[];
+  }>({ pitchDescription: "", projectTitle: "", skills: [] });
 
   return (
     <Dialog>
@@ -56,7 +56,7 @@ export default function CreateProjectPitchDialog({
               >
                 <span> Project Title</span>
                 <span className="text-muted-foreground!">
-                  {/* ${formData.projectTitle.length}/50 chars */}
+                  {formData.projectTitle.length}/50 chars
                 </span>
               </FieldLabel>
               <Input
@@ -67,6 +67,10 @@ export default function CreateProjectPitchDialog({
                 required
                 minLength={5}
                 maxLength={50}
+                value={formData.projectTitle}
+                onChange={(e) =>
+                  setFormData({ ...formData, projectTitle: e.target.value })
+                }
               />
             </Field>
             <Field>
@@ -76,7 +80,7 @@ export default function CreateProjectPitchDialog({
               >
                 <span> Pitch Description & Needed Skills</span>
                 <span className="text-muted-foreground!">
-                  {/* ${formData.pitchDescription.length}/100 chars */}
+                  {formData.pitchDescription.length}/200 chars
                 </span>
               </FieldLabel>
               <Textarea
@@ -86,6 +90,10 @@ export default function CreateProjectPitchDialog({
                 minLength={10}
                 maxLength={200}
                 required
+                value={formData.pitchDescription}
+                onChange={(e) =>
+                  setFormData({ ...formData, pitchDescription: e.target.value })
+                }
               ></Textarea>
             </Field>
             <Field>
@@ -227,14 +235,6 @@ export default function CreateProjectPitchDialog({
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                {/* <Input
-                  placeholder="E.g., 'React Native, Firebase, and OpenAI API'"
-                  name="techStack"
-                  id="tech-stack-input"
-                  minLength={5}
-                  maxLength={100}
-                  required
-                /> */}
                 <Combobox items={["Hey", "There", "Search"]}>
                   <ComboboxInput
                     placeholder="E.g., 'React Native, Firebase, and OpenAI API'"
