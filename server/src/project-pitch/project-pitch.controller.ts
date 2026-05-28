@@ -13,7 +13,7 @@ import { CreateProjectPitchDto } from './dto/create-project-pitch.dto';
 import { UpdateProjectPitchDto } from './dto/update-project-pitch.dto';
 import { JwtGuard } from 'src/auth/guard';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { ProjectPitchResponseDto } from './dto/project-pitch.dto';
+import { ProjectPitchResponseDto } from './dto/project-pitch-response.dto';
 
 @ApiBearerAuth()
 @UseGuards(JwtGuard)

@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ProjectPitchModule } from './project-pitch/project-pitch.module';
 import { SkillModule } from './skill/skill.module';
+import { YswsModule } from './ysws/ysws.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { SkillModule } from './skill/skill.module';
     UserModule,
     ProjectPitchModule,
     SkillModule,
+    YswsModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })

@@ -1,5 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   UnauthorizedException,
@@ -23,6 +24,9 @@ export class AuthService {
   ) {}
 
   hackClubAuth(redirect_uri: string) {
+    if (!redirect_uri)
+      throw new BadRequestException('redirect_uri is required');
+
     const client_id = this.config.get<string>('HACKCLUB_AUTH_CLIENT_ID');
 
     return {
@@ -34,6 +38,10 @@ export class AuthService {
     redirect_uri: string,
     code: string,
   ): Promise<AuthCallbackResponseDto> {
+    if (!redirect_uri)
+      throw new BadRequestException('redirect_uri is required');
+    if (!code) throw new BadRequestException('code is required');
+
     const client_id = this.config.get<string>('HACKCLUB_AUTH_CLIENT_ID');
     const client_secret = this.config.get<string>(
       'HACKCLUB_AUTH_CLIENT_SECRET',
