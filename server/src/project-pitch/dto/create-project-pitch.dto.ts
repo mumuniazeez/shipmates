@@ -7,6 +7,7 @@ import {
   IsArray,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { CreateSkillDto } from 'src/skill/dto/create-skill.dto';
 
 export class SkillDto {
   @IsUUID()
@@ -45,12 +46,12 @@ export class CreateProjectPitchDto {
   skills: SkillDto[];
 
   @ApiProperty({
-    type: [String],
+    type: [CreateSkillDto],
     description:
       'List of skills needed for the project. **Skill do not exist in database**',
   })
-  @IsString({ each: true })
-  @IsNotEmpty({ each: true })
+  @Type(() => CreateSkillDto)
+  @ValidateNested({ each: true })
   @IsArray()
-  newSkills: string[];
+  newSkills: CreateSkillDto[];
 }

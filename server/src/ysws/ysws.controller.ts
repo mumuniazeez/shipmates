@@ -8,32 +8,32 @@ export class YswsController {
   constructor(private readonly yswsService: YswsService) {}
 
   @ApiOperation({
-    summary: 'Get all YSWS program',
-    description: 'Get all YSWS program on https://ysws.hackclub.com',
+    summary: 'Find all YSWS program',
+    description: 'Find all YSWS program on https://ysws.hackclub.com',
   })
   @ApiResponse({ type: [YsWsResponseDto], status: 200 })
   @Get()
-  getAllYswsProgram() {
-    return this.yswsService.getAllYswsProgram();
+  findAll() {
+    return this.yswsService.findAll();
   }
   @ApiOperation({
-    summary: 'Get all active YSWS program',
-    description: 'Get all active YSWS program on https://ysws.hackclub.com',
+    summary: 'Find all active YSWS program',
+    description: 'Find all active YSWS program on https://ysws.hackclub.com',
   })
   @ApiResponse({ type: [YsWsResponseDto], status: 200 })
   @Get('active')
-  getActiveYswsProgram() {
-    return this.yswsService.getActiveYswsProgram();
+  findActive() {
+    return this.yswsService.findActive();
   }
 
   @ApiOperation({
-    summary: 'Get all ended YSWS program',
-    description: 'Get all ended YSWS program on https://ysws.hackclub.com',
+    summary: 'Find all ended YSWS program',
+    description: 'Find all ended YSWS program on https://ysws.hackclub.com',
   })
   @ApiResponse({ type: [YsWsResponseDto], status: 200 })
   @Get('ended')
-  getEndedYswsProgram() {
-    return this.yswsService.getEndedYswsProgram();
+  findEnded() {
+    return this.yswsService.findEnded();
   }
 
   @ApiOperation({
@@ -43,7 +43,7 @@ export class YswsController {
   @ApiResponse({ type: [YsWsResponseDto], status: 200 })
   @ApiQuery({ name: 'q', description: 'Query to search for' })
   @Get('search')
-  searchYswsProgram(@Query('q') q: string) {
-    return this.yswsService.searchYswsProgram(q);
+  search(@Query('q') q: string) {
+    return this.yswsService.search(q);
   }
 }

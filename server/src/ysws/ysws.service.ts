@@ -6,7 +6,7 @@ import { YsWsResponseDto } from './dto/ysws-response.dto';
 export class YswsService {
   constructor(private readonly httpService: HttpService) {}
 
-  async getAllYswsProgram() {
+  async findAll() {
     const res = await this.httpService.axiosRef.get<{
       limitedTime: YsWsResponseDto[];
       recentlyEnded: YsWsResponseDto[];
@@ -25,7 +25,7 @@ export class YswsService {
     return yswsArr;
   }
 
-  async getActiveYswsProgram() {
+  async findActive() {
     const res = await this.httpService.axiosRef.get<{
       limitedTime: YsWsResponseDto[];
       recentlyEnded: YsWsResponseDto[];
@@ -45,7 +45,7 @@ export class YswsService {
     return yswsArr.filter((ysws) => ysws.status === 'active');
   }
 
-  async getEndedYswsProgram() {
+  async findEnded() {
     const res = await this.httpService.axiosRef.get<{
       limitedTime: YsWsResponseDto[];
       recentlyEnded: YsWsResponseDto[];
@@ -65,7 +65,7 @@ export class YswsService {
     return yswsArr.filter((ysws) => ysws.status === 'ended');
   }
 
-  async searchYswsProgram(q: string) {
+  async search(q: string) {
     const res = await this.httpService.axiosRef.get<{
       limitedTime: YsWsResponseDto[];
       recentlyEnded: YsWsResponseDto[];

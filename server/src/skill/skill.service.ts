@@ -1,26 +1,35 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSkillDto } from './dto/create-skill.dto';
-import { UpdateSkillDto } from './dto/update-skill.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { SkillResponseDto } from './dto/skill-response.dto';
 
 @Injectable()
 export class SkillService {
-  create(createSkillDto: CreateSkillDto) {
-    return 'This action adds a new skill';
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(createSkillDto: CreateSkillDto): Promise<SkillResponseDto> {
+    const skill = await this.prisma.skill.create({
+      data: { name: createSkillDto.name },
+    });
+
+    return skill;
   }
 
-  findAll() {
-    return `This action returns all skill`;
+  async findAll(): Promise<SkillResponseDto[]> {
+    const skills = await this.prisma.skill.findMany({});
+
+    if (skills.length === 0) throw new NotFoundException('No skills yet');
+
+    return skills;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} skill`;
-  }
+  async search(q: string): Promise<SkillResponseDto[]> {
+    const skills = await this.prisma.skill.findMany({
+      where: { name: { contains: q, mode: 'insensitive' } },
+    });
 
-  update(id: number, updateSkillDto: UpdateSkillDto) {
-    return `This action updates a #${id} skill`;
-  }
+    if (skills.length === 0) throw new NotFoundException('No result found');
 
-  remove(id: number) {
-    return `This action removes a #${id} skill`;
+    return skills;
   }
 }

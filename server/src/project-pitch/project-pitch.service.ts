@@ -26,7 +26,7 @@ export class ProjectPitchService {
             return { id: skill.id };
           }),
           create: createProjectPitchDto.newSkills.map((skill) => {
-            return { name: skill };
+            return skill;
           }),
         },
         userId,
@@ -105,7 +105,7 @@ export class ProjectPitchService {
               }),
           create: updateProjectPitchDto.newSkills
             ? updateProjectPitchDto.newSkills.map((skill) => {
-                return { name: skill };
+                return skill;
               })
             : [],
         },
