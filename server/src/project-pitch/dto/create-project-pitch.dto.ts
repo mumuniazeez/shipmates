@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsUUID, ValidateNested } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsUUID,
+  ValidateNested,
+  IsArray,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class SkillDto {
@@ -35,6 +41,7 @@ export class CreateProjectPitchDto {
   })
   @Type(() => SkillDto)
   @ValidateNested({ each: true })
+  @IsArray()
   skills: SkillDto[];
 
   @ApiProperty({
@@ -44,5 +51,6 @@ export class CreateProjectPitchDto {
   })
   @IsString({ each: true })
   @IsNotEmpty({ each: true })
+  @IsArray()
   newSkills: string[];
 }

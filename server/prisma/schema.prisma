@@ -38,6 +38,7 @@ model ProjectPitch {
   user         User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   userId       String
   skillsNeeded Skill[]
+  matches      Match[]
 
   @@map("project_pitches")
 }
@@ -53,11 +54,13 @@ model Skill {
 }
 
 model Match {
-  id                  String @id @default(uuid())
-  projectOwner        User   @relation("matchProjectOwner", fields: [projectOwnerId], references: [id])
+  id                  String        @id @default(uuid())
+  projectOwner        User          @relation("matchProjectOwner", fields: [projectOwnerId], references: [id])
   projectOwnerId      String
-  collaboratingUser   User   @relation("matchMatchingUser", fields: [collaboratingUserId], references: [id])
-  collaboratingUserId String @map("matchingUserId")
+  collaboratingUser   User          @relation("matchMatchingUser", fields: [collaboratingUserId], references: [id])
+  collaboratingUserId String        @map("matchingUserId")
+  projectPitch        ProjectPitch? @relation(fields: [projectPitchId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  projectPitchId      String?
 
   @@map("matches")
 }

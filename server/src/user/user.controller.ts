@@ -1,4 +1,10 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { JwtGuard } from 'src/auth/guard';
 import { GetUser } from 'src/auth/decorator';
@@ -36,7 +42,7 @@ export class UserController {
     type: UserResponseDto,
   })
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.userService.findOne(id);
   }
 }

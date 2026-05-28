@@ -1,8 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateProjectPitchDto } from './dto/create-project-pitch.dto';
 import { UpdateProjectPitchDto } from './dto/update-project-pitch.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ProjectPitchResponseDto } from './dto/project-pitch-response.dto';
+import { GeneralOkResponseDto } from 'src/global/dto';
 
 @Injectable()
 export class ProjectPitchService {
@@ -32,34 +37,100 @@ export class ProjectPitchService {
     return projectPitch;
   }
 
-  findAll() {
-    return `This action returns all projectPitch`;
+  // TODO: Add pagination later
+  async findAll() {
+    const projectPitches = await this.prisma.projectPitch.findMany({
+      include: { skillsNeeded: true, user: true },
+    });
+
+    if (projectPitches.length === 0)
+      throw new NotFoundException('No project pitch yet.');
+
+    return projectPitches;
   }
 
-  findMyProjectPitches(userId: string) {
-    return 'hahaha coming soon';
+  // TODO: Add pagination later
+  async findMyProjectPitches(userId: string) {
+    const projectPitches = await this.prisma.projectPitch.findMany({
+      where: { userId },
+      include: { skillsNeeded: true, user: true },
+    });
+
+    if (projectPitches.length === 0)
+      throw new NotFoundException('No project pitch yet.');
+
+    return projectPitches;
   }
 
   async findOne(id: string): Promise<ProjectPitchResponseDto> {
-    const projectPitch = await this.prisma.projectPitch.findFirst({
+    const projectPitch = await this.prisma.projectPitch.findUnique({
       where: { id },
       include: { skillsNeeded: true, user: true },
     });
 
-    if (!projectPitch) throw new NotFoundException('Project Ptich not found');
+    if (!projectPitch) throw new NotFoundException('Project Pitch not found');
 
     return projectPitch;
   }
 
-  update(
+  async update(
     id: string,
     updateProjectPitchDto: UpdateProjectPitchDto,
     userId: string,
   ) {
-    return `This action updates a #${id} projectPitch`;
+    const existingPitch = await this.prisma.projectPitch.findUnique({
+      where: { id },
+      include: { skillsNeeded: true },
+    });
+    if (!existingPitch) throw new NotFoundException('Project Pitch not found');
+
+    if (existingPitch.userId !== userId)
+      throw new ForbiddenException(
+        'You do not have the permission to update this pitch',
+      );
+
+    const projectPitch = await this.prisma.projectPitch.update({
+      data: {
+        title: updateProjectPitchDto.projectTitle,
+        description: updateProjectPitchDto.pitchDescription,
+        skillsNeeded: {
+          set: updateProjectPitchDto.skills
+            ? updateProjectPitchDto.skills.map((skill) => {
+                return { id: skill.id };
+              })
+            : existingPitch.skillsNeeded.map((skill) => {
+                return {
+                  id: skill.id,
+                };
+              }),
+          create: updateProjectPitchDto.newSkills
+            ? updateProjectPitchDto.newSkills.map((skill) => {
+                return { name: skill };
+              })
+            : [],
+        },
+        userId,
+      },
+      include: { skillsNeeded: true, user: true },
+      where: { id },
+    });
+
+    return projectPitch;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} projectPitch`;
+  async remove(id: string, userId: string): Promise<GeneralOkResponseDto> {
+    const existingPitch = await this.prisma.projectPitch.findUnique({
+      where: { id },
+      include: { skillsNeeded: true },
+    });
+    if (!existingPitch) throw new NotFoundException('Project Pitch not found');
+
+    if (existingPitch.userId !== userId)
+      throw new ForbiddenException(
+        'You do not have the permission to update this pitch',
+      );
+
+    await this.prisma.projectPitch.delete({ where: { id } });
+    return { message: 'Project Pitch Deleted' };
   }
 }
