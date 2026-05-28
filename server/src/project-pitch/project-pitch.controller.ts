@@ -14,6 +14,7 @@ import { UpdateProjectPitchDto } from './dto/update-project-pitch.dto';
 import { JwtGuard } from 'src/auth/guard';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ProjectPitchResponseDto } from './dto/project-pitch-response.dto';
+import { GetUser } from 'src/auth/decorator';
 
 @ApiBearerAuth()
 @UseGuards(JwtGuard)
@@ -31,8 +32,11 @@ export class ProjectPitchController {
     type: ProjectPitchResponseDto,
   })
   @Post()
-  create(@Body() createProjectPitchDto: CreateProjectPitchDto) {
-    return this.projectPitchService.create(createProjectPitchDto);
+  create(
+    @Body() createProjectPitchDto: CreateProjectPitchDto,
+    @GetUser('id') userId: string,
+  ) {
+    return this.projectPitchService.create(createProjectPitchDto, userId);
   }
 
   @Get()
@@ -41,21 +45,30 @@ export class ProjectPitchController {
   }
 
   @Get('me')
-  findMyProjectPitches() {
-    // return this.projectPitchService.findOne(+id);
+  findMyProjectPitches(@GetUser('id') userId: string) {
+    return this.projectPitchService.findMyProjectPitches(userId);
   }
 
+  @ApiOperation({
+    summary: 'Find one project pitch',
+    description: 'Find a project pitch by id',
+  })
+  @ApiResponse({
+    status: 200,
+    type: ProjectPitchResponseDto,
+  })
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.projectPitchService.findOne(+id);
+    return this.projectPitchService.findOne(id);
   }
 
   @Patch(':id')
   update(
     @Param('id') id: string,
     @Body() updateProjectPitchDto: UpdateProjectPitchDto,
+    @GetUser('id') userId: string,
   ) {
-    return this.projectPitchService.update(+id, updateProjectPitchDto);
+    return this.projectPitchService.update(id, updateProjectPitchDto, userId);
   }
 
   @Delete(':id')
