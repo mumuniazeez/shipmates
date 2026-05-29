@@ -28,7 +28,7 @@ export class ProjectPitchResponseDto {
   skillsNeeded: SkillResponseDto[];
 
   @ApiProperty({
-    type: () => [UserResponseDto],
+    type: () => UserResponseDto,
     description: 'The user who created the project pitch',
   })
   user: UserResponseDto;
