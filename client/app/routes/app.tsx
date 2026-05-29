@@ -3,6 +3,8 @@ import Sidebar from "~/components/Sidebar";
 import type { Route } from "./+types/app";
 import { Outlet, redirect } from "react-router";
 import type { UserResponseDto } from "~/api";
+import DialogControlProvider from "~/contexts/DialogControlProvider";
+import CreateProjectPitchDialog from "~/components/dialogs/CreateProjectPitchDialog";
 
 export type OutletContext = {
   user: UserResponseDto;
@@ -19,9 +21,12 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export default function Home({ loaderData }: Route.ComponentProps) {
   return (
-    <div className="flex overflow-hidden h-screen">
-      <Sidebar user={loaderData.user} />
-      <Outlet context={{ user: loaderData.user } satisfies OutletContext} />
-    </div>
+    <DialogControlProvider>
+      <div className="flex overflow-hidden h-screen">
+        <Sidebar user={loaderData.user} />
+        <Outlet context={{ user: loaderData.user } satisfies OutletContext} />
+      </div>
+      <CreateProjectPitchDialog />
+    </DialogControlProvider>
   );
 }

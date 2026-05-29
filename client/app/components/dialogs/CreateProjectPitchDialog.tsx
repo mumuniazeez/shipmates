@@ -24,13 +24,12 @@ import {
   ComboboxItem,
   ComboboxList,
 } from "../ui/combobox";
+import { useDialogControlContext } from "~/contexts/DialogControlProvider";
 
-export default function CreateProjectPitchDialog({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  // const [s, sS] = useState("1");
+export default function CreateProjectPitchDialog() {
+  const { openCreateProjectDialog, setOpenCreateProjectDialog } =
+    useDialogControlContext();
+
   const [formData, setFormData] = useState<{
     projectTitle: string;
     pitchDescription: string;
@@ -38,8 +37,10 @@ export default function CreateProjectPitchDialog({
   }>({ pitchDescription: "", projectTitle: "", skills: [] });
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+    <Dialog
+      open={openCreateProjectDialog}
+      onOpenChange={setOpenCreateProjectDialog}
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create a new Project Pitch</DialogTitle>

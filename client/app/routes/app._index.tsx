@@ -20,6 +20,8 @@ import {
   EmptyDescription,
   EmptyContent,
 } from "~/components/ui/empty";
+import { getAllProjectPitch } from "~/lib/projectPitch.server";
+import { useDialogControlContext } from "~/contexts/DialogControlProvider";
 
 export function meta({}: Route.MetaArgs): Route.MetaDescriptors {
   return [
@@ -31,17 +33,15 @@ export function meta({}: Route.MetaArgs): Route.MetaDescriptors {
   ];
 }
 
-// export async function loader({ request }: Route.LoaderArgs) {
-//   const userRes = await getCurrentUser(request);
-//   if (userRes.error) {
-//     console.log(userRes.error);
-//     throw redirect("/");
-//   }
-//   return { user: userRes.data };
-// }
+export async function loader({ request }: Route.LoaderArgs) {
+  const res = await getAllProjectPitch(request);
+  return res;
+}
 
 export default function DashboardExplore({ loaderData }: Route.ComponentProps) {
   const { user } = useOutletContext<OutletContext>();
+  const { setOpenCreateProjectDialog } = useDialogControlContext();
+
   return (
     <div className="md:w-[75%] w-full overflow-auto">
       <header className="flex flex-col md:flex-row md:items-center justify-between border-b p-5 gap-y-5">
@@ -68,27 +68,57 @@ export default function DashboardExplore({ loaderData }: Route.ComponentProps) {
         </div>
       </header>
       <main className="p-5">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
-          <ProjectPitchCard />
-          <ProjectPitchCard />
-          <ProjectPitchCard />
-          <ProjectPitchCard />
-        </div>
-        <Empty>
-          <EmptyHeader>
-            <EmptyMedia variant={"icon"}>
-              <HugeiconsIcon icon={Sad02Icon} />
-            </EmptyMedia>
-            <EmptyTitle>No Pitches yet.</EmptyTitle>
-            <EmptyDescription>
-              Be the first to pitch your project and find collaborators to work
-              with.
-            </EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent className="flex-row justify-center gap-2">
-            <Button variant={"default"}>Create Pitch</Button>
-          </EmptyContent>
-        </Empty>
+        {loaderData.data ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
+            {loaderData.data.map((projectPitch) => (
+              <ProjectPitchCard
+                key={projectPitch.id}
+                projectPitch={projectPitch}
+              />
+            ))}
+          </div>
+        ) : loaderData.error.statusCode === 404 ? (
+          <Empty>
+            <EmptyHeader>
+              <EmptyMedia variant={"icon"}>
+                <HugeiconsIcon icon={Sad02Icon} />
+              </EmptyMedia>
+              <EmptyTitle>No Pitches yet.</EmptyTitle>
+              <EmptyDescription>
+                Be the first to pitch your project and find collaborators to
+                work with.
+              </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent className="flex-row justify-center gap-2">
+              <Button
+                variant={"default"}
+                onClick={() => setOpenCreateProjectDialog(true)}
+              >
+                Create Pitch
+              </Button>
+            </EmptyContent>
+          </Empty>
+        ) : (
+          <Empty>
+            <EmptyHeader>
+              <EmptyMedia variant={"icon"}>
+                <HugeiconsIcon icon={Sad02Icon} />
+              </EmptyMedia>
+              <EmptyTitle>Unable to load project pitches.</EmptyTitle>
+              <EmptyDescription>
+                Please refresh the page. If issue persist DM @AzCodes on slack
+              </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent className="flex-row justify-center gap-2">
+              <Button
+                variant={"default"}
+                onClick={() => window.location.reload()}
+              >
+                Refresh Page
+              </Button>
+            </EmptyContent>
+          </Empty>
+        )}
       </main>
     </div>
   );

@@ -105,6 +105,151 @@ export type UserResponseDto = {
     updatedAt: Date;
 };
 
+export type SkillDto = {
+    /**
+     * id of the skill needed for the project
+     */
+    id: string;
+};
+
+export type CreateSkillDto = {
+    /**
+     * The name of the skill to be added
+     */
+    name: string;
+};
+
+export type CreateProjectPitchDto = {
+    /**
+     * Title of the project to be pitched
+     */
+    projectTitle: string;
+    /**
+     * The description of what needed for the project
+     */
+    pitchDescription: string;
+    /**
+     * List of skills needed(to be added) for the project. **Skill already exist in database**
+     */
+    skills: Array<SkillDto>;
+    /**
+     * List of skills needed for the project. **Skill do not exist in database**
+     */
+    newSkills: Array<CreateSkillDto>;
+};
+
+export type SkillResponseDto = {
+    /**
+     * ID of the skill
+     */
+    id: string;
+    /**
+     * Name of the skill
+     */
+    name: string;
+    /**
+     * The date the skill was created
+     */
+    createdAt: string;
+    /**
+     * The data the skill was last updated
+     */
+    updatedAt: string;
+};
+
+export type ProjectPitchResponseDto = {
+    /**
+     * ID of the project
+     */
+    id: string;
+    /**
+     * Title of the project to be pitched
+     */
+    title: string;
+    /**
+     * The description of what needed for the project
+     */
+    description: string;
+    /**
+     * The description of what needed for the project
+     */
+    skillsNeeded: Array<SkillResponseDto>;
+    /**
+     * The user who created the project pitch
+     */
+    user: UserResponseDto;
+    /**
+     * The userId of user who created the project pitch
+     */
+    userId: string;
+    /**
+     * The date the project pitch was created
+     */
+    createdAt: string;
+    /**
+     * The data the project pitch was last updated
+     */
+    updatedAt: string;
+};
+
+export type UpdateProjectPitchDto = {
+    /**
+     * Title of the project to be pitched
+     */
+    projectTitle?: string;
+    /**
+     * The description of what needed for the project
+     */
+    pitchDescription?: string;
+    /**
+     * List of skills needed(to be added) for the project. Skill already exist in database
+     * **Note: Override the skillsNeeded array if provided**
+     */
+    skills?: Array<SkillDto>;
+    /**
+     * List of skills needed for the project. **Skill do not exist in database**
+     */
+    newSkills?: Array<CreateSkillDto>;
+};
+
+export type GeneralOkResponseDto = {
+    /**
+     * Human readable message
+     */
+    message: string;
+};
+
+export type YsWsResponseDto = {
+    /**
+     * Name of the YSWS program
+     */
+    name: string;
+    /**
+     * When the YSWS  program ends
+     */
+    deadline: string;
+    /**
+     * Description of the YSWS program
+     */
+    description: string;
+    /**
+     * Website of the YSWS program
+     */
+    website: string | null;
+    /**
+     * Slack channel link for the YSWS program
+     */
+    slack: string | null;
+    /**
+     * Slack channel name for the YSWS program (begins with # i.e #shipmates)
+     */
+    slackChannel: string | null;
+    /**
+     * Status of the YSWS program
+     */
+    status: 'active' | 'ended' | 'draft';
+};
+
 export type ErrorMessageDtoWritable = {
     /**
      * Human readable error message
@@ -116,7 +261,7 @@ export type HealthCheckData = {
     body?: never;
     path?: never;
     query?: never;
-    url: '/api/v1/health';
+    url: '/api/health';
 };
 
 export type HealthCheckErrors = {
@@ -328,3 +473,354 @@ export type UserControllerFindOneV1Responses = {
 };
 
 export type UserControllerFindOneV1Response = UserControllerFindOneV1Responses[keyof UserControllerFindOneV1Responses];
+
+export type ProjectPitchControllerFindAllV1Data = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/project-pitch';
+};
+
+export type ProjectPitchControllerFindAllV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type ProjectPitchControllerFindAllV1Error = ProjectPitchControllerFindAllV1Errors[keyof ProjectPitchControllerFindAllV1Errors];
+
+export type ProjectPitchControllerFindAllV1Responses = {
+    200: Array<ProjectPitchResponseDto>;
+};
+
+export type ProjectPitchControllerFindAllV1Response = ProjectPitchControllerFindAllV1Responses[keyof ProjectPitchControllerFindAllV1Responses];
+
+export type ProjectPitchControllerCreateV1Data = {
+    body: CreateProjectPitchDto;
+    path?: never;
+    query?: never;
+    url: '/api/v1/project-pitch';
+};
+
+export type ProjectPitchControllerCreateV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type ProjectPitchControllerCreateV1Error = ProjectPitchControllerCreateV1Errors[keyof ProjectPitchControllerCreateV1Errors];
+
+export type ProjectPitchControllerCreateV1Responses = {
+    201: ProjectPitchResponseDto;
+};
+
+export type ProjectPitchControllerCreateV1Response = ProjectPitchControllerCreateV1Responses[keyof ProjectPitchControllerCreateV1Responses];
+
+export type ProjectPitchControllerFindMyProjectPitchesV1Data = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/project-pitch/me';
+};
+
+export type ProjectPitchControllerFindMyProjectPitchesV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type ProjectPitchControllerFindMyProjectPitchesV1Error = ProjectPitchControllerFindMyProjectPitchesV1Errors[keyof ProjectPitchControllerFindMyProjectPitchesV1Errors];
+
+export type ProjectPitchControllerFindMyProjectPitchesV1Responses = {
+    200: Array<ProjectPitchResponseDto>;
+};
+
+export type ProjectPitchControllerFindMyProjectPitchesV1Response = ProjectPitchControllerFindMyProjectPitchesV1Responses[keyof ProjectPitchControllerFindMyProjectPitchesV1Responses];
+
+export type ProjectPitchControllerRemoveV1Data = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/project-pitch/{id}';
+};
+
+export type ProjectPitchControllerRemoveV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type ProjectPitchControllerRemoveV1Error = ProjectPitchControllerRemoveV1Errors[keyof ProjectPitchControllerRemoveV1Errors];
+
+export type ProjectPitchControllerRemoveV1Responses = {
+    200: GeneralOkResponseDto;
+};
+
+export type ProjectPitchControllerRemoveV1Response = ProjectPitchControllerRemoveV1Responses[keyof ProjectPitchControllerRemoveV1Responses];
+
+export type ProjectPitchControllerFindOneV1Data = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/project-pitch/{id}';
+};
+
+export type ProjectPitchControllerFindOneV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type ProjectPitchControllerFindOneV1Error = ProjectPitchControllerFindOneV1Errors[keyof ProjectPitchControllerFindOneV1Errors];
+
+export type ProjectPitchControllerFindOneV1Responses = {
+    200: ProjectPitchResponseDto;
+};
+
+export type ProjectPitchControllerFindOneV1Response = ProjectPitchControllerFindOneV1Responses[keyof ProjectPitchControllerFindOneV1Responses];
+
+export type ProjectPitchControllerUpdateV1Data = {
+    body: UpdateProjectPitchDto;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/project-pitch/{id}';
+};
+
+export type ProjectPitchControllerUpdateV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type ProjectPitchControllerUpdateV1Error = ProjectPitchControllerUpdateV1Errors[keyof ProjectPitchControllerUpdateV1Errors];
+
+export type ProjectPitchControllerUpdateV1Responses = {
+    200: ProjectPitchResponseDto;
+};
+
+export type ProjectPitchControllerUpdateV1Response = ProjectPitchControllerUpdateV1Responses[keyof ProjectPitchControllerUpdateV1Responses];
+
+export type SkillControllerFindAllV1Data = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/skill';
+};
+
+export type SkillControllerFindAllV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type SkillControllerFindAllV1Error = SkillControllerFindAllV1Errors[keyof SkillControllerFindAllV1Errors];
+
+export type SkillControllerFindAllV1Responses = {
+    200: Array<SkillResponseDto>;
+};
+
+export type SkillControllerFindAllV1Response = SkillControllerFindAllV1Responses[keyof SkillControllerFindAllV1Responses];
+
+export type SkillControllerCreateV1Data = {
+    body: CreateSkillDto;
+    path?: never;
+    query?: never;
+    url: '/api/v1/skill';
+};
+
+export type SkillControllerCreateV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type SkillControllerCreateV1Error = SkillControllerCreateV1Errors[keyof SkillControllerCreateV1Errors];
+
+export type SkillControllerCreateV1Responses = {
+    200: SkillResponseDto;
+};
+
+export type SkillControllerCreateV1Response = SkillControllerCreateV1Responses[keyof SkillControllerCreateV1Responses];
+
+export type SkillControllerSearchV1Data = {
+    body?: never;
+    path?: never;
+    query: {
+        q: string;
+    };
+    url: '/api/v1/skill/search';
+};
+
+export type SkillControllerSearchV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type SkillControllerSearchV1Error = SkillControllerSearchV1Errors[keyof SkillControllerSearchV1Errors];
+
+export type SkillControllerSearchV1Responses = {
+    200: Array<SkillResponseDto>;
+};
+
+export type SkillControllerSearchV1Response = SkillControllerSearchV1Responses[keyof SkillControllerSearchV1Responses];
+
+export type YswsControllerFindAllV1Data = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/ysws';
+};
+
+export type YswsControllerFindAllV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type YswsControllerFindAllV1Error = YswsControllerFindAllV1Errors[keyof YswsControllerFindAllV1Errors];
+
+export type YswsControllerFindAllV1Responses = {
+    200: Array<YsWsResponseDto>;
+};
+
+export type YswsControllerFindAllV1Response = YswsControllerFindAllV1Responses[keyof YswsControllerFindAllV1Responses];
+
+export type YswsControllerFindActiveV1Data = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/ysws/active';
+};
+
+export type YswsControllerFindActiveV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type YswsControllerFindActiveV1Error = YswsControllerFindActiveV1Errors[keyof YswsControllerFindActiveV1Errors];
+
+export type YswsControllerFindActiveV1Responses = {
+    200: Array<YsWsResponseDto>;
+};
+
+export type YswsControllerFindActiveV1Response = YswsControllerFindActiveV1Responses[keyof YswsControllerFindActiveV1Responses];
+
+export type YswsControllerFindEndedV1Data = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/ysws/ended';
+};
+
+export type YswsControllerFindEndedV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type YswsControllerFindEndedV1Error = YswsControllerFindEndedV1Errors[keyof YswsControllerFindEndedV1Errors];
+
+export type YswsControllerFindEndedV1Responses = {
+    200: Array<YsWsResponseDto>;
+};
+
+export type YswsControllerFindEndedV1Response = YswsControllerFindEndedV1Responses[keyof YswsControllerFindEndedV1Responses];
+
+export type YswsControllerSearchV1Data = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * Query to search for
+         */
+        q: string;
+    };
+    url: '/api/v1/ysws/search';
+};
+
+export type YswsControllerSearchV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type YswsControllerSearchV1Error = YswsControllerSearchV1Errors[keyof YswsControllerSearchV1Errors];
+
+export type YswsControllerSearchV1Responses = {
+    200: Array<YsWsResponseDto>;
+};
+
+export type YswsControllerSearchV1Response = YswsControllerSearchV1Responses[keyof YswsControllerSearchV1Responses];

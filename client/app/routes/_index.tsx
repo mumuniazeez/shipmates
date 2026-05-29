@@ -55,7 +55,7 @@ export default function Home() {
             <Button>Sign in with Hack Club</Button>
           </Link>
           <p className="text-sm text-muted-foreground">
-            DM @azcodes on Slack for support.
+            DM @AzCodes on Slack for support.
           </p>
         </section>
         <section className="py-10 md:px-30 px-10 space-y-5">

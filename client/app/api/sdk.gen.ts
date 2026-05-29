@@ -2,8 +2,8 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import { userControllerFindMeV1ResponseTransformer, userControllerFindOneV1ResponseTransformer } from './transformers.gen';
-import type { AuthControllerGetNewAccessTokenV1Data, AuthControllerGetNewAccessTokenV1Errors, AuthControllerGetNewAccessTokenV1Responses, AuthControllerHackClubAuthCallbackV1Data, AuthControllerHackClubAuthCallbackV1Errors, AuthControllerHackClubAuthCallbackV1Responses, AuthControllerHackClubAuthV1Data, AuthControllerHackClubAuthV1Errors, AuthControllerHackClubAuthV1Responses, HealthCheckData, HealthCheckErrors, HealthCheckResponses, UserControllerFindMeV1Data, UserControllerFindMeV1Errors, UserControllerFindMeV1Responses, UserControllerFindOneV1Data, UserControllerFindOneV1Errors, UserControllerFindOneV1Responses } from './types.gen';
+import { projectPitchControllerCreateV1ResponseTransformer, projectPitchControllerFindAllV1ResponseTransformer, projectPitchControllerFindMyProjectPitchesV1ResponseTransformer, projectPitchControllerFindOneV1ResponseTransformer, projectPitchControllerUpdateV1ResponseTransformer, userControllerFindMeV1ResponseTransformer, userControllerFindOneV1ResponseTransformer } from './transformers.gen';
+import type { AuthControllerGetNewAccessTokenV1Data, AuthControllerGetNewAccessTokenV1Errors, AuthControllerGetNewAccessTokenV1Responses, AuthControllerHackClubAuthCallbackV1Data, AuthControllerHackClubAuthCallbackV1Errors, AuthControllerHackClubAuthCallbackV1Responses, AuthControllerHackClubAuthV1Data, AuthControllerHackClubAuthV1Errors, AuthControllerHackClubAuthV1Responses, HealthCheckData, HealthCheckErrors, HealthCheckResponses, ProjectPitchControllerCreateV1Data, ProjectPitchControllerCreateV1Errors, ProjectPitchControllerCreateV1Responses, ProjectPitchControllerFindAllV1Data, ProjectPitchControllerFindAllV1Errors, ProjectPitchControllerFindAllV1Responses, ProjectPitchControllerFindMyProjectPitchesV1Data, ProjectPitchControllerFindMyProjectPitchesV1Errors, ProjectPitchControllerFindMyProjectPitchesV1Responses, ProjectPitchControllerFindOneV1Data, ProjectPitchControllerFindOneV1Errors, ProjectPitchControllerFindOneV1Responses, ProjectPitchControllerRemoveV1Data, ProjectPitchControllerRemoveV1Errors, ProjectPitchControllerRemoveV1Responses, ProjectPitchControllerUpdateV1Data, ProjectPitchControllerUpdateV1Errors, ProjectPitchControllerUpdateV1Responses, SkillControllerCreateV1Data, SkillControllerCreateV1Errors, SkillControllerCreateV1Responses, SkillControllerFindAllV1Data, SkillControllerFindAllV1Errors, SkillControllerFindAllV1Responses, SkillControllerSearchV1Data, SkillControllerSearchV1Errors, SkillControllerSearchV1Responses, UserControllerFindMeV1Data, UserControllerFindMeV1Errors, UserControllerFindMeV1Responses, UserControllerFindOneV1Data, UserControllerFindOneV1Errors, UserControllerFindOneV1Responses, YswsControllerFindActiveV1Data, YswsControllerFindActiveV1Errors, YswsControllerFindActiveV1Responses, YswsControllerFindAllV1Data, YswsControllerFindAllV1Errors, YswsControllerFindAllV1Responses, YswsControllerFindEndedV1Data, YswsControllerFindEndedV1Errors, YswsControllerFindEndedV1Responses, YswsControllerSearchV1Data, YswsControllerSearchV1Errors, YswsControllerSearchV1Responses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -26,7 +26,7 @@ export class health {
      * Check if server is up and running, check if database is running
      */
     public static healthCheck<ThrowOnError extends boolean = false>(options?: Options<HealthCheckData, ThrowOnError>) {
-        return (options?.client ?? client).get<HealthCheckResponses, HealthCheckErrors, ThrowOnError>({ url: '/api/v1/health', ...options });
+        return (options?.client ?? client).get<HealthCheckResponses, HealthCheckErrors, ThrowOnError>({ url: '/api/health', ...options });
     }
 }
 
@@ -94,5 +94,172 @@ export class user {
             url: '/api/v1/user/{id}',
             ...options
         });
+    }
+}
+
+export class projectPitch {
+    /**
+     * Find all project pitch
+     *
+     * Find all project pitch
+     */
+    public static projectPitchControllerFindAllV1<ThrowOnError extends boolean = false>(options?: Options<ProjectPitchControllerFindAllV1Data, ThrowOnError>) {
+        return (options?.client ?? client).get<ProjectPitchControllerFindAllV1Responses, ProjectPitchControllerFindAllV1Errors, ThrowOnError>({
+            responseTransformer: projectPitchControllerFindAllV1ResponseTransformer,
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/project-pitch',
+            ...options
+        });
+    }
+    
+    /**
+     * Create a new project pitch
+     *
+     * Create a new project pitch for a project that needs to be built
+     */
+    public static projectPitchControllerCreateV1<ThrowOnError extends boolean = false>(options: Options<ProjectPitchControllerCreateV1Data, ThrowOnError>) {
+        return (options.client ?? client).post<ProjectPitchControllerCreateV1Responses, ProjectPitchControllerCreateV1Errors, ThrowOnError>({
+            responseTransformer: projectPitchControllerCreateV1ResponseTransformer,
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/project-pitch',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+    
+    /**
+     * Find all project pitch created by the current user
+     *
+     * Find all project pitch created by the current user
+     */
+    public static projectPitchControllerFindMyProjectPitchesV1<ThrowOnError extends boolean = false>(options?: Options<ProjectPitchControllerFindMyProjectPitchesV1Data, ThrowOnError>) {
+        return (options?.client ?? client).get<ProjectPitchControllerFindMyProjectPitchesV1Responses, ProjectPitchControllerFindMyProjectPitchesV1Errors, ThrowOnError>({
+            responseTransformer: projectPitchControllerFindMyProjectPitchesV1ResponseTransformer,
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/project-pitch/me',
+            ...options
+        });
+    }
+    
+    /**
+     * Delete a project pitch
+     *
+     * Delete a project pitch
+     */
+    public static projectPitchControllerRemoveV1<ThrowOnError extends boolean = false>(options: Options<ProjectPitchControllerRemoveV1Data, ThrowOnError>) {
+        return (options.client ?? client).delete<ProjectPitchControllerRemoveV1Responses, ProjectPitchControllerRemoveV1Errors, ThrowOnError>({
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/project-pitch/{id}',
+            ...options
+        });
+    }
+    
+    /**
+     * Find one project pitch
+     *
+     * Find a project pitch by id
+     */
+    public static projectPitchControllerFindOneV1<ThrowOnError extends boolean = false>(options: Options<ProjectPitchControllerFindOneV1Data, ThrowOnError>) {
+        return (options.client ?? client).get<ProjectPitchControllerFindOneV1Responses, ProjectPitchControllerFindOneV1Errors, ThrowOnError>({
+            responseTransformer: projectPitchControllerFindOneV1ResponseTransformer,
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/project-pitch/{id}',
+            ...options
+        });
+    }
+    
+    /**
+     * Update a project pitch
+     *
+     * Update a project pitch
+     */
+    public static projectPitchControllerUpdateV1<ThrowOnError extends boolean = false>(options: Options<ProjectPitchControllerUpdateV1Data, ThrowOnError>) {
+        return (options.client ?? client).patch<ProjectPitchControllerUpdateV1Responses, ProjectPitchControllerUpdateV1Errors, ThrowOnError>({
+            responseTransformer: projectPitchControllerUpdateV1ResponseTransformer,
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/project-pitch/{id}',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+}
+
+export class skill {
+    /**
+     * Find all skills
+     *
+     * Find all skills
+     */
+    public static skillControllerFindAllV1<ThrowOnError extends boolean = false>(options?: Options<SkillControllerFindAllV1Data, ThrowOnError>) {
+        return (options?.client ?? client).get<SkillControllerFindAllV1Responses, SkillControllerFindAllV1Errors, ThrowOnError>({ url: '/api/v1/skill', ...options });
+    }
+    
+    /**
+     * Create a new skill
+     *
+     * Create a new skill
+     */
+    public static skillControllerCreateV1<ThrowOnError extends boolean = false>(options: Options<SkillControllerCreateV1Data, ThrowOnError>) {
+        return (options.client ?? client).post<SkillControllerCreateV1Responses, SkillControllerCreateV1Errors, ThrowOnError>({
+            url: '/api/v1/skill',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+    
+    /**
+     * Search for skills
+     *
+     * Search for skills
+     */
+    public static skillControllerSearchV1<ThrowOnError extends boolean = false>(options: Options<SkillControllerSearchV1Data, ThrowOnError>) {
+        return (options.client ?? client).get<SkillControllerSearchV1Responses, SkillControllerSearchV1Errors, ThrowOnError>({ url: '/api/v1/skill/search', ...options });
+    }
+}
+
+export class ysws {
+    /**
+     * Find all YSWS program
+     *
+     * Find all YSWS program on https://ysws.hackclub.com
+     */
+    public static yswsControllerFindAllV1<ThrowOnError extends boolean = false>(options?: Options<YswsControllerFindAllV1Data, ThrowOnError>) {
+        return (options?.client ?? client).get<YswsControllerFindAllV1Responses, YswsControllerFindAllV1Errors, ThrowOnError>({ url: '/api/v1/ysws', ...options });
+    }
+    
+    /**
+     * Find all active YSWS program
+     *
+     * Find all active YSWS program on https://ysws.hackclub.com
+     */
+    public static yswsControllerFindActiveV1<ThrowOnError extends boolean = false>(options?: Options<YswsControllerFindActiveV1Data, ThrowOnError>) {
+        return (options?.client ?? client).get<YswsControllerFindActiveV1Responses, YswsControllerFindActiveV1Errors, ThrowOnError>({ url: '/api/v1/ysws/active', ...options });
+    }
+    
+    /**
+     * Find all ended YSWS program
+     *
+     * Find all ended YSWS program on https://ysws.hackclub.com
+     */
+    public static yswsControllerFindEndedV1<ThrowOnError extends boolean = false>(options?: Options<YswsControllerFindEndedV1Data, ThrowOnError>) {
+        return (options?.client ?? client).get<YswsControllerFindEndedV1Responses, YswsControllerFindEndedV1Errors, ThrowOnError>({ url: '/api/v1/ysws/ended', ...options });
+    }
+    
+    /**
+     * Search YSWS program (name, description)
+     *
+     * Search YSWS program on https://ysws.hackclub.com
+     */
+    public static yswsControllerSearchV1<ThrowOnError extends boolean = false>(options: Options<YswsControllerSearchV1Data, ThrowOnError>) {
+        return (options.client ?? client).get<YswsControllerSearchV1Responses, YswsControllerSearchV1Errors, ThrowOnError>({ url: '/api/v1/ysws/search', ...options });
     }
 }

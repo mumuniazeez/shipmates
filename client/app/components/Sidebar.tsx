@@ -14,11 +14,12 @@ import LogoutDialog from "./dialogs/LogoutDialog";
 import { Link, useLocation } from "react-router";
 import { Separator } from "./ui/separator";
 import { useNavigate } from "react-router";
-import CreateProjectPitchDialog from "./dialogs/CreateProjectPitchDialog";
+import { useDialogControlContext } from "~/contexts/DialogControlProvider";
 
 export default function Sidebar({ user }: { user: UserResponseDto }) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const { setOpenCreateProjectDialog } = useDialogControlContext();
 
   return (
     <div className="w-[25%] hidden h-screen p-5 bg-accent md:flex flex-col justify-between border-r">
@@ -30,11 +31,12 @@ export default function Sidebar({ user }: { user: UserResponseDto }) {
             <p className="font-light">Hack Club Matchmaker</p>
           </div>
         </header>
-        <CreateProjectPitchDialog>
-          <Button className="w-full">
-            <HugeiconsIcon icon={Plus} /> Pitch Project
-          </Button>
-        </CreateProjectPitchDialog>
+        <Button
+          className="w-full"
+          onClick={() => setOpenCreateProjectDialog(true)}
+        >
+          <HugeiconsIcon icon={Plus} /> Pitch Project
+        </Button>
         <Separator />
         <Button
           className="w-full justify-between"
