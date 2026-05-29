@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import * as api from "~/api";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -25,6 +26,7 @@ import {
   ComboboxList,
 } from "../ui/combobox";
 import { useDialogControlContext } from "~/contexts/DialogControlProvider";
+import type { YsWsResponseDto } from "~/api";
 
 export default function CreateProjectPitchDialog() {
   const { openCreateProjectDialog, setOpenCreateProjectDialog } =
@@ -35,6 +37,17 @@ export default function CreateProjectPitchDialog() {
     pitchDescription: string;
     skills: string[];
   }>({ pitchDescription: "", projectTitle: "", skills: [] });
+
+  const [yswsPrograms, setYswsProgram] = useState<YsWsResponseDto[]>([]);
+
+  useEffect(() => {
+    async function fetchYswsPrograms() {
+      const res = await api.ysws.yswsControllerFindActiveV1();
+      if (res.error) return console.log(res.error.message);
+      setYswsProgram(res.data);
+    }
+    fetchYswsPrograms();
+  }, []);
 
   return (
     <Dialog
@@ -246,6 +259,36 @@ export default function CreateProjectPitchDialog() {
                       <p className="text-base">Not found</p>
                       <Button size={"sm"}>Add</Button>
                     </ComboboxEmpty>
+                    <ComboboxList>
+                      {(item) => (
+                        <ComboboxItem key={item} value={item}>
+                          {item}
+                        </ComboboxItem>
+                      )}
+                    </ComboboxList>
+                  </ComboboxContent>
+                </Combobox>
+                <Button type="button" variant="outline">
+                  <HugeiconsIcon icon={Plus} /> Add
+                </Button>
+              </div>
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="pitch-description-input">
+                YSWS Program (Optional)
+              </FieldLabel>
+
+              <div className="flex items-center gap-2">
+                <Combobox
+                  items={yswsPrograms.map((ysws) => ysws.name)}
+                  disabled={yswsPrograms.length === 0}
+                >
+                  <ComboboxInput
+                    placeholder="E.g., 'React Native, Firebase, and OpenAI API'"
+                    className={"w-full"}
+                  />
+                  <ComboboxContent>
+                    <ComboboxEmpty>Not found</ComboboxEmpty>
                     <ComboboxList>
                       {(item) => (
                         <ComboboxItem key={item} value={item}>

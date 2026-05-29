@@ -1,10 +1,16 @@
-import "dotenv/config";
 import { createClient } from "./api/client";
 import { createConfig } from "./api/client";
 import type { CreateClientConfig } from "./api/client.gen";
 import type { ClientOptions } from "./api/types.gen";
 
-const BASE_URL = process.env.VITE_API_URL;
+if (typeof window === "undefined") {
+  // @ts-ignore
+  import(/* @vite-ignore */ "dotenv/config").catch(() => {});
+}
+
+const BASE_URL =
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_URL) ||
+  (typeof process !== "undefined" ? process.env.VITE_API_URL : undefined);
 
 /**
  * Default client config used by the auto-generated client.
