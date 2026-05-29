@@ -15,7 +15,7 @@ export default function ProjectPitchCard({
     <div className="group border rounded-4xl p-5 space-y-5 hover:border-primary duration-200">
       <div className="flex items-center gap-x-2">
         <img
-          src={"/Shipmates-Logo.png"}
+          src={projectPitch.user.profileImg || "/Shipmates-Logo.png"}
           width={50}
           className="rounded-full border border-primary p-0.5"
         />

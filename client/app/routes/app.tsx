@@ -1,10 +1,15 @@
+import * as api from "~/api";
 import { getCurrentUser } from "~/lib/user.server";
 import Sidebar from "~/components/Sidebar";
 import type { Route } from "./+types/app";
 import { Outlet, redirect } from "react-router";
 import type { UserResponseDto } from "~/api";
-import DialogControlProvider from "~/contexts/DialogControlProvider";
+import DialogControlProvider, {
+  useDialogControlContext,
+} from "~/contexts/DialogControlProvider";
 import CreateProjectPitchDialog from "~/components/dialogs/CreateProjectPitchDialog";
+import { createProjectPitch } from "~/lib/projectPitch.server";
+import { useEffect } from "react";
 
 export type OutletContext = {
   user: UserResponseDto;
@@ -21,16 +26,48 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
+  console.log(formData);
+  const requestType = formData.get("requestType");
+  if (requestType === "create-project-pitch") {
+    const res = await createProjectPitch(request, formData);
+    if (res.error) {
+      return { requestType, error: res.error.message };
+    }
+    return { requestType, success: true };
+  }
+  return { requestType, error: "Unknown request type" };
 }
 
-export default function Home({ loaderData }: Route.ComponentProps) {
+export default function Home({ loaderData, actionData }: Route.ComponentProps) {
   return (
     <DialogControlProvider>
+      <AppLayout loaderData={loaderData} actionData={actionData} />
+    </DialogControlProvider>
+  );
+}
+
+function AppLayout({
+  loaderData,
+  actionData,
+}: {
+  loaderData: Route.ComponentProps["loaderData"];
+  actionData: Route.ComponentProps["actionData"];
+}) {
+  const { setOpenCreateProjectDialog } = useDialogControlContext();
+  useEffect(() => {
+    if (actionData?.requestType === "create-project-pitch") {
+      if (actionData.success) {
+        setOpenCreateProjectDialog(false);
+      }
+    }
+  }, [actionData]);
+  return (
+    <>
       <div className="flex overflow-hidden h-screen">
         <Sidebar user={loaderData.user} />
         <Outlet context={{ user: loaderData.user } satisfies OutletContext} />
       </div>
       <CreateProjectPitchDialog />
-    </DialogControlProvider>
+    </>
   );
 }

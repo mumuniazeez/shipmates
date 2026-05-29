@@ -28,24 +28,23 @@ import {
 } from "../ui/combobox";
 import { useDialogControlContext } from "~/contexts/DialogControlProvider";
 import type { SkillResponseDto, YsWsResponseDto } from "~/api";
+import { useSubmit } from "react-router";
 
 export default function CreateProjectPitchDialog() {
   const { openCreateProjectDialog, setOpenCreateProjectDialog } =
     useDialogControlContext();
+  const submit = useSubmit();
 
   const [formData, setFormData] = useState<{
     projectTitle: string;
     pitchDescription: string;
     skills: string[];
-    newSkills: string[];
-  }>({ pitchDescription: "", projectTitle: "", skills: [], newSkills: [] });
+  }>({ pitchDescription: "", projectTitle: "", skills: [] });
 
   const [yswsPrograms, setYswsProgram] = useState<YsWsResponseDto[]>([]);
   const [skills, setSkills] = useState<SkillResponseDto[]>([]);
 
   const [skillInputValue, setSkillInputValue] = useState<string>("");
-
-  const [newSkills, setNewSkills] = useState<string[]>([]);
 
   useEffect(() => {
     async function fetchYswsPrograms() {
@@ -62,6 +61,16 @@ export default function CreateProjectPitchDialog() {
     fetchYswsPrograms();
   }, []);
 
+  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    submit(
+      { ...formData, requestType: "create-project-pitch" },
+      {
+        method: "post",
+      },
+    );
+  };
+
   return (
     <Dialog
       open={openCreateProjectDialog}
@@ -75,7 +84,7 @@ export default function CreateProjectPitchDialog() {
             Let's get started on creating your project pitch!
           </DialogDescription>
         </DialogHeader>
-        <form action="" className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <FieldGroup>
             <Field>
               <FieldLabel
@@ -168,9 +177,6 @@ export default function CreateProjectPitchDialog() {
                       <ComboboxItem
                         key={skillInputValue}
                         value={skillInputValue}
-                        onClick={() =>
-                          setNewSkills([...newSkills, skillInputValue])
-                        }
                       >
                         Add "{skillInputValue}"
                       </ComboboxItem>

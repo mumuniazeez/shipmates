@@ -105,13 +105,6 @@ export type UserResponseDto = {
     updatedAt: Date;
 };
 
-export type SkillDto = {
-    /**
-     * id of the skill needed for the project
-     */
-    id: string;
-};
-
 export type CreateSkillDto = {
     /**
      * The name of the skill to be added
@@ -131,11 +124,7 @@ export type CreateProjectPitchDto = {
     /**
      * List of skills needed(to be added) for the project. **Skill already exist in database**
      */
-    skills: Array<SkillDto>;
-    /**
-     * List of skills needed for the project. **Skill do not exist in database**
-     */
-    newSkills: Array<CreateSkillDto>;
+    skills: Array<CreateSkillDto>;
 };
 
 export type SkillResponseDto = {
@@ -205,11 +194,7 @@ export type UpdateProjectPitchDto = {
      * List of skills needed(to be added) for the project. Skill already exist in database
      * **Note: Override the skillsNeeded array if provided**
      */
-    skills?: Array<SkillDto>;
-    /**
-     * List of skills needed for the project. **Skill do not exist in database**
-     */
-    newSkills?: Array<CreateSkillDto>;
+    skills?: Array<CreateSkillDto>;
 };
 
 export type GeneralOkResponseDto = {
