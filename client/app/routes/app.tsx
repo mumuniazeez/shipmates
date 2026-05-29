@@ -19,6 +19,10 @@ export async function loader({ request }: Route.LoaderArgs) {
   return { user: userRes.data };
 }
 
+export async function action({ request }: Route.ActionArgs) {
+  const formData = await request.formData();
+}
+
 export default function Home({ loaderData }: Route.ComponentProps) {
   return (
     <DialogControlProvider>

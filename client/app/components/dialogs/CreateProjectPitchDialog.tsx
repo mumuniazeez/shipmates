@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import * as api from "~/api";
 import { Button } from "../ui/button";
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -11,22 +10,24 @@ import {
   DialogFooter,
   DialogClose,
 } from "../ui/dialog";
-import { Field, FieldDescription, FieldGroup, FieldLabel } from "../ui/field";
+import { Field, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { Close, Plus } from "@hugeicons/core-free-icons";
-import { Badge } from "../ui/badge";
 import {
   Combobox,
+  ComboboxChip,
+  ComboboxChips,
+  ComboboxChipsInput,
+  ComboboxCollection,
   ComboboxContent,
   ComboboxEmpty,
   ComboboxInput,
   ComboboxItem,
   ComboboxList,
+  ComboboxValue,
 } from "../ui/combobox";
 import { useDialogControlContext } from "~/contexts/DialogControlProvider";
-import type { YsWsResponseDto } from "~/api";
+import type { SkillResponseDto, YsWsResponseDto } from "~/api";
 
 export default function CreateProjectPitchDialog() {
   const { openCreateProjectDialog, setOpenCreateProjectDialog } =
@@ -36,9 +37,15 @@ export default function CreateProjectPitchDialog() {
     projectTitle: string;
     pitchDescription: string;
     skills: string[];
-  }>({ pitchDescription: "", projectTitle: "", skills: [] });
+    newSkills: string[];
+  }>({ pitchDescription: "", projectTitle: "", skills: [], newSkills: [] });
 
   const [yswsPrograms, setYswsProgram] = useState<YsWsResponseDto[]>([]);
+  const [skills, setSkills] = useState<SkillResponseDto[]>([]);
+
+  const [skillInputValue, setSkillInputValue] = useState<string>("");
+
+  const [newSkills, setNewSkills] = useState<string[]>([]);
 
   useEffect(() => {
     async function fetchYswsPrograms() {
@@ -46,6 +53,12 @@ export default function CreateProjectPitchDialog() {
       if (res.error) return console.log(res.error.message);
       setYswsProgram(res.data);
     }
+    async function fetchSkills() {
+      const res = await api.skill.skillControllerFindAllV1();
+      if (res.error) return console.log(res.error.message);
+      setSkills(res.data);
+    }
+    fetchSkills();
     fetchYswsPrograms();
   }, []);
 
@@ -53,6 +66,7 @@ export default function CreateProjectPitchDialog() {
     <Dialog
       open={openCreateProjectDialog}
       onOpenChange={setOpenCreateProjectDialog}
+      modal={false}
     >
       <DialogContent>
         <DialogHeader>
@@ -76,7 +90,7 @@ export default function CreateProjectPitchDialog() {
               <Input
                 type="text"
                 placeholder="My Awesome Project"
-                name="title"
+                name="projectTitle"
                 id="project-title-input"
                 required
                 minLength={5}
@@ -99,7 +113,7 @@ export default function CreateProjectPitchDialog() {
               </FieldLabel>
               <Textarea
                 placeholder="Describe your project scope and explain exactly what kind of partner you are looking for (e.g., 'I have the firmware down, but I need someone with solid CAD skills...')."
-                name="description"
+                name="pitchDescription"
                 id="pitch-description-input"
                 minLength={10}
                 maxLength={200}
@@ -114,194 +128,82 @@ export default function CreateProjectPitchDialog() {
               <FieldLabel htmlFor="pitch-description-input">
                 Development Stack and Key Dependency
               </FieldLabel>
-              <div className="grid grid-cols-5 gap-2">
-                <div className="relative w-fit group">
-                  <Badge variant={"outline"}>Nestjs</Badge>
-                  <Button
-                    type="button"
-                    variant={"destructive"}
-                    size={"icon-xs"}
-                    className="absolute -top-2 -right-2 me-auto size-4 [&_svg:not([class*='size-'])]:size-3 hidden group-hover:inline-flex"
-                  >
-                    <HugeiconsIcon icon={Close} />
-                  </Button>
-                </div>
-                <div className="relative w-fit group">
-                  <Badge variant={"outline"}>Nestjs</Badge>
-                  <Button
-                    type="button"
-                    variant={"destructive"}
-                    size={"icon-xs"}
-                    className="absolute -top-2 -right-2 me-auto size-4 [&_svg:not([class*='size-'])]:size-3 hidden group-hover:inline-flex"
-                  >
-                    <HugeiconsIcon icon={Close} />
-                  </Button>
-                </div>
-                <div className="relative w-fit group">
-                  <Badge variant={"outline"}>Nestjs</Badge>
-                  <Button
-                    type="button"
-                    variant={"destructive"}
-                    size={"icon-xs"}
-                    className="absolute -top-2 -right-2 me-auto size-4 [&_svg:not([class*='size-'])]:size-3 hidden group-hover:inline-flex"
-                  >
-                    <HugeiconsIcon icon={Close} />
-                  </Button>
-                </div>
-                <div className="relative w-fit group">
-                  <Badge variant={"outline"}>Nestjs</Badge>
-                  <Button
-                    type="button"
-                    variant={"destructive"}
-                    size={"icon-xs"}
-                    className="absolute -top-2 -right-2 me-auto size-4 [&_svg:not([class*='size-'])]:size-3 hidden group-hover:inline-flex"
-                  >
-                    <HugeiconsIcon icon={Close} />
-                  </Button>
-                </div>
-                <div className="relative w-fit group">
-                  <Badge variant={"outline"}>Nestjs</Badge>
-                  <Button
-                    type="button"
-                    variant={"destructive"}
-                    size={"icon-xs"}
-                    className="absolute -top-2 -right-2 me-auto size-4 [&_svg:not([class*='size-'])]:size-3 hidden group-hover:inline-flex"
-                  >
-                    <HugeiconsIcon icon={Close} />
-                  </Button>
-                </div>
-                <div className="relative w-fit group">
-                  <Badge variant={"outline"}>Nestjs</Badge>
-                  <Button
-                    type="button"
-                    variant={"destructive"}
-                    size={"icon-xs"}
-                    className="absolute -top-2 -right-2 me-auto size-4 [&_svg:not([class*='size-'])]:size-3 hidden group-hover:inline-flex"
-                  >
-                    <HugeiconsIcon icon={Close} />
-                  </Button>
-                </div>
-                <div className="relative w-fit group">
-                  <Badge variant={"outline"}>Nestjs</Badge>
-                  <Button
-                    type="button"
-                    variant={"destructive"}
-                    size={"icon-xs"}
-                    className="absolute -top-2 -right-2 me-auto size-4 [&_svg:not([class*='size-'])]:size-3 hidden group-hover:inline-flex"
-                  >
-                    <HugeiconsIcon icon={Close} />
-                  </Button>
-                </div>
-                <div className="relative w-fit group">
-                  <Badge variant={"outline"}>Nestjs</Badge>
-                  <Button
-                    type="button"
-                    variant={"destructive"}
-                    size={"icon-xs"}
-                    className="absolute -top-2 -right-2 me-auto size-4 [&_svg:not([class*='size-'])]:size-3 hidden group-hover:inline-flex"
-                  >
-                    <HugeiconsIcon icon={Close} />
-                  </Button>
-                </div>
-                <div className="relative w-fit group">
-                  <Badge variant={"outline"}>Nestjs</Badge>
-                  <Button
-                    type="button"
-                    variant={"destructive"}
-                    size={"icon-xs"}
-                    className="absolute -top-2 -right-2 me-auto size-4 [&_svg:not([class*='size-'])]:size-3 hidden group-hover:inline-flex"
-                  >
-                    <HugeiconsIcon icon={Close} />
-                  </Button>
-                </div>
-                <div className="relative w-fit group">
-                  <Badge variant={"outline"}>Nestjs</Badge>
-                  <Button
-                    type="button"
-                    variant={"destructive"}
-                    size={"icon-xs"}
-                    className="absolute -top-2 -right-2 me-auto size-4 [&_svg:not([class*='size-'])]:size-3 hidden group-hover:inline-flex"
-                  >
-                    <HugeiconsIcon icon={Close} />
-                  </Button>
-                </div>
-                <div className="relative w-fit group">
-                  <Badge variant={"outline"}>Nestjs</Badge>
-                  <Button
-                    type="button"
-                    variant={"destructive"}
-                    size={"icon-xs"}
-                    className="absolute -top-2 -right-2 me-auto size-4 [&_svg:not([class*='size-'])]:size-3 hidden group-hover:inline-flex"
-                  >
-                    <HugeiconsIcon icon={Close} />
-                  </Button>
-                </div>
-                <div className="relative w-fit group">
-                  <Badge variant={"outline"}>Nestjs</Badge>
-                  <Button
-                    type="button"
-                    variant={"destructive"}
-                    size={"icon-xs"}
-                    className="absolute -top-2 -right-2 me-auto size-4 [&_svg:not([class*='size-'])]:size-3 hidden group-hover:inline-flex"
-                  >
-                    <HugeiconsIcon icon={Close} />
-                  </Button>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <Combobox items={["Hey", "There", "Search"]}>
-                  <ComboboxInput
-                    placeholder="E.g., 'React Native, Firebase, and OpenAI API'"
-                    className={"w-full"}
-                  />
-                  <ComboboxContent>
-                    <ComboboxEmpty className={"items-center gap-x-2"}>
-                      <p className="text-base">Not found</p>
-                      <Button size={"sm"}>Add</Button>
-                    </ComboboxEmpty>
-                    <ComboboxList>
-                      {(item) => (
-                        <ComboboxItem key={item} value={item}>
-                          {item}
-                        </ComboboxItem>
-                      )}
-                    </ComboboxList>
-                  </ComboboxContent>
-                </Combobox>
-                <Button type="button" variant="outline">
-                  <HugeiconsIcon icon={Plus} /> Add
-                </Button>
-              </div>
+
+              <Combobox
+                items={skills.map((skill) => skill.name)}
+                multiple
+                value={formData.skills}
+                name="skills"
+                inputValue={skillInputValue}
+                onInputValueChange={(value) => setSkillInputValue(value)}
+                onValueChange={(val) =>
+                  setFormData({ ...formData, skills: val })
+                }
+              >
+                <ComboboxChips>
+                  <ComboboxValue>
+                    {formData.skills.map((item) => (
+                      <ComboboxChip key={item}>{item}</ComboboxChip>
+                    ))}
+                  </ComboboxValue>
+                  <ComboboxChipsInput placeholder="E.g., 'React Native, Firebase, and OpenAI API'" />
+                </ComboboxChips>
+
+                <ComboboxContent>
+                  <ComboboxList>
+                    <ComboboxCollection>
+                      {(item) => {
+                        return (
+                          <ComboboxItem key={item} value={item}>
+                            {item}
+                          </ComboboxItem>
+                        );
+                      }}
+                    </ComboboxCollection>
+                    {!skills.find((s) =>
+                      s.name
+                        .toLowerCase()
+                        .includes(skillInputValue.toLowerCase()),
+                    ) && (
+                      <ComboboxItem
+                        key={skillInputValue}
+                        value={skillInputValue}
+                        onClick={() =>
+                          setNewSkills([...newSkills, skillInputValue])
+                        }
+                      >
+                        Add "{skillInputValue}"
+                      </ComboboxItem>
+                    )}
+                  </ComboboxList>
+                </ComboboxContent>
+              </Combobox>
             </Field>
             <Field>
-              <FieldLabel htmlFor="pitch-description-input">
+              <FieldLabel htmlFor="pitch-ysws-input">
                 YSWS Program (Optional)
               </FieldLabel>
 
-              <div className="flex items-center gap-2">
-                <Combobox
-                  items={yswsPrograms.map((ysws) => ysws.name)}
-                  disabled={yswsPrograms.length === 0}
-                >
-                  <ComboboxInput
-                    placeholder="E.g., 'React Native, Firebase, and OpenAI API'"
-                    className={"w-full"}
-                  />
-                  <ComboboxContent>
-                    <ComboboxEmpty>Not found</ComboboxEmpty>
-                    <ComboboxList>
-                      {(item) => (
-                        <ComboboxItem key={item} value={item}>
-                          {item}
-                        </ComboboxItem>
-                      )}
-                    </ComboboxList>
-                  </ComboboxContent>
-                </Combobox>
-                <Button type="button" variant="outline">
-                  <HugeiconsIcon icon={Plus} /> Add
-                </Button>
-              </div>
+              <Combobox
+                items={yswsPrograms.map((ysws) => ysws.name)}
+                disabled={yswsPrograms.length === 0}
+              >
+                <ComboboxInput
+                  placeholder="E.g., 'Horizon, Blueprint, Forge'"
+                  className={"w-full"}
+                  id="pitch-ysws-input"
+                />
+                <ComboboxContent>
+                  <ComboboxEmpty>Not found</ComboboxEmpty>
+                  <ComboboxList>
+                    {(item) => (
+                      <ComboboxItem key={item} value={item}>
+                        {item}
+                      </ComboboxItem>
+                    )}
+                  </ComboboxList>
+                </ComboboxContent>
+              </Combobox>
             </Field>
           </FieldGroup>
           <DialogFooter>

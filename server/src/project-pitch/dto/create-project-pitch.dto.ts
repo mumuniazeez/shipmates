@@ -1,22 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsNotEmpty,
-  IsString,
-  IsUUID,
-  ValidateNested,
-  IsArray,
-} from 'class-validator';
+import { IsNotEmpty, IsString, ValidateNested, IsArray } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CreateSkillDto } from 'src/skill/dto/create-skill.dto';
-
-export class SkillDto {
-  @IsUUID()
-  @ApiProperty({
-    type: 'string',
-    description: 'id of the skill needed for the project',
-  })
-  id: string;
-}
 
 export class CreateProjectPitchDto {
   @ApiProperty({
@@ -36,22 +21,12 @@ export class CreateProjectPitchDto {
   pitchDescription: string;
 
   @ApiProperty({
-    type: [SkillDto],
-    description:
-      'List of skills needed(to be added) for the project. **Skill already exist in database**',
-  })
-  @Type(() => SkillDto)
-  @ValidateNested({ each: true })
-  @IsArray()
-  skills: SkillDto[];
-
-  @ApiProperty({
     type: [CreateSkillDto],
     description:
-      'List of skills needed for the project. **Skill do not exist in database**',
+      'List of skills needed(to be added) for the project. **Skill already exist in database**',
   })
   @Type(() => CreateSkillDto)
   @ValidateNested({ each: true })
   @IsArray()
-  newSkills: CreateSkillDto[];
+  skills: CreateSkillDto[];
 }

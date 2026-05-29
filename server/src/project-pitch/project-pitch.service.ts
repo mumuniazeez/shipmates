@@ -22,11 +22,11 @@ export class ProjectPitchService {
         title: createProjectPitchDto.projectTitle,
         description: createProjectPitchDto.pitchDescription,
         skillsNeeded: {
-          connect: createProjectPitchDto.skills.map((skill) => {
-            return { id: skill.id };
-          }),
-          create: createProjectPitchDto.newSkills.map((skill) => {
-            return skill;
+          connectOrCreate: createProjectPitchDto.skills.map((skill) => {
+            return {
+              where: { name: skill.name },
+              create: { name: skill.name },
+            };
           }),
         },
         userId,
@@ -96,18 +96,11 @@ export class ProjectPitchService {
         skillsNeeded: {
           set: updateProjectPitchDto.skills
             ? updateProjectPitchDto.skills.map((skill) => {
-                return { id: skill.id };
+                return { name: skill.name };
               })
             : existingPitch.skillsNeeded.map((skill) => {
-                return {
-                  id: skill.id,
-                };
+                return { name: skill.name };
               }),
-          create: updateProjectPitchDto.newSkills
-            ? updateProjectPitchDto.newSkills.map((skill) => {
-                return skill;
-              })
-            : [],
         },
         userId,
       },
