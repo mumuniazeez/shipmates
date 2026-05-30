@@ -36,9 +36,17 @@ export async function loader({ request }: Route.LoaderArgs) {
     throw redirect("/");
   }
 
+  const headers = new Headers();
+
+  headers.append(
+    "Set-Cookie",
+    createAuthCookie(exchangeResult.data.access_token, "access_token"),
+  );
+  headers.append(
+    "Set-Cookie",
+    createAuthCookie(exchangeResult.data.refresh_token, "refresh_token"),
+  );
   return redirect("/app", {
-    headers: {
-      "Set-Cookie": createAuthCookie(exchangeResult.data.access_token),
-    },
+    headers,
   });
 }

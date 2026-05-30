@@ -1,12 +1,19 @@
+import * as api from "~/api";
 /**
  * Server-side utilities for authentication using cookies.
  * These utilities are meant to be used in loaders and actions.
  */
 
+import { redirect } from "react-router";
+import { createApiClient } from "~/hey-api";
+
 /**
  * Parse the Cookie header and extract the access_token value.
  */
-export function getAuthToken(request: Request): string | null {
+export function getAuthToken(
+  request: Request,
+  cookieName: "access_token" | "refresh_token" = "access_token",
+): string | null {
   const cookieHeader = request.headers.get("Cookie");
   if (!cookieHeader) return null;
 
@@ -21,7 +28,7 @@ export function getAuthToken(request: Request): string | null {
     {} as Record<string, string>,
   );
 
-  return cookies["access_token"] || null;
+  return cookies[cookieName] || null;
 }
 
 /**
@@ -30,6 +37,7 @@ export function getAuthToken(request: Request): string | null {
  */
 export function createAuthCookie(
   token: string,
+  cookieName: "access_token" | "refresh_token" = "access_token",
   options: {
     maxAge?: number;
     path?: string;
@@ -47,7 +55,7 @@ export function createAuthCookie(
   } = options;
 
   const parts = [
-    `access_token=${encodeURIComponent(token)}`,
+    `${cookieName}=${encodeURIComponent(token)}`,
     `Max-Age=${maxAge}`,
     `Path=${path}`,
     `SameSite=${sameSite}`,
@@ -63,6 +71,30 @@ export function createAuthCookie(
  * Create a Set-Cookie header that clears the auth cookie.
  * Use this when logging out.
  */
-export function clearAuthCookie(): string {
-  return "access_token=; Max-Age=0; Path=/";
+export function clearAuthCookie(
+  cookieName: "access_token" | "refresh_token" = "access_token",
+): string {
+  return `${cookieName}=; Max-Age=0; Path=/`;
+}
+
+export async function refreshAuthToken(request: Request) {
+  const refreshToken = getAuthToken(request, "refresh_token");
+  if (!refreshToken) {
+    throw redirect("/auth/login");
+  }
+  console.log(refreshToken);
+  const client = createApiClient(refreshToken);
+  const res = await api.auth.authControllerGetNewAccessTokenV1({
+    client,
+    body: { refresh_token: refreshToken },
+  });
+  if (res.error) {
+    throw redirect("/auth/login");
+  }
+  console.log(res.data);
+  return redirect(request.url, {
+    headers: {
+      "Set-Cookie": createAuthCookie(res.data.access_token, "access_token"),
+    },
+  });
 }

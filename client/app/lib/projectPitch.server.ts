@@ -25,6 +25,18 @@ export const getAllMyProjectPitch = async (request: Request) => {
   return res;
 };
 
+export const getProjectPitchById = async (request: Request, id: string) => {
+  const authToken = getAuthToken(request);
+  const client = createApiClient(authToken);
+
+  const res = await api.projectPitch.projectPitchControllerFindOneV1({
+    path: { id },
+    client,
+  });
+
+  return res;
+};
+
 export const createProjectPitch = async (
   request: Request,
   formData: FormData,

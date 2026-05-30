@@ -2,7 +2,7 @@ import * as api from "~/api";
 import { getCurrentUser } from "~/lib/user.server";
 import Sidebar from "~/components/Sidebar";
 import type { Route } from "./+types/app";
-import { Outlet, redirect } from "react-router";
+import { Outlet, redirect, useSubmit } from "react-router";
 import type { UserResponseDto } from "~/api";
 import DialogControlProvider, {
   useDialogControlContext,
@@ -15,6 +15,7 @@ import {
 } from "~/lib/projectPitch.server";
 import { useEffect } from "react";
 import LogoutDialog from "~/components/dialogs/LogoutDialog";
+import { refreshAuthToken } from "~/lib/auth.server";
 
 export type OutletContext = {
   user: UserResponseDto;
@@ -51,12 +52,27 @@ export async function action({ request }: Route.ActionArgs) {
       return { requestType, error: res.error.message };
     }
     return { requestType, success: true };
+  } else if (requestType === "refresh_token") {
+    const res = await refreshAuthToken(request);
+
+    return { requestType, success: true };
   }
 
   return { requestType, error: "Unknown request type" };
 }
 
 export default function Home({ loaderData, actionData }: Route.ComponentProps) {
+  const submit = useSubmit();
+  useEffect(() => {
+    const interval = setInterval(
+      () => {
+        submit({ requestType: "refresh_token" }, { method: "post" });
+      },
+      1000 * 28 * 60,
+    );
+    return () => clearInterval(interval);
+  }, [submit]);
+
   return (
     <DialogControlProvider>
       <AppLayout loaderData={loaderData} actionData={actionData} />

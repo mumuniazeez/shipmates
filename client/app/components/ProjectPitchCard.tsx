@@ -18,7 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { useNavigation, useOutletContext, useSubmit } from "react-router";
+import { Link, useNavigation, useOutletContext, useSubmit } from "react-router";
 import type { OutletContext } from "~/routes/app";
 import UpdateProjectPitchDialog from "./dialogs/UpdateProjectPitchDialog";
 import {
@@ -52,66 +52,73 @@ export default function ProjectPitchCard({
   };
   return (
     <>
-      <div className="group border rounded-4xl p-5 space-y-5 hover:border-primary duration-200">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-x-2">
-            <img
-              src={projectPitch.user.profileImg || "/Shipmates-Logo.png"}
-              width={50}
-              className="rounded-full border border-primary p-0.5"
-            />
-            <div>
-              <h6 className="text-xl font-bold line-clamp-1">
-                {projectPitch.user.firstName} {projectPitch.user.lastName}
-              </h6>
-              <p className="text-sm text-muted-foreground">
-                {projectPitch.user.email}
-              </p>
+      <div className="group border rounded-4xl p-5 flex flex-col gap-y-5 justify-between hover:border-primary duration-200">
+        <div className="space-y-5">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-x-2">
+              <img
+                src={projectPitch.user.profileImg || "/Shipmates-Logo.png"}
+                width={50}
+                className="rounded-full border border-primary p-0.5"
+              />
+              <div>
+                <h6 className="text-xl font-bold line-clamp-1">
+                  {projectPitch.user.firstName} {projectPitch.user.lastName}
+                </h6>
+                <p className="text-sm text-muted-foreground">
+                  {projectPitch.user.email}
+                </p>
+              </div>
             </div>
+            <DropdownMenu modal={false}>
+              <DropdownMenuTrigger asChild>
+                <Button variant={"ghost"} size={"icon"}>
+                  <HugeiconsIcon icon={EllipsisVertical} />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>Open Project Pitch</DropdownMenuItem>
+                {user.id === projectPitch.userId && (
+                  <>
+                    <DropdownMenuItem onClick={() => setEditModalOpen(true)}>
+                      Update Project Pitch
+                    </DropdownMenuItem>
+
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      variant="destructive"
+                      onClick={() => setDeleteAlertOpen(true)}
+                    >
+                      <HugeiconsIcon icon={Trash} />
+                      Delete Project Pitch
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
-          <DropdownMenu modal={false}>
-            <DropdownMenuTrigger asChild>
-              <Button variant={"ghost"} size={"icon"}>
-                <HugeiconsIcon icon={EllipsisVertical} />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>Open Project Pitch</DropdownMenuItem>
-              {user.id === projectPitch.userId && (
-                <>
-                  <DropdownMenuItem onClick={() => setEditModalOpen(true)}>
-                    Update Project Pitch
-                  </DropdownMenuItem>
-
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    variant="destructive"
-                    onClick={() => setDeleteAlertOpen(true)}
-                  >
-                    <HugeiconsIcon icon={Trash} />
-                    Delete Project Pitch
-                  </DropdownMenuItem>
-                </>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-        <div>
-          <h3 className="group-hover:text-primary duration-200 text-2xl font-bold">
-            {projectPitch.title}
-          </h3>
-          <p className="line-clamp-4">{projectPitch.description}</p>
-        </div>
-        <Separator />
-        <div className="grid grid-cols-3 gap-2">
-          {projectPitch.skillsNeeded.map((skill) => (
-            <Badge key={skill.id} variant={"outline"}>
-              #{skill.name}
-            </Badge>
-          ))}
+          <Link
+            to={`/app/project-pitch/${projectPitch.id}`}
+            className="space-y-5 h-[fill-available]"
+          >
+            <div>
+              <h3 className="group-hover:text-primary duration-200 text-2xl font-bold">
+                {projectPitch.title}
+              </h3>
+              <p className="line-clamp-4">{projectPitch.description}</p>
+            </div>
+            <Separator />
+            <div className="flex flex-wrap gap-2">
+              {projectPitch.skillsNeeded.map((skill) => (
+                <Badge key={skill.id} variant={"outline"}>
+                  #{skill.name}
+                </Badge>
+              ))}
+            </div>
+          </Link>
         </div>
 
-        <div className="flex items-center justify-between gap-x-2">
+        <div className="flex items-center justify-between gap-x-2 mt-auto">
           <div className="flex items-center gap-x-2">
             <div className="w-2 h-2 bg-green-500 rounded-full" />
             <p className="text-muted-foreground text-sm">Seeking Partner</p>
