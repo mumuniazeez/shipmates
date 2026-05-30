@@ -8,8 +8,13 @@ import DialogControlProvider, {
   useDialogControlContext,
 } from "~/contexts/DialogControlProvider";
 import CreateProjectPitchDialog from "~/components/dialogs/CreateProjectPitchDialog";
-import { createProjectPitch } from "~/lib/projectPitch.server";
+import {
+  createProjectPitch,
+  deleteProjectPitch,
+  updateProjectPitch,
+} from "~/lib/projectPitch.server";
 import { useEffect } from "react";
+import LogoutDialog from "~/components/dialogs/LogoutDialog";
 
 export type OutletContext = {
   user: UserResponseDto;
@@ -34,7 +39,20 @@ export async function action({ request }: Route.ActionArgs) {
       return { requestType, error: res.error.message };
     }
     return { requestType, success: true };
+  } else if (requestType === "update-project-pitch") {
+    const res = await updateProjectPitch(request, formData);
+    if (res.error) {
+      return { requestType, error: res.error.message };
+    }
+    return { requestType, success: true };
+  } else if (requestType === "delete-project-pitch") {
+    const res = await deleteProjectPitch(request, formData);
+    if (res.error) {
+      return { requestType, error: res.error.message };
+    }
+    return { requestType, success: true };
   }
+
   return { requestType, error: "Unknown request type" };
 }
 
@@ -68,6 +86,7 @@ function AppLayout({
         <Outlet context={{ user: loaderData.user } satisfies OutletContext} />
       </div>
       <CreateProjectPitchDialog />
+      <LogoutDialog />
     </>
   );
 }

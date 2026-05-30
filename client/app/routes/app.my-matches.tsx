@@ -27,7 +27,6 @@ export function meta({}: Route.MetaArgs): Route.MetaDescriptors {
 export default function DashboardMyMatches({
   loaderData,
 }: Route.ComponentProps) {
-  const { user } = useOutletContext<OutletContext>();
   return (
     <div className="md:w-[75%] w-full overflow-auto">
       <header className="border-b p-5">

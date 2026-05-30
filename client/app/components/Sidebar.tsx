@@ -19,7 +19,8 @@ import { useDialogControlContext } from "~/contexts/DialogControlProvider";
 export default function Sidebar({ user }: { user: UserResponseDto }) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { setOpenCreateProjectDialog } = useDialogControlContext();
+  const { setOpenCreateProjectDialog, setOpenLogoutDialog } =
+    useDialogControlContext();
 
   return (
     <div className="w-[25%] hidden h-screen p-5 bg-accent md:flex flex-col justify-between border-r">
@@ -39,34 +40,25 @@ export default function Sidebar({ user }: { user: UserResponseDto }) {
         </Button>
         <Separator />
         <Button
-          className="w-full justify-between"
+          className="w-full justify-start"
           variant={pathname === "/app" ? "default" : "outline"}
           onClick={() => navigate("/app")}
         >
-          <span className="flex items-center gap-x-2">
-            <HugeiconsIcon icon={Navigation} /> Explore
-          </span>
-          <Kbd>3</Kbd>
+          <HugeiconsIcon icon={Navigation} /> Explore
         </Button>
         <Button
-          className="w-full justify-between"
+          className="w-full justify-start"
           variant={pathname === "/app/my-deck" ? "default" : "outline"}
           onClick={() => navigate("/app/my-deck")}
         >
-          <span className="flex items-center gap-x-2">
-            <HugeiconsIcon icon={Layer} /> My Deck (Pitches)
-          </span>
-          <Kbd>5</Kbd>
+          <HugeiconsIcon icon={Layer} /> My Deck (Pitches)
         </Button>
         <Button
-          className="w-full justify-between"
+          className="w-full justify-start"
           variant={pathname === "/app/my-matches" ? "default" : "outline"}
           onClick={() => navigate("/app/my-matches")}
         >
-          <span className="flex items-center gap-x-2">
-            <HugeiconsIcon icon={Users} /> Crew Matches
-          </span>
-          <Kbd>10</Kbd>
+          <HugeiconsIcon icon={Users} /> Crew Matches
         </Button>
       </div>
       <div>
@@ -84,11 +76,14 @@ export default function Sidebar({ user }: { user: UserResponseDto }) {
               <p className="text-sm text-muted-foreground">{user.email}</p>
             </div>
           </div>
-          <LogoutDialog>
-            <Button variant={"destructive"} title="Sign out">
-              <HugeiconsIcon icon={SignOut} />
-            </Button>
-          </LogoutDialog>
+
+          <Button
+            variant={"destructive"}
+            title="Sign out"
+            onClick={() => setOpenLogoutDialog(true)}
+          >
+            <HugeiconsIcon icon={SignOut} />
+          </Button>
         </div>
       </div>
     </div>

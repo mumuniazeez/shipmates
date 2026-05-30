@@ -47,3 +47,42 @@ export const createProjectPitch = async (
 
   return res;
 };
+
+export const updateProjectPitch = async (
+  request: Request,
+  formData: FormData,
+) => {
+  const authToken = getAuthToken(request);
+  const client = createApiClient(authToken);
+
+  const res = await api.projectPitch.projectPitchControllerUpdateV1({
+    path: { id: formData.get("id")!.toString() },
+    body: {
+      projectTitle: formData.get("projectTitle") as string,
+      pitchDescription: formData.get("pitchDescription") as string,
+      skills: formData
+        .get("skills")!
+        .toString()
+        .split(",")
+        .map((s) => ({ name: s })),
+    },
+    client,
+  });
+
+  return res;
+};
+
+export const deleteProjectPitch = async (
+  request: Request,
+  formData: FormData,
+) => {
+  const authToken = getAuthToken(request);
+  const client = createApiClient(authToken);
+
+  const res = await api.projectPitch.projectPitchControllerRemoveV1({
+    path: { id: formData.get("id")!.toString() },
+    client,
+  });
+
+  return res;
+};

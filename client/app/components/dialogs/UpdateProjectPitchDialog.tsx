@@ -9,6 +9,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogClose,
+  DialogTrigger,
 } from "../ui/dialog";
 import { Field, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
@@ -32,9 +33,15 @@ import { useNavigation, useSubmit } from "react-router";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Loader, Spinner } from "@hugeicons/core-free-icons";
 
-export default function CreateProjectPitchDialog() {
-  const { openCreateProjectDialog, setOpenCreateProjectDialog } =
-    useDialogControlContext();
+export default function UpdateProjectPitchDialog({
+  projectPitch,
+  openUpdateProjectDialog,
+  setOpenUpdateProjectDialog,
+}: {
+  projectPitch: api.ProjectPitchResponseDto;
+  openUpdateProjectDialog: boolean;
+  setOpenUpdateProjectDialog: (open: boolean) => void;
+}) {
   const submit = useSubmit();
   const navigation = useNavigation();
 
@@ -42,7 +49,11 @@ export default function CreateProjectPitchDialog() {
     projectTitle: string;
     pitchDescription: string;
     skills: string[];
-  }>({ pitchDescription: "", projectTitle: "", skills: [] });
+  }>({
+    pitchDescription: projectPitch.description,
+    projectTitle: projectPitch.title,
+    skills: projectPitch.skillsNeeded.map((s) => s.name),
+  });
 
   const [yswsPrograms, setYswsProgram] = useState<YsWsResponseDto[]>([]);
   const [skills, setSkills] = useState<SkillResponseDto[]>([]);
@@ -67,28 +78,29 @@ export default function CreateProjectPitchDialog() {
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     submit(
-      { ...formData, requestType: "create-project-pitch" },
+      { ...formData, requestType: "update-project-pitch", id: projectPitch.id },
       {
         method: "post",
+        action: "/app",
       },
     );
   };
 
   return (
     <Dialog
-      open={openCreateProjectDialog}
+      open={openUpdateProjectDialog}
       onOpenChange={
         navigation.state !== "submitting"
-          ? setOpenCreateProjectDialog
+          ? setOpenUpdateProjectDialog
           : () => {}
       }
       modal={false}
     >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create a new Project Pitch</DialogTitle>
+          <DialogTitle>Update Project Pitch</DialogTitle>
           <DialogDescription>
-            Let's get started on creating your project pitch!
+            Update the details of your project pitch
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -233,7 +245,7 @@ export default function CreateProjectPitchDialog() {
               {navigation.state === "submitting" && (
                 <HugeiconsIcon icon={Loader} className="animate-spin" />
               )}
-              Create Pitch
+              Update Pitch
             </Button>
           </DialogFooter>
         </form>

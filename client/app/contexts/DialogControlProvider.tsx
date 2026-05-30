@@ -3,6 +3,8 @@ import React, { createContext, useContext, useState } from "react";
 interface DialogControlContext {
   openCreateProjectDialog: boolean;
   setOpenCreateProjectDialog: (open: boolean) => void;
+  openLogoutDialog: boolean;
+  setOpenLogoutDialog: (open: boolean) => void;
 }
 
 const DialogControlContext = createContext<DialogControlContext | null>(null);
@@ -22,10 +24,16 @@ export default function DialogControlProvider({
   children: React.ReactNode;
 }) {
   const [openCreateProjectDialog, setOpenCreateProjectDialog] = useState(false);
+  const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
 
   return (
     <DialogControlContext.Provider
-      value={{ openCreateProjectDialog, setOpenCreateProjectDialog }}
+      value={{
+        openCreateProjectDialog,
+        setOpenCreateProjectDialog,
+        openLogoutDialog,
+        setOpenLogoutDialog,
+      }}
     >
       {children}
     </DialogControlContext.Provider>

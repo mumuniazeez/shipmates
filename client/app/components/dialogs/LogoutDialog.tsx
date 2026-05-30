@@ -1,45 +1,43 @@
 import React from "react";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
+
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../ui/alert-dialog";
+import { useDialogControlContext } from "~/contexts/DialogControlProvider";
 
-export default function LogoutDialog({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function LogoutDialog() {
+  const { openLogoutDialog, setOpenLogoutDialog } = useDialogControlContext();
   const navigate = useNavigate();
   return (
-    <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Wait, hold on a sec!</DialogTitle>
-          <DialogDescription>
+    <AlertDialog
+      open={openLogoutDialog}
+      onOpenChange={(open) => setOpenLogoutDialog(open)}
+    >
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Wait, hold on a sec!</AlertDialogTitle>
+          <AlertDialogDescription>
             Are you sure you want to logout of your account?
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline">No, keep me logged in</Button>
-          </DialogClose>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>No, keep me logged in</AlertDialogCancel>
           <Button
             variant="destructive"
             onClick={() => navigate("/auth/logout")}
           >
             Yes, log me out
           </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
