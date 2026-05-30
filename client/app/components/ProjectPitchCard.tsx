@@ -37,6 +37,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "./ui/alert-dialog";
+import ConfirmMatchDialog from "./dialogs/ConfirmMatchDialog";
 
 export default function ProjectPitchCard({
   projectPitch,
@@ -47,6 +48,7 @@ export default function ProjectPitchCard({
   const submit = useSubmit();
   const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [matchModalOpen, setMatchModalOpen] = useState(false);
 
   const navigation = useNavigation();
   const navigate = useNavigate();
@@ -134,8 +136,11 @@ export default function ProjectPitchCard({
           <div className="flex items-center justify-between gap-x-2 mt-auto">
             <div className="flex items-center gap-x-2">
               <div className="w-2 h-2 bg-green-500 rounded-full" />
-              <p className="text-muted-foreground text-sm">Seeking Partner</p>
+              <p className="text-muted-foreground text-sm">
+                Seekisssng Partner
+              </p>
             </div>
+
             {user.id === projectPitch.userId ? (
               <div className="bg-primary/50 border border-primary px-2 py-1 rounded-2xl">
                 <p className="text-sm">Live on Global Feed</p>
@@ -143,7 +148,9 @@ export default function ProjectPitchCard({
             ) : (
               <div className="space-x-2">
                 <Button variant={"outline"}>Pass</Button>
-                <Button>Request to ship</Button>
+                <Button onClick={() => setMatchModalOpen(true)}>
+                  Request to ship
+                </Button>
               </div>
             )}
           </div>
@@ -153,6 +160,11 @@ export default function ProjectPitchCard({
         projectPitch={projectPitch}
         openUpdateProjectDialog={editModalOpen}
         setOpenUpdateProjectDialog={setEditModalOpen}
+      />
+      <ConfirmMatchDialog
+        projectPitch={projectPitch}
+        openMatchDialog={matchModalOpen}
+        setOpenMatchDialog={setMatchModalOpen}
       />
       <AlertDialog
         open={deleteAlertOpen}
