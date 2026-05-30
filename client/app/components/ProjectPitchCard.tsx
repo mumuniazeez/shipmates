@@ -18,7 +18,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { Link, useNavigation, useOutletContext, useSubmit } from "react-router";
+import {
+  Link,
+  useNavigate,
+  useNavigation,
+  useOutletContext,
+  useSubmit,
+} from "react-router";
 import type { OutletContext } from "~/routes/app";
 import UpdateProjectPitchDialog from "./dialogs/UpdateProjectPitchDialog";
 import {
@@ -43,6 +49,7 @@ export default function ProjectPitchCard({
   const [editModalOpen, setEditModalOpen] = useState(false);
 
   const navigation = useNavigation();
+  const navigate = useNavigate();
 
   const handleDelete = () => {
     submit(
@@ -77,7 +84,13 @@ export default function ProjectPitchCard({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem>Open Project Pitch</DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    navigate(`/app/project-pitch/${projectPitch.id}`)
+                  }
+                >
+                  Open Project Pitch
+                </DropdownMenuItem>
                 {user.id === projectPitch.userId && (
                   <>
                     <DropdownMenuItem onClick={() => setEditModalOpen(true)}>
@@ -99,7 +112,7 @@ export default function ProjectPitchCard({
           </div>
           <Link
             to={`/app/project-pitch/${projectPitch.id}`}
-            className="space-y-5 h-[fill-available]"
+            className="space-y-5 h-full"
           >
             <div>
               <h3 className="group-hover:text-primary duration-200 text-2xl font-bold">
@@ -107,25 +120,32 @@ export default function ProjectPitchCard({
               </h3>
               <p className="line-clamp-4">{projectPitch.description}</p>
             </div>
-            <Separator />
-            <div className="flex flex-wrap gap-2">
-              {projectPitch.skillsNeeded.map((skill) => (
-                <Badge key={skill.id} variant={"outline"}>
-                  #{skill.name}
-                </Badge>
-              ))}
-            </div>
           </Link>
         </div>
-
-        <div className="flex items-center justify-between gap-x-2 mt-auto">
-          <div className="flex items-center gap-x-2">
-            <div className="w-2 h-2 bg-green-500 rounded-full" />
-            <p className="text-muted-foreground text-sm">Seeking Partner</p>
+        <div className="space-y-5">
+          <Separator />
+          <div className="flex flex-wrap gap-2">
+            {projectPitch.skillsNeeded.map((skill) => (
+              <Badge key={skill.id} variant={"outline"}>
+                #{skill.name}
+              </Badge>
+            ))}
           </div>
-          <div className="space-x-2">
-            <Button variant={"outline"}>Pass</Button>
-            <Button>Request to ship</Button>
+          <div className="flex items-center justify-between gap-x-2 mt-auto">
+            <div className="flex items-center gap-x-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full" />
+              <p className="text-muted-foreground text-sm">Seeking Partner</p>
+            </div>
+            {user.id === projectPitch.userId ? (
+              <div className="bg-primary/50 border border-primary px-2 py-1 rounded-2xl">
+                <p className="text-sm">Live on Global Feed</p>
+              </div>
+            ) : (
+              <div className="space-x-2">
+                <Button variant={"outline"}>Pass</Button>
+                <Button>Request to ship</Button>
+              </div>
+            )}
           </div>
         </div>
       </div>

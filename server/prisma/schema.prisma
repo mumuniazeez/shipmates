@@ -30,7 +30,7 @@ model User {
 model ProjectPitch {
   id              String   @id @default(uuid())
   title           String
-  description     String
+  description     String   @db.Char(5000)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   yswsProgramName String?

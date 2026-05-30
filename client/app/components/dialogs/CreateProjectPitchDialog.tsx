@@ -100,7 +100,7 @@ export default function CreateProjectPitchDialog() {
               >
                 <span> Project Title</span>
                 <span className="text-muted-foreground!">
-                  {formData.projectTitle.length}/50 chars
+                  {formData.projectTitle.length}/100 chars
                 </span>
               </FieldLabel>
               <Input
@@ -110,7 +110,7 @@ export default function CreateProjectPitchDialog() {
                 id="project-title-input"
                 required
                 minLength={5}
-                maxLength={50}
+                maxLength={100}
                 value={formData.projectTitle}
                 onChange={(e) =>
                   setFormData({ ...formData, projectTitle: e.target.value })
@@ -118,21 +118,15 @@ export default function CreateProjectPitchDialog() {
               />
             </Field>
             <Field>
-              <FieldLabel
-                htmlFor="pitch-description-input"
-                className="flex justify-between"
-              >
-                <span> Pitch Description & Needed Skills</span>
-                <span className="text-muted-foreground!">
-                  {formData.pitchDescription.length}/200 chars
-                </span>
+              <FieldLabel htmlFor="pitch-description-input">
+                Pitch Description & Needed Skills
               </FieldLabel>
               <Textarea
                 placeholder="Describe your project scope and explain exactly what kind of partner you are looking for (e.g., 'I have the firmware down, but I need someone with solid CAD skills...')."
                 name="pitchDescription"
                 id="pitch-description-input"
+                className="max-h-40"
                 minLength={10}
-                maxLength={200}
                 required
                 value={formData.pitchDescription}
                 onChange={(e) =>

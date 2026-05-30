@@ -29,7 +29,12 @@ import {
 } from "../ui/combobox";
 import { useDialogControlContext } from "~/contexts/DialogControlProvider";
 import type { SkillResponseDto, YsWsResponseDto } from "~/api";
-import { useNavigation, useSubmit } from "react-router";
+import {
+  useLocation,
+  useNavigate,
+  useNavigation,
+  useSubmit,
+} from "react-router";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Loader, Spinner } from "@hugeicons/core-free-icons";
 
@@ -44,6 +49,8 @@ export default function UpdateProjectPitchDialog({
 }) {
   const submit = useSubmit();
   const navigation = useNavigation();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const [formData, setFormData] = useState<{
     projectTitle: string;
@@ -57,6 +64,7 @@ export default function UpdateProjectPitchDialog({
 
   const [yswsPrograms, setYswsProgram] = useState<YsWsResponseDto[]>([]);
   const [skills, setSkills] = useState<SkillResponseDto[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [skillInputValue, setSkillInputValue] = useState<string>("");
 
@@ -75,25 +83,25 @@ export default function UpdateProjectPitchDialog({
     fetchYswsPrograms();
   }, []);
 
-  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    submit(
+    setIsSubmitting(true);
+    await submit(
       { ...formData, requestType: "update-project-pitch", id: projectPitch.id },
       {
         method: "post",
         action: "/app",
+        navigate: false,
       },
     );
+    setIsSubmitting(false);
+    setOpenUpdateProjectDialog(false);
   };
 
   return (
     <Dialog
       open={openUpdateProjectDialog}
-      onOpenChange={
-        navigation.state !== "submitting"
-          ? setOpenUpdateProjectDialog
-          : () => {}
-      }
+      onOpenChange={!isSubmitting ? setOpenUpdateProjectDialog : () => {}}
       modal={false}
     >
       <DialogContent>
@@ -112,7 +120,7 @@ export default function UpdateProjectPitchDialog({
               >
                 <span> Project Title</span>
                 <span className="text-muted-foreground!">
-                  {formData.projectTitle.length}/50 chars
+                  {formData.projectTitle.length}/100 chars
                 </span>
               </FieldLabel>
               <Input
@@ -122,7 +130,7 @@ export default function UpdateProjectPitchDialog({
                 id="project-title-input"
                 required
                 minLength={5}
-                maxLength={50}
+                maxLength={100}
                 value={formData.projectTitle}
                 onChange={(e) =>
                   setFormData({ ...formData, projectTitle: e.target.value })
@@ -130,21 +138,15 @@ export default function UpdateProjectPitchDialog({
               />
             </Field>
             <Field>
-              <FieldLabel
-                htmlFor="pitch-description-input"
-                className="flex justify-between"
-              >
-                <span> Pitch Description & Needed Skills</span>
-                <span className="text-muted-foreground!">
-                  {formData.pitchDescription.length}/200 chars
-                </span>
+              <FieldLabel htmlFor="pitch-description-input">
+                Pitch Description & Needed Skills
               </FieldLabel>
               <Textarea
                 placeholder="Describe your project scope and explain exactly what kind of partner you are looking for (e.g., 'I have the firmware down, but I need someone with solid CAD skills...')."
                 name="pitchDescription"
                 id="pitch-description-input"
+                className="max-h-40"
                 minLength={10}
-                maxLength={200}
                 required
                 value={formData.pitchDescription}
                 onChange={(e) =>
@@ -237,12 +239,8 @@ export default function UpdateProjectPitchDialog({
                 Cancel
               </Button>
             </DialogClose>
-            <Button
-              variant="default"
-              type="submit"
-              disabled={navigation.state === "submitting"}
-            >
-              {navigation.state === "submitting" && (
+            <Button variant="default" type="submit" disabled={isSubmitting}>
+              {isSubmitting && (
                 <HugeiconsIcon icon={Loader} className="animate-spin" />
               )}
               Update Pitch

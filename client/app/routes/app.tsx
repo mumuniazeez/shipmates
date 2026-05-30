@@ -66,7 +66,10 @@ export default function Home({ loaderData, actionData }: Route.ComponentProps) {
   useEffect(() => {
     const interval = setInterval(
       () => {
-        submit({ requestType: "refresh_token" }, { method: "post" });
+        submit(
+          { requestType: "refresh_token" },
+          { method: "post", action: "/app", navigate: false },
+        );
       },
       1000 * 28 * 60,
     );
