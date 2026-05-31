@@ -12,6 +12,8 @@ import { UserModule } from './user/user.module';
 import { ProjectPitchModule } from './project-pitch/project-pitch.module';
 import { SkillModule } from './skill/skill.module';
 import { YswsModule } from './ysws/ysws.module';
+import { SlackModule } from './slack/slack.module';
+import { MatchModule } from './match/match.module';
 
 @Module({
   imports: [
@@ -26,6 +28,7 @@ import { YswsModule } from './ysws/ysws.module';
     // Custom service module
     PrismaModule,
     MailerModule,
+    SlackModule,
 
     // Routes Module
     HealthModule,
@@ -34,6 +37,7 @@ import { YswsModule } from './ysws/ysws.module';
     ProjectPitchModule,
     SkillModule,
     YswsModule,
+    MatchModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })

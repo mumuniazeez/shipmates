@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { MatchResponseDto } from 'src/match/dto/match-response.dto';
 import { SkillResponseDto } from 'src/skill/dto/skill-response.dto';
 import { UserResponseDto } from 'src/user/dto/user-response.dto';
 
@@ -32,6 +33,12 @@ export class ProjectPitchResponseDto {
     description: 'The user who created the project pitch',
   })
   user: UserResponseDto;
+
+  @ApiProperty({
+    type: () => [MatchResponseDto],
+    description: 'The users matches for this project pitch',
+  })
+  matches: MatchResponseDto[];
 
   @ApiProperty({
     type: 'string',
