@@ -31,7 +31,7 @@ export class ProjectPitchService {
         },
         userId,
       },
-      include: { skillsNeeded: true, user: true },
+      include: { skillsNeeded: true, user: true, matches: true },
     });
 
     return projectPitch;
@@ -40,7 +40,7 @@ export class ProjectPitchService {
   // TODO: Add pagination later
   async findAll() {
     const projectPitches = await this.prisma.projectPitch.findMany({
-      include: { skillsNeeded: true, user: true },
+      include: { skillsNeeded: true, user: true, matches: true },
     });
 
     if (projectPitches.length === 0)
@@ -65,7 +65,7 @@ export class ProjectPitchService {
   async findOne(id: string): Promise<ProjectPitchResponseDto> {
     const projectPitch = await this.prisma.projectPitch.findUnique({
       where: { id },
-      include: { skillsNeeded: true, user: true },
+      include: { skillsNeeded: true, user: true, matches: true },
     });
 
     if (!projectPitch) throw new NotFoundException('Project Pitch not found');
@@ -104,7 +104,7 @@ export class ProjectPitchService {
         },
         userId,
       },
-      include: { skillsNeeded: true, user: true },
+      include: { skillsNeeded: true, user: true, matches: true },
       where: { id },
     });
 
@@ -114,7 +114,6 @@ export class ProjectPitchService {
   async remove(id: string, userId: string): Promise<GeneralOkResponseDto> {
     const existingPitch = await this.prisma.projectPitch.findUnique({
       where: { id },
-      include: { skillsNeeded: true },
     });
     if (!existingPitch) throw new NotFoundException('Project Pitch not found');
 
