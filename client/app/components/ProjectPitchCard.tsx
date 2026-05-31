@@ -37,7 +37,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "./ui/alert-dialog";
-import ConfirmMatchDialog from "./dialogs/ConfirmMatchDialog";
+import ConfirmMatchDialog from "./dialogs/MatchDialog";
 
 export default function ProjectPitchCard({
   projectPitch,
@@ -140,7 +140,9 @@ export default function ProjectPitchCard({
                 Seekisssng Partner
               </p>
             </div>
-
+            <Button onClick={() => setMatchModalOpen(true)}>
+              Request to ship
+            </Button>
             {user.id === projectPitch.userId ? (
               <div className="bg-primary/50 border border-primary px-2 py-1 rounded-2xl">
                 <p className="text-sm">Live on Global Feed</p>

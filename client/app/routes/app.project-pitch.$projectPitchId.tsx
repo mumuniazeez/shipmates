@@ -43,6 +43,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "~/components/ui/alert-dialog";
+import ConfirmMatchDialog from "~/components/dialogs/MatchDialog";
 
 export function meta({ loaderData }: Route.MetaArgs): Route.MetaDescriptors {
   return [
@@ -71,6 +72,7 @@ export default function ProjectDetails({ loaderData }: Route.ComponentProps) {
   const submit = useSubmit();
   const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [matchModalOpen, setMatchModalOpen] = useState(false);
 
   const navigation = useNavigation();
 
@@ -163,6 +165,11 @@ export default function ProjectDetails({ loaderData }: Route.ComponentProps) {
               projectPitch={loaderData.data}
               openUpdateProjectDialog={editModalOpen}
               setOpenUpdateProjectDialog={setEditModalOpen}
+            />
+            <ConfirmMatchDialog
+              projectPitch={loaderData.data}
+              openMatchDialog={matchModalOpen}
+              setOpenMatchDialog={setMatchModalOpen}
             />
             <AlertDialog
               open={deleteAlertOpen}

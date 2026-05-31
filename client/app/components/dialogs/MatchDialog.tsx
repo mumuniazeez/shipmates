@@ -6,6 +6,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
+  DialogFooter,
+  DialogClose,
 } from "../ui/dialog";
 import {
   useLocation,
@@ -85,8 +87,17 @@ export default function ConfirmMatchDialog({
               </span>
             </p>
           </div>
-          <Button>Connect with on Slack</Button>
+          <p>
+            Shipmates slack bot will notify {projectPitch.user.firstName} on
+            slack, you can continue your conversation on slack.
+          </p>
         </div>
+        <DialogFooter>
+          <DialogClose>
+            <Button variant={"outline"}>Close</Button>
+          </DialogClose>
+          <Button>Connect on Slack</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
