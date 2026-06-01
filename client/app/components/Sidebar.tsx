@@ -25,13 +25,17 @@ export default function Sidebar({ user }: { user: UserResponseDto }) {
   return (
     <div className="w-[25%] hidden h-screen p-5 bg-accent md:flex flex-col justify-between border-r">
       <div className="space-y-5">
-        <header className="flex items-center gap-x-2">
-          <img src="/Shipmates-Logo.png" width={50} />
-          <div>
-            <h3 className="text-2xl font-bold">Shipmates</h3>
-            <p className="font-light">Hack Club Matchmaker</p>
-          </div>
-        </header>
+        <div>
+          <Link to={"/app"}>
+            <header className="flex items-center gap-x-2">
+              <img src="/Shipmates-Logo.png" width={50} />
+              <div>
+                <h3 className="text-2xl font-bold">Shipmates</h3>
+                <p className="font-light">Hack Club Matchmaker</p>
+              </div>
+            </header>
+          </Link>
+        </div>
         <Button
           className="w-full"
           onClick={() => setOpenCreateProjectDialog(true)}

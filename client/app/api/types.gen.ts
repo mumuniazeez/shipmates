@@ -146,6 +146,29 @@ export type SkillResponseDto = {
     updatedAt: string;
 };
 
+export type MatchResponseDto = {
+    /**
+     * id of the match
+     */
+    id: string;
+    /**
+     * Project Pitch Owner user id
+     */
+    projectOwnerId: string;
+    /**
+     * Collaborator user id
+     */
+    collaboratingUserId: string;
+    /**
+     * Project Pitch id
+     */
+    projectPitchId: string;
+    /**
+     * Project Pitch id
+     */
+    matchStatus: 'matching' | 'matched' | 'rejected';
+};
+
 export type ProjectPitchResponseDto = {
     /**
      * ID of the project
@@ -167,6 +190,10 @@ export type ProjectPitchResponseDto = {
      * The user who created the project pitch
      */
     user: UserResponseDto;
+    /**
+     * The users matches for this project pitch
+     */
+    matches: Array<MatchResponseDto>;
     /**
      * The userId of user who created the project pitch
      */
@@ -233,6 +260,13 @@ export type YsWsResponseDto = {
      * Status of the YSWS program
      */
     status: 'active' | 'ended' | 'draft';
+};
+
+export type CreateMatchDto = {
+    /**
+     * The id of the project to match users
+     */
+    projectId: string;
 };
 
 export type ErrorMessageDtoWritable = {
@@ -809,3 +843,113 @@ export type YswsControllerSearchV1Responses = {
 };
 
 export type YswsControllerSearchV1Response = YswsControllerSearchV1Responses[keyof YswsControllerSearchV1Responses];
+
+export type MatchControllerCreateV1Data = {
+    body: CreateMatchDto;
+    path?: never;
+    query?: never;
+    url: '/api/v1/match';
+};
+
+export type MatchControllerCreateV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type MatchControllerCreateV1Error = MatchControllerCreateV1Errors[keyof MatchControllerCreateV1Errors];
+
+export type MatchControllerCreateV1Responses = {
+    200: ProjectPitchResponseDto;
+};
+
+export type MatchControllerCreateV1Response = MatchControllerCreateV1Responses[keyof MatchControllerCreateV1Responses];
+
+export type MatchControllerFindAllV1Data = {
+    body?: never;
+    path: {
+        projectPitchId: string;
+    };
+    query?: never;
+    url: '/api/v1/match/{projectPitchId}';
+};
+
+export type MatchControllerFindAllV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type MatchControllerFindAllV1Error = MatchControllerFindAllV1Errors[keyof MatchControllerFindAllV1Errors];
+
+export type MatchControllerFindAllV1Responses = {
+    200: Array<MatchResponseDto>;
+};
+
+export type MatchControllerFindAllV1Response = MatchControllerFindAllV1Responses[keyof MatchControllerFindAllV1Responses];
+
+export type MatchControllerRemoveV1Data = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/match/{id}';
+};
+
+export type MatchControllerRemoveV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type MatchControllerRemoveV1Error = MatchControllerRemoveV1Errors[keyof MatchControllerRemoveV1Errors];
+
+export type MatchControllerRemoveV1Responses = {
+    200: GeneralOkResponseDto;
+};
+
+export type MatchControllerRemoveV1Response = MatchControllerRemoveV1Responses[keyof MatchControllerRemoveV1Responses];
+
+export type MatchControllerFindOneV1Data = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/match/{id}';
+};
+
+export type MatchControllerFindOneV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type MatchControllerFindOneV1Error = MatchControllerFindOneV1Errors[keyof MatchControllerFindOneV1Errors];
+
+export type MatchControllerFindOneV1Responses = {
+    200: MatchResponseDto;
+};
+
+export type MatchControllerFindOneV1Response = MatchControllerFindOneV1Responses[keyof MatchControllerFindOneV1Responses];

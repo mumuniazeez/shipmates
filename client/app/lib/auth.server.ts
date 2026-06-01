@@ -80,9 +80,8 @@ export function clearAuthCookie(
 export async function refreshAuthToken(request: Request) {
   const refreshToken = getAuthToken(request, "refresh_token");
   if (!refreshToken) {
-    throw redirect("/auth/login");
+    throw redirect("/");
   }
-  console.log(refreshToken);
   const client = createApiClient(refreshToken);
   const res = await api.auth.authControllerGetNewAccessTokenV1({
     client,
@@ -91,7 +90,6 @@ export async function refreshAuthToken(request: Request) {
   if (res.error) {
     throw redirect("/auth/login");
   }
-  console.log(res.data);
   return redirect(request.url, {
     headers: {
       "Set-Cookie": createAuthCookie(res.data.access_token, "access_token"),

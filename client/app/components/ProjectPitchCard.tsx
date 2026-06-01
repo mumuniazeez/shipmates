@@ -53,6 +53,10 @@ export default function ProjectPitchCard({
   const navigation = useNavigation();
   const navigate = useNavigate();
 
+  const hasMatched =
+    projectPitch.matches.find((m) => m.collaboratingUserId === user.id) !==
+    undefined;
+
   const handleDelete = () => {
     submit(
       { requestType: "delete-project-pitch", id: projectPitch.id },
@@ -136,22 +140,19 @@ export default function ProjectPitchCard({
           <div className="flex items-center justify-between gap-x-2 mt-auto">
             <div className="flex items-center gap-x-2">
               <div className="w-2 h-2 bg-green-500 rounded-full" />
-              <p className="text-muted-foreground text-sm">
-                Seekisssng Partner
-              </p>
+              <p className="text-muted-foreground text-sm">Seeking Partner</p>
             </div>
-            <Button onClick={() => setMatchModalOpen(true)}>
-              Request to ship
-            </Button>
             {user.id === projectPitch.userId ? (
               <div className="bg-primary/50 border border-primary px-2 py-1 rounded-2xl">
                 <p className="text-sm">Live on Global Feed</p>
               </div>
             ) : (
               <div className="space-x-2">
-                <Button variant={"outline"}>Pass</Button>
-                <Button onClick={() => setMatchModalOpen(true)}>
-                  Request to ship
+                <Button
+                  onClick={() => setMatchModalOpen(true)}
+                  disabled={hasMatched}
+                >
+                  {hasMatched ? "Already Requested" : "Request to ship"}
                 </Button>
               </div>
             )}
