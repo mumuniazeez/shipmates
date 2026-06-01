@@ -88,10 +88,11 @@ export class AuthService {
       );
 
     // check if user is eligible to signup
-    if (!userDataFromHackClubAuth.data.identity.ysws_eligible)
-      throw new UnauthorizedException(
-        'You are not eligible to use this platform',
-      );
+    // if (!userDataFromHackClubAuth.data.identity.ysws_eligible)
+    //   throw new UnauthorizedException(
+    //     'You are not eligible to use this platform',
+    //   );
+
     // get user data from public slack api using Cachet
     const userDataFromSlack = await this.httpService.axiosRef.get<{
       displayName: string;
