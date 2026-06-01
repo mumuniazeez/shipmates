@@ -38,7 +38,7 @@ export class ProjectPitchService {
   }
 
   // TODO: Add pagination later
-  async findAll() {
+  async findAll(): Promise<ProjectPitchResponseDto[]> {
     const projectPitches = await this.prisma.projectPitch.findMany({
       include: { skillsNeeded: true, user: true, matches: true },
     });
@@ -50,10 +50,12 @@ export class ProjectPitchService {
   }
 
   // TODO: Add pagination later
-  async findMyProjectPitches(userId: string) {
+  async findMyProjectPitches(
+    userId: string,
+  ): Promise<ProjectPitchResponseDto[]> {
     const projectPitches = await this.prisma.projectPitch.findMany({
       where: { userId },
-      include: { skillsNeeded: true, user: true },
+      include: { skillsNeeded: true, user: true, matches: true },
     });
 
     if (projectPitches.length === 0)
