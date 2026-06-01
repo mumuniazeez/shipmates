@@ -21,6 +21,12 @@ export class SlackService {
       .replace(/[^a-z0-9]/g, '-');
     const channelName = `ship-${sanitizedTitle}-${uniqueSuffix}`.slice(0, 80);
 
+    const maxSlackLength = 2950;
+    const cleanDescription =
+      projectPitch.description.length > maxSlackLength
+        ? `${projectPitch.description.slice(0, maxSlackLength)}...`
+        : projectPitch.description;
+
     const channelResult = await this.slackClient.conversations.create({
       name: channelName,
       is_private: true,
@@ -52,7 +58,7 @@ export class SlackService {
           type: 'section',
           text: {
             type: 'mrkdwn',
-            text: `*${projectPitch.description}*`,
+            text: `${cleanDescription}`,
           },
         },
         {
