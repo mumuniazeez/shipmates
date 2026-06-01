@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Badge } from "~/components/ui/badge";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -21,6 +21,9 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
+  const { search } = useLocation();
+  const urlSearchParams = new URLSearchParams(search);
+  const loginError = urlSearchParams.get("loginError");
   return (
     <div>
       <main>
@@ -54,6 +57,13 @@ export default function Home() {
           <Link to={"/auth/login"}>
             <Button>Sign in with Hack Club</Button>
           </Link>
+          {loginError && (
+            <p className="text-red-500 text-center">
+              An error occurred while signing in. Please try again.
+              <br />
+              Error: {loginError}
+            </p>
+          )}
           <p className="text-sm text-muted-foreground">
             DM @AzCodes on Slack for support.
           </p>

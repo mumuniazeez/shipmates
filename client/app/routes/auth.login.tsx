@@ -34,7 +34,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   // TODO: Handle error properly and display error to users
   if (exchangeResult.error) {
     console.error("Error exchanging code for token:", exchangeResult.error);
-    throw redirect("/");
+    throw redirect(`/?loginError=${exchangeResult.error.message}`);
   }
 
   const headers = new Headers();
