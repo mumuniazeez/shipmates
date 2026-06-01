@@ -24,6 +24,8 @@ export default function Home() {
   const { search } = useLocation();
   const urlSearchParams = new URLSearchParams(search);
   const loginError = urlSearchParams.get("loginError");
+  urlSearchParams.set("loginError", "");
+
   return (
     <div>
       <main>

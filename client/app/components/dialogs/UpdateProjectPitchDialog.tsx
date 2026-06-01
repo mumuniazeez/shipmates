@@ -239,7 +239,7 @@ export default function UpdateProjectPitchDialog({
                 Cancel
               </Button>
             </DialogClose>
-            <Button variant="default" type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting}>
               {isSubmitting && (
                 <HugeiconsIcon icon={Loader} className="animate-spin" />
               )}

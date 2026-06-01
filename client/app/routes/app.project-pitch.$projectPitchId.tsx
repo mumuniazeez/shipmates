@@ -83,6 +83,10 @@ export default function ProjectDetails({ loaderData }: Route.ComponentProps) {
     );
   };
 
+  const hasMatched =
+    loaderData.data?.matches.find((m) => m.collaboratingUserId === user.id) !==
+    undefined;
+
   return (
     <div className="md:w-[75%] w-full overflow-auto">
       <main className="p-5">
@@ -156,8 +160,12 @@ export default function ProjectDetails({ loaderData }: Route.ComponentProps) {
                 </div>
               ) : (
                 <div className="space-x-2">
-                  <Button variant={"outline"}>Pass</Button>
-                  <Button>Request to ship</Button>
+                  <Button
+                    onClick={() => setMatchModalOpen(true)}
+                    disabled={hasMatched}
+                  >
+                    {hasMatched ? "Already Requested" : "Request to ship"}
+                  </Button>
                 </div>
               )}
             </div>

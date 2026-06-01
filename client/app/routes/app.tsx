@@ -16,6 +16,7 @@ import {
 import { useEffect } from "react";
 import LogoutDialog from "~/components/dialogs/LogoutDialog";
 import { refreshAuthToken } from "~/lib/auth.server";
+import { matchUsersOnSlack } from "~/lib/match.server";
 
 export type OutletContext = {
   user: UserResponseDto;
@@ -54,6 +55,19 @@ export async function action({ request }: Route.ActionArgs) {
   } else if (requestType === "refresh_token") {
     const res = await refreshAuthToken(request);
 
+    return { requestType, success: true };
+  } else if (requestType === "create-match") {
+    console.log("Reach here");
+    const res = await matchUsersOnSlack(
+      request,
+      formData.get("projectPitchId") as string,
+    );
+    // TODO: Fix 500 internal server error
+    if (res.error) {
+      console.log(res.error);
+      return { requestType, error: res.error.message };
+    }
+    console.log("success");
     return { requestType, success: true };
   }
 

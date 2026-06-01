@@ -17,7 +17,7 @@ import {
   useSubmit,
 } from "react-router";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Handshake } from "@hugeicons/core-free-icons";
+import { Handshake, Loader } from "@hugeicons/core-free-icons";
 import type { OutletContext } from "~/routes/app";
 import { Button } from "../ui/button";
 
@@ -40,7 +40,18 @@ export default function ConfirmMatchDialog({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleMatch = async () => {
-    // Submit the match, this will initaite a
+    // Submit the match, this will initiate a slack handshake between both users.
+    setIsSubmitting(true);
+    await submit(
+      { projectPitchId: projectPitch.id, requestType: "create-match" },
+      {
+        method: "POST",
+        action: "/app",
+        navigate: false,
+      },
+    );
+    setIsSubmitting(false);
+    setOpenMatchDialog(false);
   };
 
   return (
@@ -92,22 +103,22 @@ export default function ConfirmMatchDialog({
             </p>
           </div>
           <p>
-            Shipmates slack bot will notify {projectPitch.user.firstName} on
-            slack, you can continue your conversation on slack.
-          </p>
-          <p>
-            A slack channel will be initiated for you conversation to hold. Our
-            slack bot will be in the channel by default, no conversation will be
-            sent to us. All your conversation will be only on slack.. The bot is
-            there because we are adding some feature to manage your project
-            pitch from slack in the future.
+            A dedicated Slack channel will be created for your private
+            conversation, where the "Shipmates" bot will notify{" "}
+            {projectPitch.user.firstName} and remain present to support future
+            project pitch management features.
           </p>
         </div>
         <DialogFooter>
           <DialogClose>
             <Button variant={"outline"}>Close</Button>
           </DialogClose>
-          <Button>Connect on Slack</Button>
+          <Button onClick={handleMatch} disabled={isSubmitting}>
+            {isSubmitting && (
+              <HugeiconsIcon icon={Loader} className="animate-spin" />
+            )}
+            Connect on Slack
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
