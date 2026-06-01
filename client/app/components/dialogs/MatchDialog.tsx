@@ -39,6 +39,10 @@ export default function ConfirmMatchDialog({
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const handleMatch = async () => {
+    // Submit the match, this will initaite a
+  };
+
   return (
     <Dialog
       open={openMatchDialog}
@@ -90,6 +94,13 @@ export default function ConfirmMatchDialog({
           <p>
             Shipmates slack bot will notify {projectPitch.user.firstName} on
             slack, you can continue your conversation on slack.
+          </p>
+          <p>
+            A slack channel will be initiated for you conversation to hold. Our
+            slack bot will be in the channel by default, no conversation will be
+            sent to us. All your conversation will be only on slack.. The bot is
+            there because we are adding some feature to manage your project
+            pitch from slack in the future.
           </p>
         </div>
         <DialogFooter>
