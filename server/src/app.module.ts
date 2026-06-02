@@ -35,9 +35,9 @@ import { MatchModule } from './match/match.module';
     AuthModule,
     UserModule,
     ProjectPitchModule,
+    MatchModule,
     SkillModule,
     YswsModule,
-    MatchModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })

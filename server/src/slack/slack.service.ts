@@ -82,4 +82,8 @@ export class SlackService {
 
     return { channelId, channelName };
   }
+
+  async archiveChannel(channelId: string) {
+    await this.slackClient.conversations.archive({ channel: channelId });
+  }
 }

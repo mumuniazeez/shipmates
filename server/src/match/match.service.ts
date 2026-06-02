@@ -2,12 +2,11 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { CreateMatchDto } from './dto/create-match.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ProjectPitchResponseDto } from 'src/project-pitch/dto/project-pitch-response.dto';
 import { MatchResponseDto } from './dto/match-response.dto';
-import { GeneralOkResponseDto } from 'src/global/dto';
 import { SlackService } from 'src/slack/slack.service';
 import { User } from 'generated/prisma';
 
@@ -21,38 +20,55 @@ export class MatchService {
   async create(
     createMatchDto: CreateMatchDto,
     user: User,
-  ): Promise<ProjectPitchResponseDto> {
+  ): Promise<MatchResponseDto> {
     const projectPitch = await this.prisma.projectPitch.findUnique({
       where: { id: createMatchDto.projectId },
-      include: { user: true },
+      include: {
+        user: true,
+        matches: { where: { collaboratingUserId: user.id } },
+      },
     });
 
     if (!projectPitch) throw new NotFoundException('Project Pitch not found');
 
-    const { channelName } = await this.slackService.createMatchHandshake(
-      user,
-      projectPitch.user,
-      projectPitch,
-    );
+    if (projectPitch.userId === user.id)
+      throw new ForbiddenException("You can't match with yourself, silly!");
 
-    return await this.prisma.projectPitch.update({
-      where: { id: createMatchDto.projectId },
+    if (projectPitch.matches.length > 0)
+      throw new UnprocessableEntityException(
+        'You have already matched on this project',
+      );
+
+    return await this.prisma.match.create({
       data: {
-        matches: {
-          create: {
-            projectOwnerId: projectPitch.userId,
-            collaboratingUserId: user.id,
-            slackChannelName: channelName,
-            matchStatus: 'matched',
-          },
-        },
+        projectPitchId: projectPitch.id,
+        projectOwnerId: projectPitch.userId,
+        collaboratingUserId: user.id,
       },
       include: {
-        matches: true,
-        skillsNeeded: true,
-        user: true,
+        projectOwner: true,
+        collaboratingUser: true,
+        projectPitch: true,
       },
     });
+  }
+
+  async findAllRelatingToMe(userId: string): Promise<MatchResponseDto[]> {
+    const projectPitchMatches = await this.prisma.match.findMany({
+      where: {
+        OR: [{ collaboratingUserId: userId }, { projectOwnerId: userId }],
+      },
+      include: {
+        projectOwner: true,
+        collaboratingUser: true,
+        projectPitch: true,
+      },
+    });
+
+    if (projectPitchMatches.length === 0)
+      throw new NotFoundException('No matched yet');
+
+    return projectPitchMatches;
   }
 
   async findAll(projectPitchId: string): Promise<MatchResponseDto[]> {
@@ -63,6 +79,11 @@ export class MatchService {
 
     const projectPitchMatches = await this.prisma.match.findMany({
       where: { projectPitchId },
+      include: {
+        projectOwner: true,
+        collaboratingUser: true,
+        projectPitch: true,
+      },
     });
 
     if (projectPitchMatches.length === 0)
@@ -74,6 +95,11 @@ export class MatchService {
   async findOne(id: string): Promise<MatchResponseDto> {
     const projectPitchMatch = await this.prisma.match.findUnique({
       where: { id },
+      include: {
+        projectOwner: true,
+        collaboratingUser: true,
+        projectPitch: true,
+      },
     });
 
     if (!projectPitchMatch) throw new NotFoundException('No matched yet');
@@ -81,7 +107,84 @@ export class MatchService {
     return projectPitchMatch;
   }
 
-  async remove(id: string, userId: string): Promise<GeneralOkResponseDto> {
+  async confirmMatching(
+    matchId: string,
+    user: User,
+  ): Promise<MatchResponseDto> {
+    const projectPitchMatch = await this.prisma.match.findUnique({
+      where: { id: matchId },
+      include: {
+        projectOwner: true,
+        collaboratingUser: true,
+        projectPitch: true,
+      },
+    });
+
+    if (!projectPitchMatch) throw new NotFoundException('No matched yet');
+
+    if (projectPitchMatch.projectOwnerId !== user.id)
+      throw new ForbiddenException(
+        "You don't have the permission to confirm this match",
+      );
+
+    const { channelName, channelId } =
+      await this.slackService.createMatchHandshake(
+        projectPitchMatch.projectOwner,
+        projectPitchMatch.collaboratingUser,
+        projectPitchMatch.projectPitch,
+      );
+
+    return this.prisma.match.update({
+      where: { id: matchId },
+      data: {
+        matchStatus: 'matching',
+        slackChannelId: channelId,
+        slackChannelName: channelName,
+      },
+      include: {
+        projectOwner: true,
+        collaboratingUser: true,
+        projectPitch: true,
+      },
+    });
+  }
+
+  async finalizeMatching(
+    matchId: string,
+    user: User,
+  ): Promise<MatchResponseDto> {
+    const projectPitchMatch = await this.prisma.match.findUnique({
+      where: { id: matchId },
+      include: {
+        projectOwner: true,
+        collaboratingUser: true,
+        projectPitch: true,
+      },
+    });
+
+    if (!projectPitchMatch) throw new NotFoundException('No matched yet');
+
+    if (projectPitchMatch.projectOwnerId !== user.id)
+      throw new ForbiddenException(
+        "You don't have the permission to finalize this match",
+      );
+
+    // TODO: Notify users about match finalization on slack channel
+
+    return this.prisma.match.update({
+      where: { id: matchId },
+      data: {
+        matchStatus: 'accepted',
+      },
+      include: {
+        projectOwner: true,
+        collaboratingUser: true,
+        projectPitch: true,
+      },
+    });
+  }
+
+  async cancelOrReject(id: string, userId: string): Promise<MatchResponseDto> {
     const projectPitchMatch = await this.prisma.match.findUnique({
       where: { id },
     });
@@ -93,7 +196,25 @@ export class MatchService {
         "You don't have the permission to cancel this match",
       );
 
-    await this.prisma.projectPitch.delete({ where: { id } });
+    // Discover if it's a cancel by the collaborator or reject by the project owner
+    await this.prisma.match.update({
+      where: { id },
+      data: {
+        matchStatus:
+          projectPitchMatch.collaboratingUserId === userId
+            ? 'cancelled'
+            : 'rejected',
+      },
+      include: {
+        projectOwner: true,
+        collaboratingUser: true,
+        projectPitch: true,
+      },
+    });
+
+    if (projectPitchMatch.slackChannelId)
+      await this.slackService.archiveChannel(projectPitchMatch.slackChannelId);
+
     return { message: 'Match Canceled' };
   }
 }
