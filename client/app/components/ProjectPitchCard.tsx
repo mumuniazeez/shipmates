@@ -37,7 +37,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "./ui/alert-dialog";
-import ConfirmMatchDialog from "./dialogs/MatchDialog";
+import MatchDialog from "./dialogs/MatchDialog";
 
 export default function ProjectPitchCard({
   projectPitch,
@@ -164,7 +164,7 @@ export default function ProjectPitchCard({
         openUpdateProjectDialog={editModalOpen}
         setOpenUpdateProjectDialog={setEditModalOpen}
       />
-      <ConfirmMatchDialog
+      <MatchDialog
         projectPitch={projectPitch}
         openMatchDialog={matchModalOpen}
         setOpenMatchDialog={setMatchModalOpen}

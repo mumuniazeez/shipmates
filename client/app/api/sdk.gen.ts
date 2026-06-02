@@ -2,8 +2,8 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import { matchControllerCreateV1ResponseTransformer, projectPitchControllerCreateV1ResponseTransformer, projectPitchControllerFindAllV1ResponseTransformer, projectPitchControllerFindMyProjectPitchesV1ResponseTransformer, projectPitchControllerFindOneV1ResponseTransformer, projectPitchControllerUpdateV1ResponseTransformer, userControllerFindMeV1ResponseTransformer, userControllerFindOneV1ResponseTransformer } from './transformers.gen';
-import type { AuthControllerGetNewAccessTokenV1Data, AuthControllerGetNewAccessTokenV1Errors, AuthControllerGetNewAccessTokenV1Responses, AuthControllerHackClubAuthCallbackV1Data, AuthControllerHackClubAuthCallbackV1Errors, AuthControllerHackClubAuthCallbackV1Responses, AuthControllerHackClubAuthV1Data, AuthControllerHackClubAuthV1Errors, AuthControllerHackClubAuthV1Responses, HealthCheckData, HealthCheckErrors, HealthCheckResponses, MatchControllerCreateV1Data, MatchControllerCreateV1Errors, MatchControllerCreateV1Responses, MatchControllerFindAllV1Data, MatchControllerFindAllV1Errors, MatchControllerFindAllV1Responses, MatchControllerFindOneV1Data, MatchControllerFindOneV1Errors, MatchControllerFindOneV1Responses, MatchControllerRemoveV1Data, MatchControllerRemoveV1Errors, MatchControllerRemoveV1Responses, ProjectPitchControllerCreateV1Data, ProjectPitchControllerCreateV1Errors, ProjectPitchControllerCreateV1Responses, ProjectPitchControllerFindAllV1Data, ProjectPitchControllerFindAllV1Errors, ProjectPitchControllerFindAllV1Responses, ProjectPitchControllerFindMyProjectPitchesV1Data, ProjectPitchControllerFindMyProjectPitchesV1Errors, ProjectPitchControllerFindMyProjectPitchesV1Responses, ProjectPitchControllerFindOneV1Data, ProjectPitchControllerFindOneV1Errors, ProjectPitchControllerFindOneV1Responses, ProjectPitchControllerRemoveV1Data, ProjectPitchControllerRemoveV1Errors, ProjectPitchControllerRemoveV1Responses, ProjectPitchControllerUpdateV1Data, ProjectPitchControllerUpdateV1Errors, ProjectPitchControllerUpdateV1Responses, SkillControllerCreateV1Data, SkillControllerCreateV1Errors, SkillControllerCreateV1Responses, SkillControllerFindAllV1Data, SkillControllerFindAllV1Errors, SkillControllerFindAllV1Responses, SkillControllerSearchV1Data, SkillControllerSearchV1Errors, SkillControllerSearchV1Responses, UserControllerFindMeV1Data, UserControllerFindMeV1Errors, UserControllerFindMeV1Responses, UserControllerFindOneV1Data, UserControllerFindOneV1Errors, UserControllerFindOneV1Responses, YswsControllerFindActiveV1Data, YswsControllerFindActiveV1Errors, YswsControllerFindActiveV1Responses, YswsControllerFindAllV1Data, YswsControllerFindAllV1Errors, YswsControllerFindAllV1Responses, YswsControllerFindEndedV1Data, YswsControllerFindEndedV1Errors, YswsControllerFindEndedV1Responses, YswsControllerSearchV1Data, YswsControllerSearchV1Errors, YswsControllerSearchV1Responses } from './types.gen';
+import { matchControllerConfirmMatchingV1ResponseTransformer, matchControllerCreateV1ResponseTransformer, matchControllerFinalizeMatchingV1ResponseTransformer, matchControllerFindAllRelatingToMeV1ResponseTransformer, matchControllerFindAllV1ResponseTransformer, matchControllerFindOneV1ResponseTransformer, projectPitchControllerCreateV1ResponseTransformer, projectPitchControllerFindAllV1ResponseTransformer, projectPitchControllerFindMyProjectPitchesV1ResponseTransformer, projectPitchControllerFindOneV1ResponseTransformer, projectPitchControllerUpdateV1ResponseTransformer, userControllerFindMeV1ResponseTransformer, userControllerFindOneV1ResponseTransformer } from './transformers.gen';
+import type { AuthControllerGetNewAccessTokenV1Data, AuthControllerGetNewAccessTokenV1Errors, AuthControllerGetNewAccessTokenV1Responses, AuthControllerHackClubAuthCallbackV1Data, AuthControllerHackClubAuthCallbackV1Errors, AuthControllerHackClubAuthCallbackV1Responses, AuthControllerHackClubAuthV1Data, AuthControllerHackClubAuthV1Errors, AuthControllerHackClubAuthV1Responses, HealthCheckData, HealthCheckErrors, HealthCheckResponses, MatchControllerCancelOrRejectV1Data, MatchControllerCancelOrRejectV1Errors, MatchControllerCancelOrRejectV1Responses, MatchControllerConfirmMatchingV1Data, MatchControllerConfirmMatchingV1Errors, MatchControllerConfirmMatchingV1Responses, MatchControllerCreateV1Data, MatchControllerCreateV1Errors, MatchControllerCreateV1Responses, MatchControllerFinalizeMatchingV1Data, MatchControllerFinalizeMatchingV1Errors, MatchControllerFinalizeMatchingV1Responses, MatchControllerFindAllRelatingToMeV1Data, MatchControllerFindAllRelatingToMeV1Errors, MatchControllerFindAllRelatingToMeV1Responses, MatchControllerFindAllV1Data, MatchControllerFindAllV1Errors, MatchControllerFindAllV1Responses, MatchControllerFindOneV1Data, MatchControllerFindOneV1Errors, MatchControllerFindOneV1Responses, ProjectPitchControllerCreateV1Data, ProjectPitchControllerCreateV1Errors, ProjectPitchControllerCreateV1Responses, ProjectPitchControllerFindAllV1Data, ProjectPitchControllerFindAllV1Errors, ProjectPitchControllerFindAllV1Responses, ProjectPitchControllerFindMyProjectPitchesV1Data, ProjectPitchControllerFindMyProjectPitchesV1Errors, ProjectPitchControllerFindMyProjectPitchesV1Responses, ProjectPitchControllerFindOneV1Data, ProjectPitchControllerFindOneV1Errors, ProjectPitchControllerFindOneV1Responses, ProjectPitchControllerRemoveV1Data, ProjectPitchControllerRemoveV1Errors, ProjectPitchControllerRemoveV1Responses, ProjectPitchControllerUpdateV1Data, ProjectPitchControllerUpdateV1Errors, ProjectPitchControllerUpdateV1Responses, SkillControllerCreateV1Data, SkillControllerCreateV1Errors, SkillControllerCreateV1Responses, SkillControllerFindAllV1Data, SkillControllerFindAllV1Errors, SkillControllerFindAllV1Responses, SkillControllerSearchV1Data, SkillControllerSearchV1Errors, SkillControllerSearchV1Responses, UserControllerFindMeV1Data, UserControllerFindMeV1Errors, UserControllerFindMeV1Responses, UserControllerFindOneV1Data, UserControllerFindOneV1Errors, UserControllerFindOneV1Responses, YswsControllerFindActiveV1Data, YswsControllerFindActiveV1Errors, YswsControllerFindActiveV1Responses, YswsControllerFindAllV1Data, YswsControllerFindAllV1Errors, YswsControllerFindAllV1Responses, YswsControllerFindEndedV1Data, YswsControllerFindEndedV1Errors, YswsControllerFindEndedV1Responses, YswsControllerSearchV1Data, YswsControllerSearchV1Errors, YswsControllerSearchV1Responses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -190,6 +190,109 @@ export class projectPitch {
     }
 }
 
+export class match {
+    /**
+     * Create a match
+     *
+     * Create a match between the users on a project pitch
+     */
+    public static matchControllerCreateV1<ThrowOnError extends boolean = false>(options: Options<MatchControllerCreateV1Data, ThrowOnError>) {
+        return (options.client ?? client).post<MatchControllerCreateV1Responses, MatchControllerCreateV1Errors, ThrowOnError>({
+            responseTransformer: matchControllerCreateV1ResponseTransformer,
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/match',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+    
+    /**
+     * Get all matches relating to current user
+     *
+     * Get all the matches relating to the current authenticated user
+     */
+    public static matchControllerFindAllRelatingToMeV1<ThrowOnError extends boolean = false>(options?: Options<MatchControllerFindAllRelatingToMeV1Data, ThrowOnError>) {
+        return (options?.client ?? client).get<MatchControllerFindAllRelatingToMeV1Responses, MatchControllerFindAllRelatingToMeV1Errors, ThrowOnError>({
+            responseTransformer: matchControllerFindAllRelatingToMeV1ResponseTransformer,
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/match/me',
+            ...options
+        });
+    }
+    
+    /**
+     * Get a project pitch matches
+     *
+     * Get all the matches under a project pitch
+     */
+    public static matchControllerFindAllV1<ThrowOnError extends boolean = false>(options: Options<MatchControllerFindAllV1Data, ThrowOnError>) {
+        return (options.client ?? client).get<MatchControllerFindAllV1Responses, MatchControllerFindAllV1Errors, ThrowOnError>({
+            responseTransformer: matchControllerFindAllV1ResponseTransformer,
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/match/{projectPitchId}',
+            ...options
+        });
+    }
+    
+    /**
+     * Cancel or Reject a match
+     *
+     * Cancel or Reject a matches under a project pitch, this will set the match status to "cancelled" and archive the slack channel if one was created
+     */
+    public static matchControllerCancelOrRejectV1<ThrowOnError extends boolean = false>(options: Options<MatchControllerCancelOrRejectV1Data, ThrowOnError>) {
+        return (options.client ?? client).delete<MatchControllerCancelOrRejectV1Responses, MatchControllerCancelOrRejectV1Errors, ThrowOnError>({
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/match/{id}',
+            ...options
+        });
+    }
+    
+    /**
+     * Get a match
+     *
+     * Get a matches under a project pitch
+     */
+    public static matchControllerFindOneV1<ThrowOnError extends boolean = false>(options: Options<MatchControllerFindOneV1Data, ThrowOnError>) {
+        return (options.client ?? client).get<MatchControllerFindOneV1Responses, MatchControllerFindOneV1Errors, ThrowOnError>({
+            responseTransformer: matchControllerFindOneV1ResponseTransformer,
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/match/{id}',
+            ...options
+        });
+    }
+    
+    /**
+     * Confirm a match
+     *
+     * Confirm a match under a project pitch, this will spawn up a slack channel, notify the users about the match and set match status to "matching"
+     */
+    public static matchControllerConfirmMatchingV1<ThrowOnError extends boolean = false>(options: Options<MatchControllerConfirmMatchingV1Data, ThrowOnError>) {
+        return (options.client ?? client).patch<MatchControllerConfirmMatchingV1Responses, MatchControllerConfirmMatchingV1Errors, ThrowOnError>({
+            responseTransformer: matchControllerConfirmMatchingV1ResponseTransformer,
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/match/{id}/confirm',
+            ...options
+        });
+    }
+    
+    /**
+     * Finalize a match
+     *
+     * Finalize a match under a project pitch, this will set the match status to "accepted" and notify the users about the match finalization
+     */
+    public static matchControllerFinalizeMatchingV1<ThrowOnError extends boolean = false>(options: Options<MatchControllerFinalizeMatchingV1Data, ThrowOnError>) {
+        return (options.client ?? client).patch<MatchControllerFinalizeMatchingV1Responses, MatchControllerFinalizeMatchingV1Errors, ThrowOnError>({
+            responseTransformer: matchControllerFinalizeMatchingV1ResponseTransformer,
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/match/{id}/finalize',
+            ...options
+        });
+    }
+}
+
 export class skill {
     /**
      * Find all skills
@@ -261,64 +364,5 @@ export class ysws {
      */
     public static yswsControllerSearchV1<ThrowOnError extends boolean = false>(options: Options<YswsControllerSearchV1Data, ThrowOnError>) {
         return (options.client ?? client).get<YswsControllerSearchV1Responses, YswsControllerSearchV1Errors, ThrowOnError>({ url: '/api/v1/ysws/search', ...options });
-    }
-}
-
-export class match {
-    /**
-     * Create a match
-     *
-     * Create a match between the users on a project pitch
-     */
-    public static matchControllerCreateV1<ThrowOnError extends boolean = false>(options: Options<MatchControllerCreateV1Data, ThrowOnError>) {
-        return (options.client ?? client).post<MatchControllerCreateV1Responses, MatchControllerCreateV1Errors, ThrowOnError>({
-            responseTransformer: matchControllerCreateV1ResponseTransformer,
-            security: [{ scheme: 'bearer', type: 'http' }],
-            url: '/api/v1/match',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options.headers
-            }
-        });
-    }
-    
-    /**
-     * Get a project pitch matches
-     *
-     * Get all the matches under a project pitch
-     */
-    public static matchControllerFindAllV1<ThrowOnError extends boolean = false>(options: Options<MatchControllerFindAllV1Data, ThrowOnError>) {
-        return (options.client ?? client).get<MatchControllerFindAllV1Responses, MatchControllerFindAllV1Errors, ThrowOnError>({
-            security: [{ scheme: 'bearer', type: 'http' }],
-            url: '/api/v1/match/{projectPitchId}',
-            ...options
-        });
-    }
-    
-    /**
-     * Delete a match
-     *
-     * Delete a matches under a project pitch
-     */
-    public static matchControllerRemoveV1<ThrowOnError extends boolean = false>(options: Options<MatchControllerRemoveV1Data, ThrowOnError>) {
-        return (options.client ?? client).delete<MatchControllerRemoveV1Responses, MatchControllerRemoveV1Errors, ThrowOnError>({
-            security: [{ scheme: 'bearer', type: 'http' }],
-            url: '/api/v1/match/{id}',
-            ...options
-        });
-    }
-    
-    /**
-     * Get a match
-     *
-     * Get a matches under a project pitch
-     */
-    public static matchControllerFindOneV1<ThrowOnError extends boolean = false>(options: Options<MatchControllerFindOneV1Data, ThrowOnError>) {
-        return (options.client ?? client).get<MatchControllerFindOneV1Responses, MatchControllerFindOneV1Errors, ThrowOnError>({
-            security: [{ scheme: 'bearer', type: 'http' }],
-            url: '/api/v1/match/{id}',
-            ...options
-        });
     }
 }

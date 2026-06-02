@@ -43,7 +43,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "~/components/ui/alert-dialog";
-import ConfirmMatchDialog from "~/components/dialogs/MatchDialog";
+import MatchDialog from "~/components/dialogs/MatchDialog";
 
 export function meta({ loaderData }: Route.MetaArgs): Route.MetaDescriptors {
   return [
@@ -174,7 +174,7 @@ export default function ProjectDetails({ loaderData }: Route.ComponentProps) {
               openUpdateProjectDialog={editModalOpen}
               setOpenUpdateProjectDialog={setEditModalOpen}
             />
-            <ConfirmMatchDialog
+            <MatchDialog
               projectPitch={loaderData.data}
               openMatchDialog={matchModalOpen}
               setOpenMatchDialog={setMatchModalOpen}

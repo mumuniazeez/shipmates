@@ -10,6 +10,7 @@ import {
   DialogClose,
 } from "../ui/dialog";
 import {
+  Link,
   useLocation,
   useNavigate,
   useNavigation,
@@ -21,7 +22,7 @@ import { Handshake, Loader } from "@hugeicons/core-free-icons";
 import type { OutletContext } from "~/routes/app";
 import { Button } from "../ui/button";
 
-export default function ConfirmMatchDialog({
+export default function MatchDialog({
   projectPitch,
   openMatchDialog,
   setOpenMatchDialog,
@@ -38,6 +39,11 @@ export default function ConfirmMatchDialog({
   const location = useLocation();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const match = projectPitch.matches.find(
+    (m) => m.collaboratingUserId === user.id,
+  );
+  const hasMatch = match !== undefined;
 
   const handleMatch = async () => {
     // Submit the match, this will initiate a slack handshake between both users.
@@ -66,6 +72,7 @@ export default function ConfirmMatchDialog({
             Let's connect you to {projectPitch.user.firstName}
           </DialogDescription>
         </DialogHeader>
+
         <div className="space-y-2">
           <div className="flex justify-center items-center space-x-2">
             <div className="text-center space-y-2">
@@ -102,23 +109,75 @@ export default function ConfirmMatchDialog({
               </span>
             </p>
           </div>
-          <p>
-            A dedicated Slack channel will be created for your private
-            conversation, where the "Shipmates" bot will notify{" "}
-            {projectPitch.user.firstName} and remain present to support future
-            project pitch management features.
+          {hasMatch ? (
+            <div>
+              {match.matchStatus === "pending" ? (
+                <p>
+                  Waiting for {projectPitch.user.firstName} to accept your
+                  match, Once your match is approved, Shipmates will spawn up a
+                  dedicated Slack channel for your private conversation.
+                </p>
+              ) : match.matchStatus === "matching" ? (
+                <p>
+                  {projectPitch.user.firstName} has approved your match, a slack
+                  channel ({match.slackChannelName}) has been spawned for your
+                  conversations.
+                </p>
+              ) : match.matchStatus === "accepted" ? (
+                <p>
+                  {projectPitch.user.firstName} has accepted your match, you can
+                  continue your conversation on Slack.
+                </p>
+              ) : (
+                <p>{projectPitch.user.firstName} has rejected your match.</p>
+              )}
+            </div>
+          ) : (
+            <p>
+              You can connect with {projectPitch.user.firstName} on Slack, once
+              your match is approved by {projectPitch.user.firstName}, a
+              dedicated Slack channel will be spawn up for your to privately
+              chat on Slack
+            </p>
+          )}
+          <p className="text-center text-xs text-gray-400">
+            Shipmates will not be responsible for any conversation that happens
+            on the spawned slack channel. Remember to be respectful and
+            professional in your conversations.
+          </p>
+          <p className="text-center text-xs text-gray-400">
+            Not on Hack Club slack workspace? check out{" "}
+            <Link
+              to={"https://slack.hackclub.com"}
+              target="_blank"
+              className="text-primary"
+            >
+              this (so cool btw)
+            </Link>
           </p>
         </div>
         <DialogFooter>
           <DialogClose>
             <Button variant={"outline"}>Close</Button>
           </DialogClose>
-          <Button onClick={handleMatch} disabled={isSubmitting}>
-            {isSubmitting && (
-              <HugeiconsIcon icon={Loader} className="animate-spin" />
-            )}
-            Connect on Slack
-          </Button>
+          {!hasMatch ? (
+            <Button onClick={handleMatch} disabled={isSubmitting}>
+              {isSubmitting && (
+                <HugeiconsIcon icon={Loader} className="animate-spin" />
+              )}
+              Connect on Slack
+            </Button>
+          ) : (
+            <Button
+              // onClick={handleCancelMatch}
+              disabled={isSubmitting}
+            >
+              {isSubmitting && (
+                <HugeiconsIcon icon={Loader} className="animate-spin" />
+              )}
+              Cancel
+            </Button>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>

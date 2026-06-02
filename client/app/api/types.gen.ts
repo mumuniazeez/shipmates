@@ -146,7 +146,7 @@ export type SkillResponseDto = {
     updatedAt: string;
 };
 
-export type MatchResponseDto = {
+export type MatchRelationalResponseDto = {
     /**
      * id of the match
      */
@@ -166,7 +166,23 @@ export type MatchResponseDto = {
     /**
      * Project Pitch id
      */
-    matchStatus: 'matching' | 'matched' | 'rejected';
+    matchStatus: 'pending' | 'matching' | 'accepted' | 'rejected' | 'cancelled';
+    /**
+     * Slack channel id
+     */
+    slackChannelId: string | null;
+    /**
+     * Slack channel name
+     */
+    slackChannelName: string | null;
+    /**
+     * createdAt
+     */
+    createdAt: string;
+    /**
+     * updatedAt
+     */
+    updatedAt: string;
 };
 
 export type ProjectPitchResponseDto = {
@@ -183,18 +199,6 @@ export type ProjectPitchResponseDto = {
      */
     description: string;
     /**
-     * The description of what needed for the project
-     */
-    skillsNeeded: Array<SkillResponseDto>;
-    /**
-     * The user who created the project pitch
-     */
-    user: UserResponseDto;
-    /**
-     * The users matches for this project pitch
-     */
-    matches: Array<MatchResponseDto>;
-    /**
      * The userId of user who created the project pitch
      */
     userId: string;
@@ -206,6 +210,18 @@ export type ProjectPitchResponseDto = {
      * The data the project pitch was last updated
      */
     updatedAt: string;
+    /**
+     * The description of what needed for the project
+     */
+    skillsNeeded: Array<SkillResponseDto>;
+    /**
+     * The user who created the project pitch
+     */
+    user: UserResponseDto;
+    /**
+     * The users matches for this project pitch
+     */
+    matches: Array<MatchRelationalResponseDto>;
 };
 
 export type UpdateProjectPitchDto = {
@@ -229,6 +245,91 @@ export type GeneralOkResponseDto = {
      * Human readable message
      */
     message: string;
+};
+
+export type CreateMatchDto = {
+    /**
+     * The id of the project to match users
+     */
+    projectId: string;
+};
+
+export type ProjectPitchRelationalResponseDto = {
+    /**
+     * ID of the project
+     */
+    id: string;
+    /**
+     * Title of the project to be pitched
+     */
+    title: string;
+    /**
+     * The description of what needed for the project
+     */
+    description: string;
+    /**
+     * The userId of user who created the project pitch
+     */
+    userId: string;
+    /**
+     * The date the project pitch was created
+     */
+    createdAt: string;
+    /**
+     * The data the project pitch was last updated
+     */
+    updatedAt: string;
+};
+
+export type MatchResponseDto = {
+    /**
+     * id of the match
+     */
+    id: string;
+    /**
+     * Project Pitch Owner user id
+     */
+    projectOwnerId: string;
+    /**
+     * Collaborator user id
+     */
+    collaboratingUserId: string;
+    /**
+     * Project Pitch id
+     */
+    projectPitchId: string;
+    /**
+     * Project Pitch id
+     */
+    matchStatus: 'pending' | 'matching' | 'accepted' | 'rejected' | 'cancelled';
+    /**
+     * Slack channel id
+     */
+    slackChannelId: string | null;
+    /**
+     * Slack channel name
+     */
+    slackChannelName: string | null;
+    /**
+     * createdAt
+     */
+    createdAt: string;
+    /**
+     * updatedAt
+     */
+    updatedAt: string;
+    /**
+     * Project Pitch Owner
+     */
+    projectOwner: UserResponseDto;
+    /**
+     * Collaborator
+     */
+    collaboratingUser: UserResponseDto;
+    /**
+     * Project Pitch
+     */
+    projectPitch: ProjectPitchRelationalResponseDto;
 };
 
 export type YsWsResponseDto = {
@@ -260,13 +361,6 @@ export type YsWsResponseDto = {
      * Status of the YSWS program
      */
     status: 'active' | 'ended' | 'draft';
-};
-
-export type CreateMatchDto = {
-    /**
-     * The id of the project to match users
-     */
-    projectId: string;
 };
 
 export type ErrorMessageDtoWritable = {
@@ -655,6 +749,198 @@ export type ProjectPitchControllerUpdateV1Responses = {
 
 export type ProjectPitchControllerUpdateV1Response = ProjectPitchControllerUpdateV1Responses[keyof ProjectPitchControllerUpdateV1Responses];
 
+export type MatchControllerCreateV1Data = {
+    body: CreateMatchDto;
+    path?: never;
+    query?: never;
+    url: '/api/v1/match';
+};
+
+export type MatchControllerCreateV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type MatchControllerCreateV1Error = MatchControllerCreateV1Errors[keyof MatchControllerCreateV1Errors];
+
+export type MatchControllerCreateV1Responses = {
+    200: MatchResponseDto;
+};
+
+export type MatchControllerCreateV1Response = MatchControllerCreateV1Responses[keyof MatchControllerCreateV1Responses];
+
+export type MatchControllerFindAllRelatingToMeV1Data = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/match/me';
+};
+
+export type MatchControllerFindAllRelatingToMeV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type MatchControllerFindAllRelatingToMeV1Error = MatchControllerFindAllRelatingToMeV1Errors[keyof MatchControllerFindAllRelatingToMeV1Errors];
+
+export type MatchControllerFindAllRelatingToMeV1Responses = {
+    200: Array<MatchResponseDto>;
+};
+
+export type MatchControllerFindAllRelatingToMeV1Response = MatchControllerFindAllRelatingToMeV1Responses[keyof MatchControllerFindAllRelatingToMeV1Responses];
+
+export type MatchControllerFindAllV1Data = {
+    body?: never;
+    path: {
+        projectPitchId: string;
+    };
+    query?: never;
+    url: '/api/v1/match/{projectPitchId}';
+};
+
+export type MatchControllerFindAllV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type MatchControllerFindAllV1Error = MatchControllerFindAllV1Errors[keyof MatchControllerFindAllV1Errors];
+
+export type MatchControllerFindAllV1Responses = {
+    200: Array<MatchResponseDto>;
+};
+
+export type MatchControllerFindAllV1Response = MatchControllerFindAllV1Responses[keyof MatchControllerFindAllV1Responses];
+
+export type MatchControllerCancelOrRejectV1Data = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/match/{id}';
+};
+
+export type MatchControllerCancelOrRejectV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type MatchControllerCancelOrRejectV1Error = MatchControllerCancelOrRejectV1Errors[keyof MatchControllerCancelOrRejectV1Errors];
+
+export type MatchControllerCancelOrRejectV1Responses = {
+    200: GeneralOkResponseDto;
+};
+
+export type MatchControllerCancelOrRejectV1Response = MatchControllerCancelOrRejectV1Responses[keyof MatchControllerCancelOrRejectV1Responses];
+
+export type MatchControllerFindOneV1Data = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/match/{id}';
+};
+
+export type MatchControllerFindOneV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type MatchControllerFindOneV1Error = MatchControllerFindOneV1Errors[keyof MatchControllerFindOneV1Errors];
+
+export type MatchControllerFindOneV1Responses = {
+    200: MatchResponseDto;
+};
+
+export type MatchControllerFindOneV1Response = MatchControllerFindOneV1Responses[keyof MatchControllerFindOneV1Responses];
+
+export type MatchControllerConfirmMatchingV1Data = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/match/{id}/confirm';
+};
+
+export type MatchControllerConfirmMatchingV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type MatchControllerConfirmMatchingV1Error = MatchControllerConfirmMatchingV1Errors[keyof MatchControllerConfirmMatchingV1Errors];
+
+export type MatchControllerConfirmMatchingV1Responses = {
+    200: MatchResponseDto;
+};
+
+export type MatchControllerConfirmMatchingV1Response = MatchControllerConfirmMatchingV1Responses[keyof MatchControllerConfirmMatchingV1Responses];
+
+export type MatchControllerFinalizeMatchingV1Data = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/match/{id}/finalize';
+};
+
+export type MatchControllerFinalizeMatchingV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type MatchControllerFinalizeMatchingV1Error = MatchControllerFinalizeMatchingV1Errors[keyof MatchControllerFinalizeMatchingV1Errors];
+
+export type MatchControllerFinalizeMatchingV1Responses = {
+    200: MatchResponseDto;
+};
+
+export type MatchControllerFinalizeMatchingV1Response = MatchControllerFinalizeMatchingV1Responses[keyof MatchControllerFinalizeMatchingV1Responses];
+
 export type SkillControllerFindAllV1Data = {
     body?: never;
     path?: never;
@@ -843,113 +1129,3 @@ export type YswsControllerSearchV1Responses = {
 };
 
 export type YswsControllerSearchV1Response = YswsControllerSearchV1Responses[keyof YswsControllerSearchV1Responses];
-
-export type MatchControllerCreateV1Data = {
-    body: CreateMatchDto;
-    path?: never;
-    query?: never;
-    url: '/api/v1/match';
-};
-
-export type MatchControllerCreateV1Errors = {
-    /**
-     * Client side error
-     */
-    '4XX': ErrorMessageDto;
-    /**
-     * Server side error
-     */
-    '5XX': ErrorMessageDto;
-};
-
-export type MatchControllerCreateV1Error = MatchControllerCreateV1Errors[keyof MatchControllerCreateV1Errors];
-
-export type MatchControllerCreateV1Responses = {
-    200: ProjectPitchResponseDto;
-};
-
-export type MatchControllerCreateV1Response = MatchControllerCreateV1Responses[keyof MatchControllerCreateV1Responses];
-
-export type MatchControllerFindAllV1Data = {
-    body?: never;
-    path: {
-        projectPitchId: string;
-    };
-    query?: never;
-    url: '/api/v1/match/{projectPitchId}';
-};
-
-export type MatchControllerFindAllV1Errors = {
-    /**
-     * Client side error
-     */
-    '4XX': ErrorMessageDto;
-    /**
-     * Server side error
-     */
-    '5XX': ErrorMessageDto;
-};
-
-export type MatchControllerFindAllV1Error = MatchControllerFindAllV1Errors[keyof MatchControllerFindAllV1Errors];
-
-export type MatchControllerFindAllV1Responses = {
-    200: Array<MatchResponseDto>;
-};
-
-export type MatchControllerFindAllV1Response = MatchControllerFindAllV1Responses[keyof MatchControllerFindAllV1Responses];
-
-export type MatchControllerRemoveV1Data = {
-    body?: never;
-    path: {
-        id: string;
-    };
-    query?: never;
-    url: '/api/v1/match/{id}';
-};
-
-export type MatchControllerRemoveV1Errors = {
-    /**
-     * Client side error
-     */
-    '4XX': ErrorMessageDto;
-    /**
-     * Server side error
-     */
-    '5XX': ErrorMessageDto;
-};
-
-export type MatchControllerRemoveV1Error = MatchControllerRemoveV1Errors[keyof MatchControllerRemoveV1Errors];
-
-export type MatchControllerRemoveV1Responses = {
-    200: GeneralOkResponseDto;
-};
-
-export type MatchControllerRemoveV1Response = MatchControllerRemoveV1Responses[keyof MatchControllerRemoveV1Responses];
-
-export type MatchControllerFindOneV1Data = {
-    body?: never;
-    path: {
-        id: string;
-    };
-    query?: never;
-    url: '/api/v1/match/{id}';
-};
-
-export type MatchControllerFindOneV1Errors = {
-    /**
-     * Client side error
-     */
-    '4XX': ErrorMessageDto;
-    /**
-     * Server side error
-     */
-    '5XX': ErrorMessageDto;
-};
-
-export type MatchControllerFindOneV1Error = MatchControllerFindOneV1Errors[keyof MatchControllerFindOneV1Errors];
-
-export type MatchControllerFindOneV1Responses = {
-    200: MatchResponseDto;
-};
-
-export type MatchControllerFindOneV1Response = MatchControllerFindOneV1Responses[keyof MatchControllerFindOneV1Responses];

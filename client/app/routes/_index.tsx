@@ -59,6 +59,18 @@ export default function Home() {
           <Link to={"/auth/login"}>
             <Button>Sign in with Hack Club</Button>
           </Link>
+          <p className="">
+            Shipmate uses{" "}
+            <Link
+              to={"https://slack.hackclub.com"}
+              target="_blank"
+              className="text-primary"
+            >
+              Hack Club Slack workspace
+            </Link>{" "}
+            to manage conversations. Make sure to be there. You can signup
+            without it btw.
+          </p>
           {loginError && (
             <p className="text-red-500 text-center">
               An error occurred while signing in. Please try again.
@@ -66,6 +78,7 @@ export default function Home() {
               Error: {loginError}
             </p>
           )}
+
           <p className="text-sm text-muted-foreground">
             DM @AzCodes on Slack for support.
           </p>
@@ -166,7 +179,7 @@ export default function Home() {
             Hack Club
           </Link>
           <Link
-            to={"https://hackclub.com/slack"}
+            to={"https://slack.hackclub.com"}
             target="_blank"
             className="text-primary hover:underline"
           >
