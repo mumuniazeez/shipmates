@@ -197,7 +197,7 @@ export class MatchService {
       );
 
     // Discover if it's a cancel by the collaborator or reject by the project owner
-    await this.prisma.match.update({
+    const newProjectPitchMatch = await this.prisma.match.update({
       where: { id },
       data: {
         matchStatus:
@@ -215,6 +215,6 @@ export class MatchService {
     if (projectPitchMatch.slackChannelId)
       await this.slackService.archiveChannel(projectPitchMatch.slackChannelId);
 
-    return { message: 'Match Canceled' };
+    return newProjectPitchMatch;
   }
 }
