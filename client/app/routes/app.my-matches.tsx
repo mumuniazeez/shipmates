@@ -13,6 +13,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "~/components/ui/empty";
+import { getAllMatches } from "~/lib/match.server";
 
 export function meta({}: Route.MetaArgs): Route.MetaDescriptors {
   return [
@@ -22,6 +23,12 @@ export function meta({}: Route.MetaArgs): Route.MetaDescriptors {
       content: "Ctrl+Atl+Meet your next collaborator to work on your project",
     },
   ];
+}
+
+export async function loader({ request }: Route.LoaderArgs) {
+  const res = await getAllMatches(request);
+
+  return res;
 }
 
 export default function DashboardMyMatches({
@@ -39,26 +46,23 @@ export default function DashboardMyMatches({
       </header>
       <main className="p-5">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
-          <ProjectPitchCard />
-          <ProjectPitchCard />
-          <ProjectPitchCard />
-          <ProjectPitchCard />
+          {/* Add mapping here */}
         </div>
         <Empty>
           <EmptyHeader>
             <EmptyMedia variant={"icon"}>
               <HugeiconsIcon icon={Sad02Icon} />
             </EmptyMedia>
-            <EmptyTitle>No Pitches yet.</EmptyTitle>
+            <EmptyTitle>No Active Crew Matches yet.</EmptyTitle>
             <EmptyDescription>
-              You haven't authored any pitch yet, try create one.
+              You don't have any match made yet. Click on explore pitches below
+              to get started.
             </EmptyDescription>
           </EmptyHeader>
           <EmptyContent className="flex-row justify-center gap-2">
             <Link to={"/app"}>
               <Button variant={"outline"}>Explore Pitches</Button>
             </Link>
-            <Button variant={"default"}>Create Pitch</Button>
           </EmptyContent>
         </Empty>
       </main>
