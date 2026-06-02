@@ -59,12 +59,12 @@ export default function Home() {
           <Link to={"/auth/login"}>
             <Button>Sign in with Hack Club</Button>
           </Link>
-          <p className="">
+          <p className="max-w-xl text-center text-muted-foreground">
             Shipmate uses{" "}
             <Link
               to={"https://slack.hackclub.com"}
               target="_blank"
-              className="text-primary"
+              className="text-primary underline decoration-wavy"
             >
               Hack Club Slack workspace
             </Link>{" "}

@@ -148,11 +148,8 @@ export default function ProjectPitchCard({
               </div>
             ) : (
               <div className="space-x-2">
-                <Button
-                  onClick={() => setMatchModalOpen(true)}
-                  disabled={hasMatched}
-                >
-                  {hasMatched ? "Already Requested" : "Request to ship"}
+                <Button onClick={() => setMatchModalOpen(true)}>
+                  {hasMatched ? "See match details" : "Request to ship"}
                 </Button>
               </div>
             )}

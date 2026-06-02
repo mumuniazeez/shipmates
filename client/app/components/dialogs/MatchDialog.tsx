@@ -175,7 +175,7 @@ export default function MatchDialog({
               {isSubmitting && (
                 <HugeiconsIcon icon={Loader} className="animate-spin" />
               )}
-              Cancel
+              Cancel request
             </Button>
           )}
         </DialogFooter>
