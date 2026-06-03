@@ -26,6 +26,18 @@ export const matchUsersOnSlack = async (
   return res;
 };
 
+export const approveMatch = async (request: Request, matchId: string) => {
+  const authToken = getAuthToken(request);
+  const client = createApiClient(authToken);
+
+  const res = await api.match.matchControllerConfirmMatchingV1({
+    path: { id: matchId },
+    client,
+  });
+
+  return res;
+};
+
 export const cancelOrRejectMatch = async (
   request: Request,
   matchId: string,

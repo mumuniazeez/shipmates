@@ -191,11 +191,6 @@ export class MatchService {
 
     if (!projectPitchMatch) throw new NotFoundException('No matched yet');
 
-    if (projectPitchMatch.collaboratingUserId !== userId)
-      throw new ForbiddenException(
-        "You don't have the permission to cancel this match",
-      );
-
     // Discover if it's a cancel by the collaborator or reject by the project owner
     const newProjectPitchMatch = await this.prisma.match.update({
       where: { id },

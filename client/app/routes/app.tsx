@@ -16,7 +16,11 @@ import {
 import { useEffect } from "react";
 import LogoutDialog from "~/components/dialogs/LogoutDialog";
 import { refreshAuthToken } from "~/lib/auth.server";
-import { cancelOrRejectMatch, matchUsersOnSlack } from "~/lib/match.server";
+import {
+  approveMatch,
+  cancelOrRejectMatch,
+  matchUsersOnSlack,
+} from "~/lib/match.server";
 
 export type OutletContext = {
   user: UserResponseDto;
@@ -61,6 +65,14 @@ export async function action({ request }: Route.ActionArgs) {
       request,
       formData.get("projectPitchId") as string,
     );
+
+    if (res.error) {
+      console.log(res.error);
+      return { requestType, error: res.error.message };
+    }
+    return { requestType, success: true };
+  } else if (requestType === "approve-match") {
+    const res = await approveMatch(request, formData.get("matchId") as string);
 
     if (res.error) {
       console.log(res.error);

@@ -12,13 +12,14 @@ export default function MatchCard({ match }: { match: MatchResponseDto }) {
   const { user } = useOutletContext<OutletContext>();
 
   const isCollaborator = match.collaboratingUserId === user.id;
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCanceling, setIsCanceling] = useState(false);
+  const [isApproving, setIsApproving] = useState(false);
   const submit = useSubmit();
 
   const handleCancelMatch = async () => {
     if (!match) return;
 
-    setIsSubmitting(true);
+    setIsCanceling(true);
     await submit(
       { matchId: match.id, requestType: "cancel-match" },
       {
@@ -27,7 +28,22 @@ export default function MatchCard({ match }: { match: MatchResponseDto }) {
         navigate: false,
       },
     );
-    setIsSubmitting(false);
+    setIsCanceling(false);
+  };
+
+  const handleApproveMatch = async () => {
+    if (!match) return;
+
+    setIsApproving(true);
+    await submit(
+      { matchId: match.id, requestType: "approve-match" },
+      {
+        method: "POST",
+        action: "/app",
+        navigate: false,
+      },
+    );
+    setIsApproving(false);
   };
   return (
     <>
@@ -107,8 +123,8 @@ export default function MatchCard({ match }: { match: MatchResponseDto }) {
             {isCollaborator &&
             (match.matchStatus === "pending" ||
               match.matchStatus === "matching") ? (
-              <Button onClick={handleCancelMatch} disabled={isSubmitting}>
-                {isSubmitting && (
+              <Button onClick={handleCancelMatch} disabled={isCanceling}>
+                {isCanceling && (
                   <HugeiconsIcon icon={Loader} className="animate-spin" />
                 )}
                 Cancel Match Request
@@ -116,11 +132,23 @@ export default function MatchCard({ match }: { match: MatchResponseDto }) {
             ) : match.matchStatus === "pending" ? (
               // If the user is the project owner and the proposal is pending, they can approve/reject
               <>
-                <Button variant={"default"}>Approve Match Proposal</Button>
-                <Button onClick={handleCancelMatch} disabled={isSubmitting}>
-                  {isSubmitting && (
+                <Button
+                  variant={"default"}
+                  onClick={handleApproveMatch}
+                  disabled={isApproving || isCanceling}
+                >
+                  {isApproving && (
                     <HugeiconsIcon icon={Loader} className="animate-spin" />
-                  )}{" "}
+                  )}
+                  Approve Match
+                </Button>
+                <Button
+                  onClick={handleCancelMatch}
+                  disabled={isApproving || isCanceling}
+                >
+                  {isCanceling && (
+                    <HugeiconsIcon icon={Loader} className="animate-spin" />
+                  )}
                   Reject
                 </Button>
               </>
