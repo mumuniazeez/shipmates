@@ -45,11 +45,26 @@ export default function MatchDialog({
   );
   const hasMatch = match !== undefined;
 
-  const handleMatch = async () => {
-    // Submit the match, this will initiate a slack handshake between both users.
+  const handleCreateMatch = async () => {
     setIsSubmitting(true);
     await submit(
       { projectPitchId: projectPitch.id, requestType: "create-match" },
+      {
+        method: "POST",
+        action: "/app",
+        navigate: false,
+      },
+    );
+    setIsSubmitting(false);
+    setOpenMatchDialog(false);
+  };
+
+  const handleCancelMatch = async () => {
+    if (!match) return;
+
+    setIsSubmitting(true);
+    await submit(
+      { matchId: match.id, requestType: "cancel-match" },
       {
         method: "POST",
         action: "/app",
@@ -128,6 +143,8 @@ export default function MatchDialog({
                   {projectPitch.user.firstName} has accepted your match, you can
                   continue your conversation on Slack.
                 </p>
+              ) : match.matchStatus === "cancelled" ? (
+                <p>You cancelled this match request.</p>
               ) : (
                 <p>{projectPitch.user.firstName} has rejected your match.</p>
               )}
@@ -161,22 +178,28 @@ export default function MatchDialog({
             <Button variant={"outline"}>Close</Button>
           </DialogClose>
           {!hasMatch ? (
-            <Button onClick={handleMatch} disabled={isSubmitting}>
+            <Button onClick={handleCreateMatch} disabled={isSubmitting}>
               {isSubmitting && (
                 <HugeiconsIcon icon={Loader} className="animate-spin" />
               )}
               Connect on Slack
             </Button>
-          ) : (
-            <Button
-              // onClick={handleCancelMatch}
-              disabled={isSubmitting}
-            >
+          ) : match.matchStatus === "pending" ||
+            match.matchStatus === "matching" ? (
+            <Button onClick={handleCancelMatch} disabled={isSubmitting}>
               {isSubmitting && (
                 <HugeiconsIcon icon={Loader} className="animate-spin" />
               )}
               Cancel request
             </Button>
+          ) : match.matchStatus === "accepted" ? (
+            <div className="bg-green-500/50 border border-green-500 px-2 py-1 rounded-2xl">
+              <p className="text-sm">Matched, you're all set!</p>
+            </div>
+          ) : (
+            <div className="bg-red-500/50 border border-red-500 px-2 py-1 rounded-2xl">
+              <p className="text-sm">Declined or Cancelled</p>
+            </div>
           )}
         </DialogFooter>
       </DialogContent>

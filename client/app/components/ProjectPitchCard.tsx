@@ -149,7 +149,7 @@ export default function ProjectPitchCard({
             ) : (
               <div className="space-x-2">
                 <Button onClick={() => setMatchModalOpen(true)}>
-                  {hasMatched ? "See match details" : "Request to ship"}
+                  {hasMatched ? "View Match Status" : "Request to ship"}
                 </Button>
               </div>
             )}

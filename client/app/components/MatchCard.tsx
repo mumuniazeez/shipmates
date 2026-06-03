@@ -1,7 +1,7 @@
-import { Handshake } from "@hugeicons/core-free-icons";
+import { Handshake, Loader } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import React from "react";
-import { Link, useOutletContext } from "react-router";
+import React, { useState } from "react";
+import { Link, useOutletContext, useSubmit } from "react-router";
 import type { MatchResponseDto } from "~/api";
 import type { OutletContext } from "~/routes/app";
 import { Button } from "./ui/button";
@@ -12,7 +12,23 @@ export default function MatchCard({ match }: { match: MatchResponseDto }) {
   const { user } = useOutletContext<OutletContext>();
 
   const isCollaborator = match.collaboratingUserId === user.id;
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submit = useSubmit();
 
+  const handleCancelMatch = async () => {
+    if (!match) return;
+
+    setIsSubmitting(true);
+    await submit(
+      { matchId: match.id, requestType: "cancel-match" },
+      {
+        method: "POST",
+        action: "/app",
+        navigate: false,
+      },
+    );
+    setIsSubmitting(false);
+  };
   return (
     <>
       <div className="group border rounded-4xl p-5 flex flex-col gap-y-5 justify-between hover:border-primary duration-200">
@@ -91,12 +107,22 @@ export default function MatchCard({ match }: { match: MatchResponseDto }) {
             {isCollaborator &&
             (match.matchStatus === "pending" ||
               match.matchStatus === "matching") ? (
-              <Button variant={"destructive"}>Cancel Match Request</Button>
+              <Button onClick={handleCancelMatch} disabled={isSubmitting}>
+                {isSubmitting && (
+                  <HugeiconsIcon icon={Loader} className="animate-spin" />
+                )}
+                Cancel Match Request
+              </Button>
             ) : match.matchStatus === "pending" ? (
               // If the user is the project owner and the proposal is pending, they can approve/reject
               <>
                 <Button variant={"default"}>Approve Match Proposal</Button>
-                <Button variant={"destructive"}>Reject</Button>
+                <Button onClick={handleCancelMatch} disabled={isSubmitting}>
+                  {isSubmitting && (
+                    <HugeiconsIcon icon={Loader} className="animate-spin" />
+                  )}{" "}
+                  Reject
+                </Button>
               </>
             ) : match.matchStatus === "matching" ? (
               // If the user is the project owner and they are in the matching state, they can finalize the match

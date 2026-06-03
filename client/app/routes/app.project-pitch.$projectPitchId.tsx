@@ -76,6 +76,11 @@ export default function ProjectDetails({ loaderData }: Route.ComponentProps) {
 
   const navigation = useNavigation();
 
+  const match = loaderData.data?.matches.find(
+    (m) => m.collaboratingUserId === user.id,
+  );
+  const hasMatch = match !== undefined;
+
   const handleDelete = async () => {
     submit(
       { requestType: "delete-project-pitch", id: loaderData.data!.id },
@@ -160,11 +165,8 @@ export default function ProjectDetails({ loaderData }: Route.ComponentProps) {
                 </div>
               ) : (
                 <div className="space-x-2">
-                  <Button
-                    onClick={() => setMatchModalOpen(true)}
-                    disabled={hasMatched}
-                  >
-                    {hasMatched ? "Already Requested" : "Request to ship"}
+                  <Button onClick={() => setMatchModalOpen(true)}>
+                    {hasMatched ? "View Match Status" : "Request to ship"}
                   </Button>
                 </div>
               )}
