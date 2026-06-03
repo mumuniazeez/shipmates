@@ -59,7 +59,7 @@ export default function MatchCard({ match }: { match: MatchResponseDto }) {
               </div>
             </Badge>
 
-            {match.slackChannelName && <Badge>{match.slackChannelName}</Badge>}
+            {match.slackChannelName && <Badge>#{match.slackChannelName}</Badge>}
           </div>
           <div>
             <Link
@@ -154,7 +154,18 @@ export default function MatchCard({ match }: { match: MatchResponseDto }) {
               </>
             ) : match.matchStatus === "matching" ? (
               // If the user is the project owner and they are in the matching state, they can finalize the match
-              <Button variant={"default"}>Mark as Matched</Button>
+              <>
+                <Button variant={"default"}>Mark as Matched</Button>
+                <Button
+                  onClick={handleCancelMatch}
+                  disabled={isApproving || isCanceling}
+                >
+                  {isCanceling && (
+                    <HugeiconsIcon icon={Loader} className="animate-spin" />
+                  )}
+                  Cancel Match
+                </Button>
+              </>
             ) : match.matchStatus === "accepted" ? (
               <div className="bg-green-500/50 border border-green-500 px-2 py-1 rounded-2xl">
                 <p className="text-sm">Matched, you're all set!</p>
