@@ -83,7 +83,37 @@ export class SlackService {
     return { channelId, channelName };
   }
 
+  async sendFinalization(channelId: string, projectOwner: User) {
+    await this.slackClient.chat.postMessage({
+      channel: channelId,
+      text: 'Match Completed',
+      blocks: [
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: `${projectOwner.firstName}, I hope you had a great time working on this project. You can now close this channel.`,
+          },
+        },
+        // TODO: Add Close Channel Button functionality
+        // {
+        //   type: 'actions',
+        //   elements: [
+        //     {
+        //       type: 'button',
+        //       text: {
+        //         type: 'plain_text',
+        //         text: 'Close Channel',
+        //       },
+        //       value: 'close_channel',
+        //     },
+        //   ],
+        // },
+      ],
+    });
+  }
+
   async archiveChannel(channelId: string) {
-    await this.slackClient.conversations.archive({ channel: channelId });
+    await this.slackClient.conversations.close({ channel: channelId });
   }
 }

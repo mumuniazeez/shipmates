@@ -31,7 +31,6 @@ export async function loader({ request }: Route.LoaderArgs) {
     query: { code, redirect_uri: redirectUri },
   });
 
-  // TODO: Handle error properly and display error to users
   if (exchangeResult.error) {
     console.error("Error exchanging code for token:", exchangeResult.error);
     throw redirect(`/?loginError=${exchangeResult.error.message}`);

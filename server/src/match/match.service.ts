@@ -169,7 +169,10 @@ export class MatchService {
         "You don't have the permission to finalize this match",
       );
 
-    // TODO: Notify users about match finalization on slack channel
+    await this.slackService.sendFinalization(
+      projectPitchMatch.slackChannelId!,
+      projectPitchMatch.projectOwner,
+    );
 
     return this.prisma.match.update({
       where: { id: matchId },

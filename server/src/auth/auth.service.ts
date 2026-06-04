@@ -87,14 +87,6 @@ export class AuthService {
         `Failed to retrieve user data from hack club auth: ${userDataFromHackClubAuth.status} ${userDataFromHackClubAuth.statusText}`,
       );
 
-    // check if user is eligible to signup
-    // TODO: Beta: To be remove later.
-    // TODO: Temporary disabled. For Future consideration
-    // if (!userDataFromHackClubAuth.data.identity.ysws_eligible)
-    //   throw new UnauthorizedException(
-    //     'You are not eligible to use this platform, perform YSWS verification at https://auth.hackclub.com',
-    //   );
-
     // get user data from public slack api using Cachet
     const userDataFromSlack = await this.httpService.axiosRef.get<{
       displayName: string;
