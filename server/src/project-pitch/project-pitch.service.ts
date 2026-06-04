@@ -106,6 +106,7 @@ export class ProjectPitchService {
               }),
         },
         userId,
+        yswsProgramName: updateProjectPitchDto.yswsProgramName,
       },
       include: { skillsNeeded: true, user: true, matches: true },
       where: { id },
