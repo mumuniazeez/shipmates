@@ -48,6 +48,7 @@ export const createProjectPitch = async (
     body: {
       projectTitle: formData.get("projectTitle") as string,
       pitchDescription: formData.get("pitchDescription") as string,
+      yswsProgramName: formData.get("yswsProgramName") as string,
       skills: formData
         .get("skills")!
         .toString()

@@ -137,6 +137,11 @@ export default function ProjectPitchCard({
               </Badge>
             ))}
           </div>
+          {projectPitch.yswsProgramName && (
+            <Badge variant={"default"} title="This is from the YSWS program">
+              YSWS: {projectPitch.yswsProgramName}
+            </Badge>
+          )}
           <div className="flex items-center justify-between gap-x-2 mt-auto">
             <div className="flex items-center gap-x-2">
               <div className="w-2 h-2 bg-green-500 rounded-full" />

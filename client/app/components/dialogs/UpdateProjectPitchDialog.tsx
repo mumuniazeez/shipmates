@@ -56,10 +56,12 @@ export default function UpdateProjectPitchDialog({
     projectTitle: string;
     pitchDescription: string;
     skills: string[];
+    yswsProgramName: string | null;
   }>({
     pitchDescription: projectPitch.description,
     projectTitle: projectPitch.title,
     skills: projectPitch.skillsNeeded.map((s) => s.name),
+    yswsProgramName: projectPitch.yswsProgramName,
   });
 
   const [yswsPrograms, setYswsProgram] = useState<YsWsResponseDto[]>([]);

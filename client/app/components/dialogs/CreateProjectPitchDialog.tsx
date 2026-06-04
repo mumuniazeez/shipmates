@@ -27,7 +27,11 @@ import {
   ComboboxValue,
 } from "../ui/combobox";
 import { useDialogControlContext } from "~/contexts/DialogControlProvider";
-import type { SkillResponseDto, YsWsResponseDto } from "~/api";
+import type {
+  CreateProjectPitchDto,
+  SkillResponseDto,
+  YsWsResponseDto,
+} from "~/api";
 import { useNavigation, useSubmit } from "react-router";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Loader, Spinner } from "@hugeicons/core-free-icons";
@@ -38,11 +42,12 @@ export default function CreateProjectPitchDialog() {
   const submit = useSubmit();
   const navigation = useNavigation();
 
-  const [formData, setFormData] = useState<{
-    projectTitle: string;
-    pitchDescription: string;
-    skills: string[];
-  }>({ pitchDescription: "", projectTitle: "", skills: [] });
+  const [formData, setFormData] = useState<CreateProjectPitchDto>({
+    pitchDescription: "",
+    projectTitle: "",
+    skills: [],
+    yswsProgramName: "",
+  });
 
   const [yswsPrograms, setYswsProgram] = useState<YsWsResponseDto[]>([]);
   const [skills, setSkills] = useState<SkillResponseDto[]>([]);
@@ -142,18 +147,21 @@ export default function CreateProjectPitchDialog() {
               <Combobox
                 items={skills.map((skill) => skill.name)}
                 multiple
-                value={formData.skills}
+                value={formData.skills.map((skill) => skill.name)}
                 name="skills"
                 inputValue={skillInputValue}
                 onInputValueChange={(value) => setSkillInputValue(value)}
                 onValueChange={(val) =>
-                  setFormData({ ...formData, skills: val })
+                  setFormData({
+                    ...formData,
+                    skills: val.map((name) => ({ name })),
+                  })
                 }
               >
                 <ComboboxChips>
                   <ComboboxValue>
                     {formData.skills.map((item) => (
-                      <ComboboxChip key={item}>{item}</ComboboxChip>
+                      <ComboboxChip key={item.name}>{item.name}</ComboboxChip>
                     ))}
                   </ComboboxValue>
                   <ComboboxChipsInput placeholder="E.g., 'React Native, Firebase, and OpenAI API'" />
@@ -164,8 +172,8 @@ export default function CreateProjectPitchDialog() {
                     <ComboboxCollection>
                       {(item) => {
                         return (
-                          <ComboboxItem key={item} value={item}>
-                            {item}
+                          <ComboboxItem key={item} value={item.name}>
+                            {item.name}
                           </ComboboxItem>
                         );
                       }}
@@ -194,6 +202,14 @@ export default function CreateProjectPitchDialog() {
               <Combobox
                 items={yswsPrograms.map((ysws) => ysws.name)}
                 disabled={yswsPrograms.length === 0}
+                name="yswsProgramName"
+                value={formData.yswsProgramName}
+                onValueChange={(val) =>
+                  setFormData({
+                    ...formData,
+                    yswsProgramName: val || undefined,
+                  })
+                }
               >
                 <ComboboxInput
                   placeholder="E.g., 'Horizon, Blueprint, Forge'"

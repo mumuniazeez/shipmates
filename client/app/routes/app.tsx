@@ -1,4 +1,3 @@
-import * as api from "~/api";
 import { getCurrentUser } from "~/lib/user.server";
 import Sidebar from "~/components/Sidebar";
 import type { Route } from "./+types/app";
@@ -19,8 +18,10 @@ import { refreshAuthToken } from "~/lib/auth.server";
 import {
   approveMatch,
   cancelOrRejectMatch,
+  finalizeMatch,
   matchUsersOnSlack,
 } from "~/lib/match.server";
+import { toast } from "sonner";
 
 export type OutletContext = {
   user: UserResponseDto;
@@ -91,10 +92,7 @@ export async function action({ request }: Route.ActionArgs) {
     }
     return { requestType, success: true };
   } else if (requestType === "finalize-match") {
-    const res = await cancelOrRejectMatch(
-      request,
-      formData.get("matchId") as string,
-    );
+    const res = await finalizeMatch(request, formData.get("matchId") as string);
 
     if (res.error) {
       console.log(res.error);
@@ -141,6 +139,15 @@ function AppLayout({
       if (actionData.success) {
         setOpenCreateProjectDialog(false);
       }
+    }
+    if (actionData?.error) {
+      toast("An Error Occurred", {
+        description: `${
+          actionData.requestType
+            ? actionData.requestType.toString().split("-").join(" ")
+            : "Unknown"
+        }: ${actionData.error}`,
+      });
     }
   }, [actionData]);
   return (

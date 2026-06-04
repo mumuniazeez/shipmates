@@ -125,6 +125,10 @@ export type CreateProjectPitchDto = {
      * List of skills needed(to be added) for the project. **Skill already exist in database**
      */
     skills: Array<CreateSkillDto>;
+    /**
+     * YSWS program if the project is related to one
+     */
+    yswsProgramName?: string;
 };
 
 export type SkillResponseDto = {
@@ -203,6 +207,10 @@ export type ProjectPitchResponseDto = {
      */
     userId: string;
     /**
+     * The YSWS program name the project belongs to
+     */
+    yswsProgramName: string | null;
+    /**
      * The date the project pitch was created
      */
     createdAt: string;
@@ -238,6 +246,10 @@ export type UpdateProjectPitchDto = {
      * **Note: Override the skillsNeeded array if provided**
      */
     skills?: Array<CreateSkillDto>;
+    /**
+     * YSWS program if the project is related to one
+     */
+    yswsProgramName?: string;
 };
 
 export type GeneralOkResponseDto = {
@@ -271,6 +283,10 @@ export type ProjectPitchRelationalResponseDto = {
      * The userId of user who created the project pitch
      */
     userId: string;
+    /**
+     * The YSWS program name the project belongs to
+     */
+    yswsProgramName: string | null;
     /**
      * The date the project pitch was created
      */
