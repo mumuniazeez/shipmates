@@ -30,6 +30,7 @@ export class ProjectPitchService {
           }),
         },
         userId,
+        yswsProgramName: createProjectPitchDto.yswsProgramName,
       },
       include: { skillsNeeded: true, user: true, matches: true },
     });

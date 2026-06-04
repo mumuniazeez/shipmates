@@ -90,6 +90,17 @@ export async function action({ request }: Route.ActionArgs) {
       return { requestType, error: res.error.message };
     }
     return { requestType, success: true };
+  } else if (requestType === "finalize-match") {
+    const res = await cancelOrRejectMatch(
+      request,
+      formData.get("matchId") as string,
+    );
+
+    if (res.error) {
+      console.log(res.error);
+      return { requestType, error: res.error.message };
+    }
+    return { requestType, success: true };
   }
 
   return { requestType, error: "Unknown request type" };

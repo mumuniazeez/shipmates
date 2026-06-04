@@ -52,3 +52,15 @@ export const cancelOrRejectMatch = async (
 
   return res;
 };
+
+export const finalizeMatch = async (request: Request, matchId: string) => {
+  const authToken = getAuthToken(request);
+  const client = createApiClient(authToken);
+
+  const res = await api.match.matchControllerFinalizeMatchingV1({
+    path: { id: matchId },
+    client,
+  });
+
+  return res;
+};

@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, ValidateNested, IsArray } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  ValidateNested,
+  IsArray,
+  IsOptional,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { CreateSkillDto } from 'src/skill/dto/create-skill.dto';
 
@@ -29,4 +35,13 @@ export class CreateProjectPitchDto {
   @ValidateNested({ each: true })
   @IsArray()
   skills: CreateSkillDto[];
+
+  @ApiProperty({
+    type: 'string',
+    description: 'YSWS program if the project is related to one',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  yswsProgramName?: string;
 }

@@ -14,6 +14,7 @@ export default function MatchCard({ match }: { match: MatchResponseDto }) {
   const isCollaborator = match.collaboratingUserId === user.id;
   const [isCanceling, setIsCanceling] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
+  const [isFinalizing, setIsFinalizing] = useState(false);
   const submit = useSubmit();
 
   const handleCancelMatch = async () => {
@@ -44,6 +45,20 @@ export default function MatchCard({ match }: { match: MatchResponseDto }) {
       },
     );
     setIsApproving(false);
+  };
+  const handleFinalizeMatch = async () => {
+    if (!match) return;
+
+    setIsFinalizing(true);
+    await submit(
+      { matchId: match.id, requestType: "finalize-match" },
+      {
+        method: "POST",
+        action: "/app",
+        navigate: false,
+      },
+    );
+    setIsFinalizing(false);
   };
   return (
     <>
@@ -155,10 +170,19 @@ export default function MatchCard({ match }: { match: MatchResponseDto }) {
             ) : match.matchStatus === "matching" ? (
               // If the user is the project owner and they are in the matching state, they can finalize the match
               <>
-                <Button variant={"default"}>Mark as Matched</Button>
+                <Button
+                  variant={"default"}
+                  onClick={handleFinalizeMatch}
+                  disabled={isCanceling || isFinalizing}
+                >
+                  {isFinalizing && (
+                    <HugeiconsIcon icon={Loader} className="animate-spin" />
+                  )}
+                  Mark as Matched
+                </Button>
                 <Button
                   onClick={handleCancelMatch}
-                  disabled={isApproving || isCanceling}
+                  disabled={isCanceling || isFinalizing}
                 >
                   {isCanceling && (
                     <HugeiconsIcon icon={Loader} className="animate-spin" />

@@ -1,6 +1,8 @@
 # Welcome to Shipmate
 
-Shipmate is an Hack Club match maker for hackers. Where you get to meet people to collaborate on project's with you.
+Shipmate is an Hack Club matchmaker for hackers. Where you get to meet people to collaborate on projects with you.
+
+![Project Screenshot](./asset/project_screenshot.png)
 
 ## How it works
 
@@ -10,6 +12,10 @@ Shipmate is an Hack Club match maker for hackers. Where you get to meet people t
 4. You can accept or decline their request.
 5. If you accept their request, you will be able to chat with them and plan your project on Slack.
 6. You can also chat with other Shipmates who are interested in your project on Slack.
+
+## Get Started
+
+Let's get you working on this project.
 
 ## Folder Structure
 
@@ -39,10 +45,6 @@ Shipmate is an Hack Club match maker for hackers. Where you get to meet people t
 
 ```
 
-## Get Started
-
-Let's get you working on this project.
-
 ## Prerequisite
 
 The following are needed for you to run this :
@@ -53,7 +55,7 @@ The following are needed for you to run this :
 
 ## Installation
 
-This project is a monorepo project which utilize pnpm workspaces
+This project is a monorepo project which utilizes pnpm workspaces
 
 ```bash
 pnpm install
@@ -79,7 +81,26 @@ cp .env.example .env
 
 Those commands will create a `.env` file in the `~/server` or the `~/client` folders and copy the content from the `.env.example` file to the `.env` file.
 
+## Database Setup
+
+You'll need to apply the available migrations to your Postgres Database.
+
+```bash
+cd server
+npx prisma db push
+```
+
 ## Running the Project
+
+### Running both client and server at the same time
+
+To run the client and the server at the same time, run the command on the root directory
+
+```bash
+pnpm dev
+```
+
+This will start up both the frontend and the backend servers
 
 ### The `~/client` folder
 
@@ -103,7 +124,7 @@ From the client folder:
 pnpm dev
 ```
 
-### The `~/server` foleder
+### The `~/server` folder
 
 The server folder contain the backend code for the application and is build with:
 
@@ -127,19 +148,13 @@ From the server folder:
 pnpm start:dev
 ```
 
-### Running both client and server at the same time
-
-To run the client and the server at the same time, run the command on the root directory
-
-```bash
-pnpm dev
-```
-
-This will start up both the frontend and the backend servers
-
 ## Contributing
 
-Feel free to request a PR or raise issues
+Contributing to this project will make it better for other Hack Clubber to use. Feel free to request a PR or raise issues.
+
+## AI Usage Disclosure
+
+I used AI for code generation, code completion, perform redundant task, and also to help with swagger documentation for the backend API.
 
 ## License
 

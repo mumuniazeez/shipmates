@@ -21,6 +21,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { Handshake, Loader } from "@hugeicons/core-free-icons";
 import type { OutletContext } from "~/routes/app";
 import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
 
 export default function MatchDialog({
   projectPitch,
@@ -116,6 +117,22 @@ export default function MatchDialog({
               </p>
             </div>
           </div>
+          {match && (
+            <div className="flex items-center justify-between">
+              <Badge variant={"outline"}>
+                <div className="flex items-center gap-x-2">
+                  <div
+                    className={`w-2 h-2 ${match.matchStatus === "accepted" ? "bg-green-500" : match.matchStatus === "pending" ? "bg-yellow-500" : "bg-red-500"} rounded-full`}
+                  />
+                  <p className="text-sm capitalize">{match.matchStatus}</p>
+                </div>
+              </Badge>
+
+              {match.slackChannelName && (
+                <Badge>#{match.slackChannelName}</Badge>
+              )}
+            </div>
+          )}
           <div className="bg-secondary/20 rounded-2xl p-5">
             <p className="text-xl">
               You and {projectPitch.user.firstName} wants to build <br />
