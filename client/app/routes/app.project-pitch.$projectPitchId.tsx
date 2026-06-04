@@ -153,6 +153,14 @@ export default function ProjectDetails({ loaderData }: Route.ComponentProps) {
                 <p className="text-xl">{loaderData.data.description}</p>
               </div>
               <div className="flex flex-wrap gap-2">
+                {loaderData.data.yswsProgramName && (
+                  <Badge
+                    variant={"default"}
+                    title="This is from the YSWS program"
+                  >
+                    YSWS: {loaderData.data.yswsProgramName}
+                  </Badge>
+                )}
                 {loaderData.data.skillsNeeded.map((skill) => (
                   <Badge key={skill.id} variant={"outline"}>
                     #{skill.name}
