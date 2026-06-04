@@ -30,6 +30,13 @@ export class ProjectPitchRelationalResponseDto {
 
   @ApiProperty({
     type: 'string',
+    description: 'The YSWS program name the project belongs to',
+    nullable: true,
+  })
+  yswsProgramName: string | null;
+
+  @ApiProperty({
+    type: 'string',
     description: 'The date the project pitch was created',
   })
   createdAt: Date;
