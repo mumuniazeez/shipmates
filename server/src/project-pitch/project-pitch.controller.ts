@@ -8,12 +8,18 @@ import {
   Delete,
   UseGuards,
   ParseUUIDPipe,
+  Query,
 } from '@nestjs/common';
 import { ProjectPitchService } from './project-pitch.service';
 import { CreateProjectPitchDto } from './dto/create-project-pitch.dto';
 import { UpdateProjectPitchDto } from './dto/update-project-pitch.dto';
 import { JwtGuard } from 'src/auth/guard';
-import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { ProjectPitchResponseDto } from './dto/project-pitch-response.dto';
 import { GetUser } from 'src/auth/decorator';
 import { GeneralOkResponseDto } from 'src/global/dto';
@@ -52,6 +58,31 @@ export class ProjectPitchController {
   @Get()
   findAll() {
     return this.projectPitchService.findAll();
+  }
+
+  @ApiOperation({
+    summary: 'Search for project pitch',
+    description: 'Search for project pitch',
+  })
+  @ApiResponse({
+    status: 200,
+    type: [ProjectPitchResponseDto],
+  })
+  @ApiQuery({
+    name: 'q',
+    required: false,
+    description:
+      'The query to search for (search compare title and description)',
+  })
+  @ApiQuery({
+    name: 'skills',
+    required: false,
+    description:
+      'a comma separated list of skills in string format (e.g "web,coding,hardware,software")',
+  })
+  @Get('/search')
+  search(@Query('q') q: string, @Query('skills') skills: string) {
+    return this.projectPitchService.search(q, skills);
   }
 
   @ApiOperation({

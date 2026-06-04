@@ -50,6 +50,27 @@ export class ProjectPitchService {
     return projectPitches;
   }
 
+  async search(
+    q: string = '',
+    skills: string = '',
+  ): Promise<ProjectPitchResponseDto[]> {
+    const projectPitches = await this.prisma.projectPitch.findMany({
+      where: {
+        OR: [
+          { title: { contains: q, mode: 'insensitive' } },
+          { description: { contains: q, mode: 'insensitive' } },
+          { skillsNeeded: { some: { name: { in: skills.split(',') } } } },
+        ],
+      },
+      include: { skillsNeeded: true, user: true, matches: true },
+    });
+
+    if (projectPitches.length === 0)
+      throw new NotFoundException('No project pitch yet.');
+
+    return projectPitches;
+  }
+
   // TODO: Add pagination later
   async findMyProjectPitches(
     userId: string,
