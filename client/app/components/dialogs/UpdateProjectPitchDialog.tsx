@@ -216,6 +216,14 @@ export default function UpdateProjectPitchDialog({
               <Combobox
                 items={yswsPrograms.map((ysws) => ysws.name)}
                 disabled={yswsPrograms.length === 0}
+                name="yswsProgramName"
+                value={formData.yswsProgramName}
+                onValueChange={(val) =>
+                  setFormData({
+                    ...formData,
+                    yswsProgramName: val || undefined,
+                  })
+                }
               >
                 <ComboboxInput
                   placeholder="E.g., 'Horizon, Blueprint, Forge'"
