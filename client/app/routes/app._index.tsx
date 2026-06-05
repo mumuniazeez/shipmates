@@ -17,12 +17,23 @@ import SearchInput from "~/components/SearchInput";
 import { useState } from "react";
 
 export function meta({}: Route.MetaArgs): Route.MetaDescriptors {
+  const title = "Explore Live Pitches | Shipmates";
+  const description =
+    "Explore active project pitches and find developers to collaborate with. Double-tap to match and start building together on Shipmates.";
+  const keywords =
+    "live pitches, project ideas, find developers, hack club project, code collaboration, developer matchmaker";
   return [
-    { title: "Explore | Shipmates - Where hackers meet" },
-    {
-      name: "description",
-      content: "Ctrl+Atl+Meet your next collaborator to work on your project",
-    },
+    { title },
+    { name: "description", content: description },
+    { name: "keywords", content: keywords },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { property: "og:image", content: "/Shipmates-Logo.png" },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "twitter:image", content: "/Shipmates-Logo.png" },
   ];
 }
 

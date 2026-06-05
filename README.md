@@ -154,7 +154,7 @@ Contributing to this project will make it better for other Hack Clubber to use. 
 
 ## AI Usage Disclosure
 
-I used AI for code generation, code completion, perform redundant task, and also to help with swagger documentation for the backend API.
+I used AI for code generation, code completion, perform redundant task, implement SEO (Search Engine Optimization) and also to help with swagger documentation for the backend API.
 
 ## License
 

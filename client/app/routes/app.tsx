@@ -27,6 +27,13 @@ export type OutletContext = {
   user: UserResponseDto;
 };
 
+export function meta({}: Route.MetaArgs) {
+  const title = "Dashboard | Shipmates";
+  const description =
+    "Access your Shipmates dashboard. Discover pitches, find matches, and collaborate with other hackers in the Hack Club community.";
+  return [{ title }, { name: "description", content: description }];
+}
+
 export async function loader({ request }: Route.LoaderArgs) {
   const userRes = await getCurrentUser(request);
   if (userRes.error) {

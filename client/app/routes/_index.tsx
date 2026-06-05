@@ -11,12 +11,21 @@ import { Badge } from "~/components/ui/badge";
 import { Link, useLocation } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
+  const title = "Shipmates | Where Hackers Meet";
+  const description = "Find project collaborators and teammate hackers on Shipmates. Pitch your project, search for skills, and start shipping with fellow Hack Club members.";
+  const keywords = "Hack Club, hackers, project collaboration, find teammates, software development, coding partner, ship projects, developer community";
   return [
-    { title: "Shipmates | Where Hackers Meet" },
-    {
-      name: "description",
-      content: "Ctrl+Atl+Meet your next collaborator to work on your project",
-    },
+    { title },
+    { name: "description", content: description },
+    { name: "keywords", content: keywords },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { property: "og:image", content: "/Shipmates-Logo.png" },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "twitter:image", content: "/Shipmates-Logo.png" },
   ];
 }
 

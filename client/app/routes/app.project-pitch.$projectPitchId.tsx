@@ -46,18 +46,31 @@ import {
 import MatchDialog from "~/components/dialogs/MatchDialog";
 
 export function meta({ loaderData }: Route.MetaArgs): Route.MetaDescriptors {
+  const pitch = loaderData?.data;
+  const title = pitch
+    ? `${pitch.title} | Shipmates`
+    : "Project Pitch | Shipmates";
+  const description = pitch
+    ? `Check out "${pitch.title}" on Shipmates: ${pitch.description}`
+    : "Explore this project pitch on Shipmates and collaborate with developers from the Hack Club community.";
+  const skills = pitch?.skillsNeeded?.map((s) => s.name).join(", ") || "";
+  const keywords = pitch
+    ? `${pitch.title}, project pitch, collaboration, ${skills}, hack club`
+    : "project pitch, collaboration, developers, shipmates, hack club";
+  const image = pitch?.user?.profileImg || "/Shipmates-Logo.png";
+
   return [
-    {
-      title: loaderData.data
-        ? `${loaderData.data.title} | Shipmates - Where hackers meet`
-        : `Project Pitch | Shipmates - Where hackers meet`,
-    },
-    {
-      name: "description",
-      content:
-        loaderData.data?.description ||
-        "Ctrl+Atl+Meet your next collaborator to work on your project",
-    },
+    { title },
+    { name: "description", content: description },
+    { name: "keywords", content: keywords },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { property: "og:image", content: image },
+    { property: "og:type", content: "article" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "twitter:image", content: image },
   ];
 }
 

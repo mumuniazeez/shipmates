@@ -17,12 +17,21 @@ import { getAllMatches } from "~/lib/match.server";
 import MatchCard from "~/components/MatchCard";
 
 export function meta({}: Route.MetaArgs): Route.MetaDescriptors {
+  const title = "My Matches | Shipmates";
+  const description = "View and manage your active partnerships and collaborations with other hackers. Track matching requests and start shipping your projects.";
+  const keywords = "project partners, developer matches, collaboration requests, team dashboard, shipmates matches";
   return [
-    { title: "Crew Matches | Shipmates - Where hackers meet" },
-    {
-      name: "description",
-      content: "Ctrl+Atl+Meet your next collaborator to work on your project",
-    },
+    { title },
+    { name: "description", content: description },
+    { name: "keywords", content: keywords },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { property: "og:image", content: "/Shipmates-Logo.png" },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "twitter:image", content: "/Shipmates-Logo.png" },
   ];
 }
 

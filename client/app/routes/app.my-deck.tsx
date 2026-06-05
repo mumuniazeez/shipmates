@@ -17,12 +17,21 @@ import { getAllMyProjectPitch } from "~/lib/projectPitch.server";
 import { useDialogControlContext } from "~/contexts/DialogControlProvider";
 
 export function meta({}: Route.MetaArgs): Route.MetaDescriptors {
+  const title = "My Deck | Shipmates";
+  const description = "Manage, edit, and track your authored project pitches. Keep your pitches updated to attract the best collaborators in the Hack Club community.";
+  const keywords = "my project pitches, project dashboard, manage pitches, developer team, shipmates, hack club";
   return [
-    { title: "My Deck | Shipmates - Where hackers meet" },
-    {
-      name: "description",
-      content: "Ctrl+Atl+Meet your next collaborator to work on your project",
-    },
+    { title },
+    { name: "description", content: description },
+    { name: "keywords", content: keywords },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { property: "og:image", content: "/Shipmates-Logo.png" },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "twitter:image", content: "/Shipmates-Logo.png" },
   ];
 }
 

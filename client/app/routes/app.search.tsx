@@ -20,7 +20,22 @@ import {
 } from "~/lib/projectPitch.server";
 
 export function meta({}: Route.MetaArgs): Route.MetaDescriptors {
-  return [];
+  const title = "Search Pitches | Shipmates";
+  const description = "Search for project pitches, technologies, and skills. Find the perfect project or hacker to collaborate with on Shipmates.";
+  const keywords = "search project pitches, find skills, match hackers, project search, developer skills, shipmates search";
+  return [
+    { title },
+    { name: "description", content: description },
+    { name: "keywords", content: keywords },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { property: "og:image", content: "/Shipmates-Logo.png" },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "twitter:image", content: "/Shipmates-Logo.png" },
+  ];
 }
 
 export async function loader({ url, request }: Route.LoaderArgs) {
@@ -33,7 +48,11 @@ export async function loader({ url, request }: Route.LoaderArgs) {
     const res = await getAllProjectPitch(request);
     return res;
   } else {
-    const res = await searchProjectPitch(request, query || undefined, skills || undefined);
+    const res = await searchProjectPitch(
+      request,
+      query || undefined,
+      skills || undefined,
+    );
     return res;
   }
 }
@@ -48,7 +67,11 @@ export async function action({ url, request }: Route.ActionArgs) {
     const res = await getAllProjectPitch(request);
     return res;
   } else {
-    const res = await searchProjectPitch(request, query || undefined, skills || undefined);
+    const res = await searchProjectPitch(
+      request,
+      query || undefined,
+      skills || undefined,
+    );
     return res;
   }
 }
