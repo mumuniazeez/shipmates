@@ -1,8 +1,11 @@
-import type { Route } from "./+types/app._index";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { Sad02Icon } from "@hugeicons/core-free-icons";
+import React from "react";
+import type { Route } from "./+types/app.search";
+import { useDialogControlContext } from "~/contexts/DialogControlProvider";
 import { Button } from "~/components/ui/button";
+import { Sad02Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import ProjectPitchCard from "~/components/ProjectPitchCard";
+import SearchInput from "~/components/SearchInput";
 import {
   Empty,
   EmptyHeader,
@@ -11,51 +14,75 @@ import {
   EmptyDescription,
   EmptyContent,
 } from "~/components/ui/empty";
-import { getAllProjectPitch } from "~/lib/projectPitch.server";
-import { useDialogControlContext } from "~/contexts/DialogControlProvider";
-import SearchInput from "~/components/SearchInput";
-import { useState } from "react";
+import {
+  getAllProjectPitch,
+  searchProjectPitch,
+} from "~/lib/projectPitch.server";
 
 export function meta({}: Route.MetaArgs): Route.MetaDescriptors {
-  return [
-    { title: "Explore | Shipmates - Where hackers meet" },
-    {
-      name: "description",
-      content: "Ctrl+Atl+Meet your next collaborator to work on your project",
-    },
-  ];
+  return [];
 }
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const res = await getAllProjectPitch(request);
-  return res;
+export async function loader({ url, request }: Route.LoaderArgs) {
+  const searchParam = new URLSearchParams(url.search);
+  const query = searchParam.get("q");
+  const skills = searchParam.get("skills");
+  console.log(query, skills);
+
+  if (!query && !skills) {
+    const res = await getAllProjectPitch(request);
+    return res;
+  } else {
+    const res = await searchProjectPitch(request, query || undefined, skills || undefined);
+    return res;
+  }
 }
 
-export default function DashboardExplore({ loaderData }: Route.ComponentProps) {
+export async function action({ url, request }: Route.ActionArgs) {
+  const searchParam = new URLSearchParams(url.search);
+  const query = searchParam.get("q");
+  const skills = searchParam.get("skills");
+
+  console.log(query, skills);
+  if (!query && !skills) {
+    const res = await getAllProjectPitch(request);
+    return res;
+  } else {
+    const res = await searchProjectPitch(request, query || undefined, skills || undefined);
+    return res;
+  }
+}
+
+export default function SearchPage({
+  loaderData,
+  actionData,
+}: Route.ComponentProps) {
   const { setOpenCreateProjectDialog } = useDialogControlContext();
+
+  const responseData = actionData || loaderData;
 
   return (
     <div className="md:w-[75%] w-full overflow-auto">
       <header className="flex flex-col md:flex-row md:items-center justify-between border-b p-5 gap-y-5">
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold">Explore Live Pitches</h1>
+          <h1 className="text-3xl font-bold">Search Live Pitches</h1>
           <p className="text-muted-foreground">
-            Pitch your skills or double tap to ship with active author.
+            Search for project pitch or skills to find collaborators
           </p>
         </div>
         <SearchInput />
       </header>
       <main className="p-5">
-        {loaderData.data ? (
+        {responseData.data ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
-            {loaderData.data.map((projectPitch) => (
+            {responseData.data.map((projectPitch) => (
               <ProjectPitchCard
                 key={projectPitch.id}
                 projectPitch={projectPitch}
               />
             ))}
           </div>
-        ) : loaderData.error.statusCode === 404 ? (
+        ) : responseData.error.statusCode === 404 ? (
           <Empty>
             <EmptyHeader>
               <EmptyMedia variant={"icon"}>

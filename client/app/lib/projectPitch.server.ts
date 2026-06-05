@@ -2,6 +2,25 @@ import * as api from "~/api";
 import { getAuthToken } from "~/lib/auth.server";
 import { createApiClient } from "~/hey-api";
 
+export const searchProjectPitch = async (
+  request: Request,
+  query?: string,
+  skills?: string,
+) => {
+  const authToken = getAuthToken(request);
+  const client = createApiClient(authToken);
+
+  const res = await api.projectPitch.projectPitchControllerSearchV1({
+    client,
+    query: {
+      q: query,
+      skills: skills,
+    },
+  });
+
+  return res;
+};
+
 export const getAllProjectPitch = async (request: Request) => {
   const authToken = getAuthToken(request);
   const client = createApiClient(authToken);

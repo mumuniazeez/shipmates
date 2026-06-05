@@ -655,6 +655,41 @@ export type ProjectPitchControllerCreateV1Responses = {
 
 export type ProjectPitchControllerCreateV1Response = ProjectPitchControllerCreateV1Responses[keyof ProjectPitchControllerCreateV1Responses];
 
+export type ProjectPitchControllerSearchV1Data = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * The query to search for (search compare title and description)
+         */
+        q?: string;
+        /**
+         * a comma separated list of skills in string format (e.g "web,coding,hardware,software")
+         */
+        skills?: string;
+    };
+    url: '/api/v1/project-pitch/search';
+};
+
+export type ProjectPitchControllerSearchV1Errors = {
+    /**
+     * Client side error
+     */
+    '4XX': ErrorMessageDto;
+    /**
+     * Server side error
+     */
+    '5XX': ErrorMessageDto;
+};
+
+export type ProjectPitchControllerSearchV1Error = ProjectPitchControllerSearchV1Errors[keyof ProjectPitchControllerSearchV1Errors];
+
+export type ProjectPitchControllerSearchV1Responses = {
+    200: Array<ProjectPitchResponseDto>;
+};
+
+export type ProjectPitchControllerSearchV1Response = ProjectPitchControllerSearchV1Responses[keyof ProjectPitchControllerSearchV1Responses];
+
 export type ProjectPitchControllerFindMyProjectPitchesV1Data = {
     body?: never;
     path?: never;
